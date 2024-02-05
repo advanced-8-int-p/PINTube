@@ -13,13 +13,13 @@
 
     <fragment
         android:id="@+id/navigation_dashboard"
-        android:name="com.example.pintube.ui.dashboard.DashboardFragment"
+        android:name="com.example.pintube.ui.shorts.ShortsFragment"
         android:label="@string/title_dashboard"
-        tools:layout="@layout/fragment_dashboard" />
+        tools:layout="@layout/fragment_shorts" />
 
     <fragment
         android:id="@+id/navigation_notifications"
-        android:name="com.example.pintube.ui.notifications.NotificationsFragment"
+        android:name="com.example.pintube.ui.mypage.MypageFragment"
         android:label="@string/title_notifications"
-        tools:layout="@layout/fragment_notifications" />
+        tools:layout="@layout/fragment_mypage" />
 </navigation>
