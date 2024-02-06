@@ -1,6 +1,10 @@
-package com.example.pintube.data.repository.entitiy
+package com.example.pintube.data.local.entity
 
-data class CommentEntity(
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+
+@Entity(tableName = "comment_info")
+data class LocalCommentEntity(
     val channelId: String?,
     val videoId: String?,
     val textDisplay: String?,
@@ -15,5 +19,7 @@ data class CommentEntity(
     val publishedAt: String?,
     val updatedAt: String?,
     val totalReplyCount: Int?,
-    var replies: List<CommentEntity>? = null,
-)
+    var replies: List<LocalCommentEntity>? = null,
+){
+    @PrimaryKey(autoGenerate = true) var key:Int = 0
+}

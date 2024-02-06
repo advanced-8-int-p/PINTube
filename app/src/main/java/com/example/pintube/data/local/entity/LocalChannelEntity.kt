@@ -1,6 +1,10 @@
-package com.example.pintube.data.repository.entitiy
+package com.example.pintube.data.local.entity
 
-data class ChannelEntity (
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+
+@Entity(tableName = "channel_info")
+data class LocalChannelEntity (
     val id: String?,
     val title: String?,
     val description: String?,
@@ -19,4 +23,6 @@ data class ChannelEntity (
     val subscriberCount: String?,
     val videoCount: String?,
     val bannerImageUrl: String?,
-)
+){
+    @PrimaryKey(autoGenerate = true) var key:Int = 0
+}
