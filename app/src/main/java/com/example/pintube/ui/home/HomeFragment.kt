@@ -21,6 +21,18 @@ class HomeFragment : Fragment() {
 
     private val viewModel: HomeViewModel by viewModels()
 
+    //ddd
+    val homeAdapter by lazy { HomeAdapter(requireContext()) }
+    val popularAdapter = PopularAdapter(
+        onItemClick = { view, position -> }
+    )
+    val categoryAdapter = CategoryAdapter(
+        onItemClick = { view, position -> }
+    )
+    val categoryVideoAdapter = CategoryVideoAdapter(
+        onItemClick = { view, position -> }
+    )
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -34,5 +46,22 @@ class HomeFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        initView()
+    }
+
+    private fun initView() = binding.also { b ->
+        b.rvHomeMain.adapter = homeAdapter
+        homeAdapter.datas.addAll(
+            listOf(
+                MultiData(type = MULTI_POPULAR),
+                MultiData(type = MULTI_CATEGORY),
+                MultiData(),
+            )
+        )
     }
 }

@@ -20,6 +20,7 @@
             android:layout_marginStart="8dp"
             android:text="PINTube"
             android:textColor="#FFFFFF"
+            android:textSize="18sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@id/iv_home_logo"
             app:layout_constraintTop_toTopOf="parent" />

@@ -3,22 +3,27 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content">
 
     <LinearLayout
-        android:id="@+id/ll_home_main"
+        android:id="@+id/ll_popular_main"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintTop_toTopOf="parent">
 
         <TextView
-            android:id="@+id/tv_home_popular"
+            android:id="@+id/tv_popular_header"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="인기 영상" />
+            android:paddingHorizontal="8dp"
+            android:paddingVertical="4dp"
+            android:text="인기 영상"
+            android:textSize="16sp"
+            android:textStyle="bold" />
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_home_popular"
+            android:id="@+id/rv_popular_videos"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
