@@ -1,4 +1,4 @@
-package com.example.pintube.ui.notifications
+package com.example.pintube.ui.mypage
 
 import android.os.Bundle
 import android.util.Log
@@ -8,16 +8,16 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import com.example.pintube.databinding.FragmentMypageBinding
 import androidx.lifecycle.lifecycleScope
 import com.example.pintube.data.repository.ApiRepositoryImpl
-import com.example.pintube.databinding.FragmentNotificationsBinding
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class NotificationsFragment : Fragment() {
+class MypageFragment : Fragment() {
 
-    private var _binding: FragmentNotificationsBinding? = null
+    private var _binding: FragmentMypageBinding? = null
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -28,14 +28,14 @@ class NotificationsFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val notificationsViewModel =
-            ViewModelProvider(this).get(NotificationsViewModel::class.java)
+        val mypageViewModel =
+            ViewModelProvider(this).get(MypageViewModel::class.java)
 
-        _binding = FragmentNotificationsBinding.inflate(inflater, container, false)
+        _binding = FragmentMypageBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
         val textView: TextView = binding.textNotifications
-        notificationsViewModel.text.observe(viewLifecycleOwner) {
+        mypageViewModel.text.observe(viewLifecycleOwner) {
             textView.text = it
         }
         return root
