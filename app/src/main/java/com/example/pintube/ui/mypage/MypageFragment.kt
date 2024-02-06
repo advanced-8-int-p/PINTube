@@ -11,7 +11,6 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.pintube.databinding.FragmentMypageBinding
 import androidx.lifecycle.lifecycleScope
 import com.example.pintube.data.repository.ApiRepositoryImpl
-import com.example.pintube.databinding.FragmentNotificationsBinding
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
