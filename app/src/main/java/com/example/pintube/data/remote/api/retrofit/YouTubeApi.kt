@@ -1,7 +1,8 @@
-package com.example.pintube.data.retrofit
+package com.example.pintube.data.remote.api.retrofit
 
 import com.example.pintube.BuildConfig
 import okhttp3.ConnectionPool
+import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -23,9 +24,20 @@ object YouTubeApi {
             interceptor.level = HttpLoggingInterceptor.Level.NONE
         }
 
+        val keyInterceptor = Interceptor { chain ->
+            var request = chain.request()
+            val url = request.url.newBuilder()
+                .addQueryParameter("key", BuildConfig.YOUTUBE_API_KEY)
+                .build()
+            request = request.newBuilder()
+                .url(url)
+                .build()
+            chain.proceed(request)
+        }
 
         return OkHttpClient.Builder()
             .connectionPool(connectionPool)
+            .addInterceptor(keyInterceptor)
             .addNetworkInterceptor(interceptor)
             .build()
     }
