@@ -1,6 +1,6 @@
-package com.example.pintube.data.model.dto
+package com.example.pintube.data.remote.dto
 
-data class ThumbnailsDTO(
+data class ThumbnailsResponse(
     val default: Default?,
     val high: High?,
     val maxres: Maxres?,

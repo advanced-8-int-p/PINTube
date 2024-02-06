@@ -1,4 +1,4 @@
-package com.example.pintube.data.model
+package com.example.pintube.data.remote
 
 data class VideoModel(
     val thumbnail: String?,
