@@ -11,6 +11,7 @@
         app:cardCornerRadius="20dp">
 
         <ImageView
+            android:id="@+id/rv_search_image"
             android:layout_width="450dp"
             android:layout_height="300dp"
             android:scaleType="centerCrop"
@@ -30,6 +31,7 @@
             app:cardCornerRadius="100dp">
 
             <ImageView
+                android:id="@+id/rv_search_chImage"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
                 android:src="@drawable/iv_rvresult_thum"/>
@@ -43,6 +45,7 @@
             android:orientation="vertical">
 
             <TextView
+                android:id="@+id/rv_search_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="맛있는 참치 무조림 만들기"
@@ -56,17 +59,20 @@
                 android:orientation="horizontal">
 
             <TextView
+                android:id="@+id/rv_search_chTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="자취왕 스파르타" />
 
                 <TextView
+                    android:id="@+id/rv_search_viewCount"
                     android:layout_marginStart="5dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="22회" />
 
                 <TextView
+                    android:id="@+id/rv_search_uploadDate"
                     android:layout_marginStart="5dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
