@@ -18,7 +18,9 @@ import com.example.pintube.MainActivity
 import com.example.pintube.databinding.FragmentDetailBinding
 import com.example.pintube.ui.home.HomeViewModel
 import com.google.android.material.snackbar.Snackbar
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 
 class DetailFragment : Fragment() {
 
