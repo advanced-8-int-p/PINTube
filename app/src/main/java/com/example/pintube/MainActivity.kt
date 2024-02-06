@@ -8,6 +8,8 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.example.pintube.databinding.ActivityMainBinding
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.example.pintube.ui.detailpage.DetailFragment
+import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class MainActivity : AppCompatActivity() {
 
@@ -26,11 +28,19 @@ class MainActivity : AppCompatActivity() {
         // menu should be considered as top level destinations.
         val appBarConfiguration = AppBarConfiguration(
             setOf(
-                R.id.navigation_home, R.id.navigation_dashboard, R.id.navigation_notifications
+                R.id.navigation_home, R.id.navigation_shorts, R.id.navigation_mypage
             )
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
+
+        binding.btnToDetail.setOnClickListener {
+//            val intent = Intent(this, TempDetailActivity::class.java)
+//            startActivity(intent)
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.nav_host_fragment_activity_main, DetailFragment())
+                .commit()
+        }
 
     }
 }
