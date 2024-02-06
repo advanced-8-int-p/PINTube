@@ -1,6 +1,5 @@
 package com.example.pintube
 
-import android.content.Intent
 import android.os.Bundle
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
@@ -9,7 +8,7 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.example.pintube.databinding.ActivityMainBinding
-import com.example.pintube.ui.detailpage.DetailpageFragment
+import com.example.pintube.ui.detailpage.DetailFragment
 
 class MainActivity : AppCompatActivity() {
 
@@ -35,8 +34,10 @@ class MainActivity : AppCompatActivity() {
         navView.setupWithNavController(navController)
 
         binding.btnToDetail.setOnClickListener {
+//            val intent = Intent(this, TempDetailActivity::class.java)
+//            startActivity(intent)
             supportFragmentManager.beginTransaction()
-                .replace(R.id.nav_host_fragment_activity_main, DetailpageFragment())
+                .replace(R.id.nav_host_fragment_activity_main, DetailFragment())
                 .commit()
         }
     }
