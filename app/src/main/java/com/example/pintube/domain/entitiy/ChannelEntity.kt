@@ -1,4 +1,4 @@
-package com.example.pintube.data.repository.entitiy
+package com.example.pintube.domain.entitiy
 
 data class ChannelEntity (
     val id: String?,

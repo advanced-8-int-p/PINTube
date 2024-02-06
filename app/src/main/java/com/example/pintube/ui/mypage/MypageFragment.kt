@@ -7,13 +7,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import com.example.pintube.databinding.FragmentNotificationsBinding
 import com.example.pintube.databinding.FragmentMypageBinding
-import androidx.lifecycle.lifecycleScope
-import com.example.pintube.data.repository.ApiRepositoryImpl
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class MypageFragment : Fragment() {
 
