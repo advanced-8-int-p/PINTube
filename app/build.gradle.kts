@@ -80,5 +80,18 @@ android {
 //hilt
         implementation("com.google.dagger:hilt-android:2.50")
         ksp("com.google.dagger:hilt-android-compiler:2.50")
+
+//video player
+        implementation("com.google.android.exoplayer:exoplayer:2.19.1")
+
+        implementation("androidx.media3:media3-session:1.2.1")
+        implementation("androidx.media3:media3-exoplayer:1.2.1")
+        implementation("androidx.media3:media3-exoplayer-dash:1.2.1")
+        implementation("androidx.media3:media3-ui:1.2.1")
     }
+}
+dependencies {
+    implementation("androidx.legacy:legacy-support-v4:1.0.0")
+    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.7.0")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.7.0")
 }
