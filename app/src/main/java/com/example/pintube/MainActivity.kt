@@ -34,8 +34,6 @@ class MainActivity : AppCompatActivity() {
         navView.setupWithNavController(navController)
 
         binding.btnToDetail.setOnClickListener {
-//            val intent = Intent(this, TempDetailActivity::class.java)
-//            startActivity(intent)
             supportFragmentManager.beginTransaction()
                 .replace(R.id.nav_host_fragment_activity_main, DetailFragment())
                 .commit()

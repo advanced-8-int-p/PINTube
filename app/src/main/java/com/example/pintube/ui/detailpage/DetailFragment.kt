@@ -20,6 +20,7 @@ import androidx.media3.exoplayer.source.ProgressiveMediaSource
 import androidx.media3.session.MediaSession
 import com.example.pintube.MainActivity
 import com.example.pintube.R
+import com.example.pintube.data.repository.entitiy.VideoEntity
 import com.example.pintube.databinding.FragmentDetailBinding
 import com.google.android.material.snackbar.Snackbar
 
@@ -38,7 +39,6 @@ class DetailFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initPlayer()
-        initSession()
     }
 
     override fun onCreateView(
@@ -66,6 +66,10 @@ class DetailFragment : Fragment() {
     }
 
     private fun initPlayer() {
+
+//        if ( == null) {
+//
+//        }
         val mediaItem = MediaItem.fromUri(videoSample)
 
         player = ExoPlayer.Builder(requireContext())
@@ -87,17 +91,5 @@ class DetailFragment : Fragment() {
 
     }
 
-    private fun initSession() {
-        mediaSession = MediaSession.Builder(requireContext(), player)
-            .setSessionActivity(
-                PendingIntent.getActivity(
-                    requireContext(),
-                    0,
-                    Intent(requireContext(), MainActivity::class.java),
-                    0
-                )
-            )
-            .build()
-    }
 
 }
