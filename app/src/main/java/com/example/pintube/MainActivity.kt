@@ -1,13 +1,20 @@
 package com.example.pintube
 
 import android.os.Bundle
+import android.util.Log
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
+import com.example.pintube.data.repository.ApiRepository
+import com.example.pintube.data.repository.ApiRepositoryImpl
 import com.example.pintube.databinding.ActivityMainBinding
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import com.example.pintube.ui.detailpage.DetailFragment
 
 class MainActivity : AppCompatActivity() {
@@ -40,5 +47,6 @@ class MainActivity : AppCompatActivity() {
                 .replace(R.id.nav_host_fragment_activity_main, DetailFragment())
                 .commit()
         }
+
     }
 }
