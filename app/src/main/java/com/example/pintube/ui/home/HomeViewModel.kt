@@ -8,6 +8,9 @@ import com.example.pintube.data.local.dao.ChannelDAO
 import com.example.pintube.data.local.dao.CommentDAO
 import com.example.pintube.data.local.dao.VideoDAO
 import com.example.pintube.domain.repository.ApiRepository
+import com.example.pintube.domain.usecase.ConvertDurationTime
+import com.example.pintube.domain.usecase.ConvertToDaysAgo
+import com.example.pintube.domain.usecase.ConvertViewCount
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -19,6 +22,9 @@ class HomeViewModel @Inject constructor(
     private val videoDao: VideoDAO,
     private val commentDao: CommentDAO,
     private val channelDao: ChannelDAO,
+    private val convertDurationTime: ConvertDurationTime,
+    private val convertToDaysAgo: ConvertToDaysAgo,
+    private val convertViewCount: ConvertViewCount
 ) : ViewModel() {
 
     private val _text = MutableLiveData<String>().apply {
@@ -38,13 +44,13 @@ class HomeViewModel @Inject constructor(
         val videoEntities = repository.getPopularVideo()
         val videoItemDatas = videoEntities?.map {
             VideoItemData(
-                videoThumbnailUri = it.thumbnailMedium,
+                videoThumbnailUri = it.thumbnailHigh,
                 channelThumbnailUri = "https://picsum.photos/200/300",  // 채널 썸네일은 다시 가져와야하는건가
                 title = it.title,
                 channelName = it.channelTitle,
-                views = it.viewCount,
-                date = it.publishedAt,
-                length = it.duration,
+                views = convertViewCount(it.viewCount),
+                date = convertToDaysAgo(it.publishedAt),
+                length = convertDurationTime(it.duration),
                 isSaved = null,
                 id = it.id,
             )
