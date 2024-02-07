@@ -36,8 +36,10 @@ class MainActivity : AppCompatActivity() {
         navView.setupWithNavController(navController)
 
         binding.btnToDetail.setOnClickListener {
+
             supportFragmentManager.beginTransaction()
                 .replace(R.id.nav_host_fragment_activity_main, DetailFragment())
+                .addToBackStack(null)
                 .commit()
         }
 
