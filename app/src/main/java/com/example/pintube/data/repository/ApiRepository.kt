@@ -60,7 +60,8 @@ class ApiRepositoryImpl : ApiRepository {
             thumbnailMedium = item.snippet?.thumbnails?.medium?.url?: "",
             thumbnailLow = item.snippet?.thumbnails?.default?.url?: "",
             channelTitle = item.snippet?.channelTitle?: "",
-            liveBroadcastContent = item.snippet?.liveBroadcastContent?: ""
+            liveBroadcastContent = item.snippet?.liveBroadcastContent?: "",
+            viewCount = item.statics?.viewCount?: ""
         )
     }
     private fun convertVideoEntity(item: ItemResponse): VideoEntity {

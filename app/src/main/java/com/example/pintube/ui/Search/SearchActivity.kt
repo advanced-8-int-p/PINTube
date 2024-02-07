@@ -4,8 +4,9 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
+import androidx.lifecycle.lifecycleScope
 import com.example.pintube.R
-import com.example.pintube.data.model.VideoModel
+import com.example.pintube.data.local.Database
 import com.example.pintube.data.repository.ApiRepository
 import com.example.pintube.data.repository.ApiRepositoryImpl
 import com.example.pintube.databinding.ActivitySearchBinding
@@ -14,7 +15,7 @@ import kotlinx.coroutines.launch
 
 class SearchActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySearchBinding
-    private var searchItems: ArrayList<VideoModel> = arrayListOf()
+
     private val apiRepository: ApiRepository = ApiRepositoryImpl()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -22,26 +23,21 @@ class SearchActivity : AppCompatActivity() {
         binding = ActivitySearchBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-//        binding.ivSearchFragmentSearch.setOnClickListener {
-//            searchVideo()
-//
-//        }
-//    }
+        binding.ivSearchFragmentSearch.setOnClickListener {
+            val query = binding.etSearchFragmentBar.text.toString()
+            searchVideo(query)
+        }
 
-//    private fun searchVideo() {
-//        val query = binding.etSearchFragmentBar.text.toString().trim()
-//        if (query.isNotEmpty()) {
-//            GlobalScope.launch {
-//                val video = apiRepository.searchYoutube(query)
-//                setFragment()
-//            }
-//        }
-//
-//
-//    }
+
 
     }
-
+    private fun searchVideo(query : String) {
+        lifecycleScope.launch {
+            val searchResults = apiRepository.searchResult(query)
+            val searchResultFragment = SearchResultFragment.newInstance(searchResults)
+            setFragment(searchResultFragment)
+        }
+    }
 
     private fun setFragment(frag: Fragment) {
         supportFragmentManager.commit {

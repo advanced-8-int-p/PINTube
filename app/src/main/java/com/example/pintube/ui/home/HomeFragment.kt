@@ -8,8 +8,9 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import com.example.pintube.databinding.ActivitySearchBinding
 import com.example.pintube.databinding.FragmentHomeBinding
-import com.example.pintube.ui.Search.SearchResultFragment
+import com.example.pintube.ui.Search.SearchActivity
 
 class HomeFragment : Fragment() {
 
@@ -31,7 +32,7 @@ class HomeFragment : Fragment() {
         val root: View = binding.root
 
         binding.btnText.setOnClickListener{
-            val intent = Intent(requireContext(), SearchResultFragment::class.java)
+            val intent = Intent(requireContext(), SearchActivity::class.java)
             startActivity(intent)
         }
 

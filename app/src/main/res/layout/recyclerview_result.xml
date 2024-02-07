@@ -3,17 +3,19 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:layout_margin="11dp">
 
     <androidx.cardview.widget.CardView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:cardCornerRadius="20dp">
+        app:cardCornerRadius="20dp"
+        android:layout_gravity="center">
 
         <ImageView
             android:id="@+id/rv_search_image"
-            android:layout_width="450dp"
-            android:layout_height="300dp"
+            android:layout_width="400dp"
+            android:layout_height="180dp"
             android:scaleType="centerCrop"
             android:src="@drawable/iv_rvresult_thum" />
 
@@ -32,9 +34,9 @@
 
             <ImageView
                 android:id="@+id/rv_search_chImage"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:src="@drawable/iv_rvresult_thum"/>
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:src="@drawable/iv_rvresult_thum" />
 
         </androidx.cardview.widget.CardView>
 
@@ -48,8 +50,10 @@
                 android:id="@+id/rv_search_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="6dp"
+                android:layout_marginTop="3dp"
                 android:text="맛있는 참치 무조림 만들기"
-                android:textSize="17sp"
+                android:textSize="14sp"
                 android:textStyle="bold"/>
 
             <LinearLayout
@@ -60,6 +64,7 @@
 
             <TextView
                 android:id="@+id/rv_search_chTitle"
+                android:layout_marginStart="6dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="자취왕 스파르타" />

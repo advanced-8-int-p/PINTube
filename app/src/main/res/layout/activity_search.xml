@@ -12,7 +12,7 @@
         android:id="@+id/item_srchframe_cons"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="25dp"
+        android:paddingTop="10dp"
         android:paddingBottom="15dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -58,6 +58,9 @@
         android:id="@+id/search_frameLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
+
+
 
 
     </FrameLayout>
