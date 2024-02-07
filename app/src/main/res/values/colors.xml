@@ -9,4 +9,5 @@
     <color name="white">#FFFFFFFF</color>
     <color name="main_color">#8083FF</color>
     <color name="sub_color">#E3E0F3</color>
+    <color name="nav_inactive_color">#E3E0F3</color>
 </resources>

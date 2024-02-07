@@ -2,6 +2,7 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:theme="@style/Theme.MaterialComponents"
     android:id="@+id/mobile_navigation"
     app:startDestination="@+id/navigation_home">
 
@@ -22,4 +23,10 @@
         android:name="com.example.pintube.ui.mypage.MypageFragment"
         android:label="@string/title_mypage"
         tools:layout="@layout/fragment_mypage" />
+
+    <fragment
+        android:id="@+id/navigation_detail"
+        android:name="com.example.pintube.ui.detailpage.DetailFragment"
+        android:label="@string/title_mypage"
+        tools:layout="@layout/fragment_detail" />
 </navigation>

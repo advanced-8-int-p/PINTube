@@ -1,14 +1,12 @@
 package com.example.pintube
 
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
-import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.setupActionBarWithNavController
+import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.example.pintube.databinding.ActivityMainBinding
-import com.example.pintube.ui.detailpage.DetailFragment
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -16,31 +14,48 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
 
+    private val navHostFragment by lazy {
+        supportFragmentManager.findFragmentById(R.id.nav_host_fragment_activity_main) as NavHostFragment
+    }
+
+    private val navController by lazy {
+        navHostFragment.navController
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val navView: BottomNavigationView = binding.navView
 
-        val navController = findNavController(R.id.nav_host_fragment_activity_main)
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
-        val appBarConfiguration = AppBarConfiguration(
-            setOf(
-                R.id.navigation_home, R.id.navigation_shorts, R.id.navigation_mypage
-            )
-        )
-        setupActionBarWithNavController(navController, appBarConfiguration)
+        initView()
+    }
+
+    private fun initView() {
+        initBottomNav()
+    }
+
+    private fun initBottomNav() = with(binding){
         navView.setupWithNavController(navController)
+        navView.background = null
 
-        binding.btnToDetail.setOnClickListener {
+        mainFab.setOnClickListener {
+            if (mainMotion.currentState == mainMotion.startState) {
+                mainMotion.transitionToEnd()
+            } else {
+                mainMotion.transitionToStart()
+            }
+        }
 
-            supportFragmentManager.beginTransaction()
-                .replace(R.id.nav_host_fragment_activity_main, DetailFragment())
-                .addToBackStack(null)
-                .commit()
+        mainFabShorts.setOnClickListener {
+            navController.navigate(R.id.navigation_shorts)
+            mainMotion.transitionToStart()
+        }
+
+        mainFabPin.setOnClickListener {
+            navController.navigate(R.id.navigation_detail)
+            mainMotion.transitionToStart()
         }
 
     }

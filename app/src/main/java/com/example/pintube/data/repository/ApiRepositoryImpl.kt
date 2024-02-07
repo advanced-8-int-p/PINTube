@@ -2,6 +2,7 @@ package com.example.pintube.data.repository
 
 import com.example.pintube.data.remote.api.retrofit.YouTubeApi
 import com.example.pintube.data.remote.dto.ItemResponse
+import com.example.pintube.data.remote.dto.SearchItemResponse
 import com.example.pintube.domain.entitiy.ChannelEntity
 import com.example.pintube.domain.entitiy.CommentEntity
 import com.example.pintube.domain.entitiy.SearchEntity
@@ -45,7 +46,7 @@ class ApiRepositoryImpl @Inject constructor() : ApiRepository {
         }
     }
 
-    private fun convertSearchEntity(item: ItemResponse): SearchEntity {
+    private fun convertSearchEntity(item: SearchItemResponse): SearchEntity {
         return SearchEntity(
             id = item.id?.videoId?: "",
             publishedAt = item.snippet?.publishedAt?: "",
