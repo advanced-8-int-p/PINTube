@@ -12,7 +12,6 @@ import com.example.pintube.domain.usecase.ConvertDurationTime
 import com.example.pintube.domain.usecase.ConvertToDaysAgo
 import com.example.pintube.domain.usecase.ConvertViewCount
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -27,18 +26,14 @@ class HomeViewModel @Inject constructor(
     private val convertViewCount: ConvertViewCount
 ) : ViewModel() {
 
-    private val _text = MutableLiveData<String>().apply {
-        value = "This is home Fragment"
-    }
-    val text: LiveData<String> = _text
+    private var _populars: MutableLiveData<List<VideoItemData>> = MutableLiveData(emptyList())
+    val populars: LiveData<List<VideoItemData>> get() = _populars
 
-    private var _populars: MutableLiveData<ArrayList<VideoItemData>> = MutableLiveData(ArrayList())
-    val populars: LiveData<ArrayList<VideoItemData>> get() = _populars
+    private var _categories: MutableLiveData<List<String>> = MutableLiveData(emptyList())
+    val categories: LiveData<List<String>> get() = _categories
 
-    private var _categories: MutableLiveData<ArrayList<String>> = MutableLiveData(ArrayList())
-    val categories: LiveData<ArrayList<String>> get() = _categories
-
-    // 카테고리 비디오 리스트
+    private var _categoryVideos: MutableLiveData<List<VideoItemData>> = MutableLiveData(emptyList())
+    val categoryVideos: LiveData<List<VideoItemData>> get() = _categoryVideos
 
     fun updatePopulars() = viewModelScope.launch {
         val videoEntities = repository.getPopularVideo() ?: return@launch
@@ -58,9 +53,7 @@ class HomeViewModel @Inject constructor(
         _populars.postValue(ArrayList(videoItemDatas))
     }
 
-    fun searchResult(query: String) = viewModelScope.launch { repository.searchResult(query) }
-
-    fun dddSearch(query: String) = viewModelScope.launch {
+    fun searchCategory(query: String) = viewModelScope.launch {
         val videoEntities = repository.searchResult(query) ?: return@launch
         val videoItemDatas = videoEntities.map {
             VideoItemData(
@@ -75,10 +68,11 @@ class HomeViewModel @Inject constructor(
                 id = it.id,
             )
         }
-        _populars.postValue(ArrayList(videoItemDatas))
+        _categoryVideos.postValue(videoItemDatas)
     }
 
-    fun addAllToCategories(elements: Collection<String>) =
-        _categories.value!!.addAll(elements.toList())
+    fun addAllToCategories(elements: Collection<String>) {
+        _categories.value = _categories.value!!.toMutableList().apply { addAll(elements.toList()) }
+    }
 
 }
