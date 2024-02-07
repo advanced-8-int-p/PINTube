@@ -61,7 +61,7 @@ class HomeAdapter(private val context: Context) : RecyclerView.Adapter<RecyclerV
         fun onBind(item: MultiData) {
             Log.d("myTag:멀티인기뷰홀더 onBind", item.toString())  //ddd
             // TODO: 어댑터를 파라미터로 받아야하나
-            val adapter = PopularAdapter { _, _ -> }
+            val adapter = PopularVideoAdapter { _, _ -> }
             view.findViewById<RecyclerView>(R.id.rv_popular_videos).adapter =
                 adapter
             //ddd

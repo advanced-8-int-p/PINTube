@@ -8,9 +8,9 @@ import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.example.pintube.databinding.VideoItemBinding
 
-class PopularAdapter(
+class PopularVideoAdapter(
     private val onItemClick: (view: View, position: Int) -> Unit
-) : RecyclerView.Adapter<PopularAdapter.PopularViewHolder>() {
+) : RecyclerView.Adapter<PopularVideoAdapter.PopularViewHolder>() {
 
     var items = ArrayList<VideoItemData>()
 
