@@ -37,9 +37,9 @@ class HomeViewModel @Inject constructor(
 
     // 카테고리 비디오 리스트
 
-    fun updatePopulars() = viewModelScope.launch(Dispatchers.IO) {
-        val videoEntities = repository.getPopularVideo()
-        val videoItemDatas = videoEntities?.map {
+    fun updatePopulars() = viewModelScope.launch {
+        val videoEntities = repository.getPopularVideo() ?: return@launch
+        val videoItemDatas = videoEntities.map {
             VideoItemData(
                 videoThumbnailUri = it.thumbnailHigh,
                 channelThumbnailUri = null,  // 채널 썸네일은 다시 가져와야하는건가
