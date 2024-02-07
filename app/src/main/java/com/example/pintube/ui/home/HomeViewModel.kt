@@ -9,6 +9,7 @@ import com.example.pintube.data.local.dao.CommentDAO
 import com.example.pintube.data.local.dao.VideoDAO
 import com.example.pintube.domain.repository.ApiRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -33,9 +34,9 @@ class HomeViewModel @Inject constructor(
 
     // 카테고리 비디오 리스트
 
-    fun updatePopulars() = viewModelScope.launch {
-        val videoEntities = repository.getPopularVideo() ?: return@launch
-        val videoItemDatas = videoEntities.map {
+    fun updatePopulars() = viewModelScope.launch(Dispatchers.IO) {
+        val videoEntities = repository.getPopularVideo()
+        val videoItemDatas = videoEntities?.map {
             VideoItemData(
                 videoThumbnailUri = it.thumbnailMedium,
                 channelThumbnailUri = "https://picsum.photos/200/300",  // 채널 썸네일은 다시 가져와야하는건가

@@ -29,6 +29,7 @@ interface YoutubeSearchService {
         @Query("part") part: String = "snippet,contentDetails,statistics,player,liveStreamingDetails,topicDetails",
         @Query("chart") chart: String = "mostPopular",
         @Query("maxResults") maxResult: Int = 50,
+        @Query("regionCode") regionCode: String = "kr",
     ) : ApiResponse
 
     @GET("videos")
@@ -36,6 +37,7 @@ interface YoutubeSearchService {
         @Query("part") part: String = "contentDetails,statistics,player,liveStreamingDetails,topicDetails",
         @Query("id") ids: List<String>,
         @Query("maxResults") maxResult: Int? = 50,
+        @Query("regionCode") regionCode: String = "kr",
     ) : ApiResponse
 
     @GET("channels")

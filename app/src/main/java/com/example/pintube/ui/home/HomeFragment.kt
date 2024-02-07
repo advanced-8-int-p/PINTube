@@ -1,6 +1,7 @@
 package com.example.pintube.ui.home
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -69,21 +70,22 @@ class HomeFragment : Fragment() {
         )
     }
 
-    private fun initViewModel() = viewModel.also { vm ->
+    private fun initViewModel() = with(viewModel){
         //ddd
-        vm.addAllToCategories(List(10) { "카테고리$it" } )
+        addAllToCategories(List(10) { "카테고리$it" } )
         // TODO: 터짐
-//        vm.updatePopulars()
+        updatePopulars()
 
         // 이건 왜 안되지..
 //        vm.dddSearch("아이유")
 
-        vm.categories.observe(viewLifecycleOwner) {
+        categories.observe(viewLifecycleOwner) {
             categoryAdapter.submitList(it)
         }
-//        vm.populars.observe(viewLifecycleOwner) {
-//            popularVideoAdapter.items = it
-//        }
+        populars.observe(viewLifecycleOwner) {
+            popularVideoAdapter.items = it
+            Log.d("pop", "$it")
+        }
     }
 
 }
