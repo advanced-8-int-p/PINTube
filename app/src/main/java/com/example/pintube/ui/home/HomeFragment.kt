@@ -21,14 +21,14 @@ class HomeFragment : Fragment() {
     private val viewModel: HomeViewModel by viewModels()
 
     //ddd
-    val homeAdapter by lazy { HomeAdapter(requireContext()) }
-    val popularVideoAdapter = PopularVideoAdapter(
+    private val homeAdapter by lazy { HomeAdapter() }
+    private val popularVideoAdapter = PopularVideoAdapter(
         onItemClick = { view, position -> }
     )
-    val categoryAdapter = CategoryAdapter(
+    private val categoryAdapter = CategoryAdapter(
         onItemClick = { view, position -> }
     )
-    val categoryVideoAdapter = CategoryVideoAdapter(
+    private val categoryVideoAdapter = CategoryVideoAdapter(
         onItemClick = { view, position -> }
     )
 
@@ -54,12 +54,16 @@ class HomeFragment : Fragment() {
     }
 
     private fun initView() = binding.also { b ->
+        //ddd
+        popularVideoAdapter.items.addAll(List(10) { VideoItemData() })
+        categoryAdapter.items.addAll(List(10) { "카테고리$it" })
+        categoryVideoAdapter.items.addAll(List(10) { VideoItemData() })
+
         b.rvHomeMain.adapter = homeAdapter
-        homeAdapter.datas.addAll(
+        homeAdapter.sealedMultis.addAll(
             listOf(
-                MultiData(type = MULTI_POPULAR),
-                MultiData(type = MULTI_CATEGORY),
-                MultiData(),
+                SealedMulti.Popular(popularVideoAdapter),
+                SealedMulti.Category(categoryAdapter, categoryVideoAdapter),
             )
         )
     }

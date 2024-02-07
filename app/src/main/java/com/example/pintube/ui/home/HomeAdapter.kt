@@ -1,103 +1,68 @@
 package com.example.pintube.ui.home
 
-import android.content.Context
 import android.util.Log
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.pintube.R
+import com.example.pintube.databinding.HomeItemCategoryBinding
+import com.example.pintube.databinding.HomeItemPopularBinding
 
-class HomeAdapter(private val context: Context) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class HomeAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    var datas = mutableListOf<MultiData>()
+    var sealedMultis = mutableListOf<SealedMulti>()
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        val view: View?
-        return when (viewType) {
-            MULTI_POPULAR -> {
-                view = LayoutInflater.from(parent.context).inflate(
-                    R.layout.home_item_popular,
-                    parent,
-                    false
-                )
-                MultiViewHolderPopular(view)
-            }
+    inner class MultiViewHolderPopular(private val binding: HomeItemPopularBinding) :
+        RecyclerView.ViewHolder(binding.root) {
 
-            else -> {
-                view = LayoutInflater.from(parent.context).inflate(
-                    R.layout.home_item_category,
-                    parent,
-                    false
-                )
-                MultiViewHolderCategory(view)
-            }
+        fun onBind(item: SealedMulti.Popular) {
+            Log.d("myTag:홈어댑터 popular onBind", item.toString())  //ddd
+
+            binding.rvPopularVideos.adapter = item.videoAdapter
         }
     }
 
-    override fun getItemCount(): Int = datas.size
+    inner class MultiViewHolderCategory(private val binding: HomeItemCategoryBinding) :
+        RecyclerView.ViewHolder(binding.root) {
 
-    override fun getItemViewType(position: Int): Int {
-        return datas[position].type
+        fun onBind(item: SealedMulti.Category) = binding.also { b ->
+            b.rvCategoryCategories.adapter = item.categoryAdapter
+            b.rvCategoryVideos.adapter = item.videoAdapter
+        }
+    }
+
+    override fun getItemCount(): Int = sealedMultis.size
+    override fun getItemViewType(position: Int): Int = sealedMultis[position].viewType
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        return when (viewType) {
+            MULTI_POPULAR ->
+                MultiViewHolderPopular(
+                    HomeItemPopularBinding
+                        .inflate(LayoutInflater.from(parent.context), parent, false)
+                )
+
+            // MULTI_CATEGORY
+            else ->
+                MultiViewHolderCategory(
+                    HomeItemCategoryBinding
+                        .inflate(LayoutInflater.from(parent.context), parent, false)
+                )
+        }
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        when (datas[position].type) {
-            MULTI_POPULAR -> {
-                (holder as MultiViewHolderPopular).onBind(datas[position])
-                holder.setIsRecyclable(false)
+        when (val item = sealedMultis[position]) {
+            is SealedMulti.Popular -> {
+                (holder as MultiViewHolderPopular).onBind(item)
+                // TODO: holder.setIsRecyclable(false) 안쓰면 문제가 있나?
+//                holder.setIsRecyclable(false)
             }
 
-            else -> {
-                (holder as MultiViewHolderCategory).onBind(datas[position])
-                holder.setIsRecyclable(false)
+            is SealedMulti.Category -> {
+                (holder as MultiViewHolderCategory).onBind(item)
+//                holder.setIsRecyclable(false)
             }
         }
     }
 
-    inner class MultiViewHolderPopular(private val view: View) :
-        RecyclerView.ViewHolder(view) {
-
-        fun onBind(item: MultiData) {
-            Log.d("myTag:멀티인기뷰홀더 onBind", item.toString())  //ddd
-            // TODO: 어댑터를 파라미터로 받아야하나
-            val adapter = PopularVideoAdapter { _, _ -> }
-            view.findViewById<RecyclerView>(R.id.rv_popular_videos).adapter =
-                adapter
-            //ddd
-            adapter.items.addAll(List(10) { VideoItemData() })
-        }
-    }
-
-    inner class MultiViewHolderCategory(private val view: View) :
-        RecyclerView.ViewHolder(view) {
-
-        fun onBind(item: MultiData) {
-            Log.d("myTag:멀티카테고리뷰홀더 onBind", item.toString())  //ddd
-            // TODO: 어댑터를 파라미터로 받아야하나
-            val categoryAdapter = CategoryAdapter { _, _ -> }
-            view.findViewById<RecyclerView>(R.id.rv_category_categories).adapter =
-                categoryAdapter
-            //ddd
-            categoryAdapter.items.addAll(List(10) { "카테고리$it" })
-
-            val categoryVideoAdapter = CategoryVideoAdapter { _, _ -> }
-            view.findViewById<RecyclerView>(R.id.rv_category_videos).adapter =
-                categoryVideoAdapter
-            //ddd
-            categoryVideoAdapter.items.addAll(List(10) { VideoItemData() })
-        }
-    }
-
-//    inner class MultiViewHolder3(view: View) : RecyclerView.ViewHolder(view) {
-//
-//        private val txtName: TextView = view.findViewById(R.id.tv_rv_name)
-//        private val imgProfile: ImageView = view.findViewById(R.id.img_rv_photo)
-//
-//        fun bind(item: MultiData) {
-//            txtName.text = item.name
-//            Glide.with(itemView).load(item.image).into(imgProfile)
-//
-//        }
-//    }
 }
