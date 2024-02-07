@@ -1,5 +1,9 @@
 package com.example.pintube.domain.entitiy
 
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
+
+@Parcelize
 data class SearchEntity(
     val id: String?,
     val publishedAt: String?,
@@ -11,4 +15,4 @@ data class SearchEntity(
     val thumbnailLow: String?,
     val channelTitle: String?,
     val liveBroadcastContent: String?,
-)
+) : Parcelable
