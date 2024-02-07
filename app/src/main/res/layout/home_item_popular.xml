@@ -28,7 +28,7 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            tools:listitem="@layout/video_item" />
+            tools:listitem="@layout/popular_item" />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

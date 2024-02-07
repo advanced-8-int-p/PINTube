@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
-import com.example.pintube.databinding.VideoItemBinding
+import com.example.pintube.databinding.PopularItemBinding
 
 class PopularVideoAdapter(
     private val onItemClick: (view: View, position: Int) -> Unit
@@ -14,13 +14,15 @@ class PopularVideoAdapter(
 
     var items = ArrayList<VideoItemData>()
 
-    inner class PopularViewHolder(private val binding: VideoItemBinding) :
+    inner class PopularViewHolder(private val binding: PopularItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun onBind(item: VideoItemData) = binding.also { b ->
-            item.videoThumbnailUri?.let { b.ivItemVideo.load(it) }
-            item.channelThumbnailUri?.let { b.ivItemChannel.load(it) }
-            item.title?.let { b.tvItemTitle.text = it }
-            item.channelName?.let { b.tvItemName.text = it }
+            item.videoThumbnailUri?.let { b.ivPopularItemVideo.load(it) }
+            item.channelThumbnailUri?.let { b.ivPopularItemChannel.load(it) }
+            item.title?.let { b.tvPopularItemTitle.text = it }
+            item.channelName?.let { b.tvPopularItemName.text = it }
+            item.length?.let { b.tvPopularItemLength.text = it }
+            // item.isSaved
 
             b.root.setOnClickListener {
                 Log.d("myTag:Popular 아이템 클릭", "$layoutPosition: ${items[layoutPosition]}")
@@ -31,7 +33,7 @@ class PopularVideoAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PopularViewHolder {
         return PopularViewHolder(
-            VideoItemBinding
+            PopularItemBinding
                 .inflate(LayoutInflater.from(parent.context), parent, false)
         )
     }

@@ -7,4 +7,6 @@ data class VideoItemData(
     var channelName: String? = null,
     var views: String? = null,
     var date: String? = null,
+    var length: String? = null,
+    var isSaved: Boolean? = null,
 )
