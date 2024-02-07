@@ -10,6 +10,8 @@ data class SearchEntity(
     val channelId: String?,
     val title: String?,
     val description: String?,
+    val localizedTitle: String?,
+    val localizedDescription: String?,
     val thumbnailHigh: String?,
     val thumbnailMedium: String?,
     val thumbnailLow: String?,

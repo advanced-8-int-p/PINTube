@@ -55,7 +55,6 @@
         android:layout_height="0dp"
         android:background="@drawable/subtract"
         android:clipToOutline="true"
-        android:paddingTop="40dp"
         app:layout_constraintBottom_toBottomOf="parent"
 
         app:layout_constraintTop_toBottomOf="@id/cl_home_top_bar">
