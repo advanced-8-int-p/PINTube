@@ -2,20 +2,16 @@ package com.example.pintube.data.repository
 
 import com.example.pintube.data.remote.api.retrofit.YouTubeApi
 import com.example.pintube.data.remote.dto.ItemResponse
-import com.example.pintube.data.repository.entitiy.ChannelEntity
-import com.example.pintube.data.repository.entitiy.CommentEntity
-import com.example.pintube.data.repository.entitiy.SearchEntity
-import com.example.pintube.data.repository.entitiy.VideoEntity
+import com.example.pintube.domain.entitiy.ChannelEntity
+import com.example.pintube.domain.entitiy.CommentEntity
+import com.example.pintube.domain.entitiy.SearchEntity
+import com.example.pintube.domain.entitiy.VideoEntity
+import com.example.pintube.domain.repository.ApiRepository
+import javax.inject.Singleton
+import javax.inject.Inject
 
-interface ApiRepository {
-    suspend fun searchResult(query: String): List<SearchEntity>?
-    suspend fun getPopularVideo(): List<VideoEntity>?
-    suspend fun getContentDetails(idList: List<String>): List<VideoEntity>?
-    suspend fun getChannelDetails(idList: List<String>): List<ChannelEntity>?
-    suspend fun getComments(videoId: String): List<CommentEntity>?
-}
-
-class ApiRepositoryImpl : ApiRepository {
+@Singleton
+class ApiRepositoryImpl @Inject constructor() : ApiRepository {
 
     override suspend fun searchResult(
         query: String

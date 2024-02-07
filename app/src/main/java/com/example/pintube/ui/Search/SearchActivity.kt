@@ -6,10 +6,9 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 import androidx.lifecycle.lifecycleScope
 import com.example.pintube.R
-import com.example.pintube.data.local.Database
-import com.example.pintube.data.repository.ApiRepository
 import com.example.pintube.data.repository.ApiRepositoryImpl
 import com.example.pintube.databinding.ActivitySearchBinding
+import com.example.pintube.domain.repository.ApiRepository
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 

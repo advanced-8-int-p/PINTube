@@ -7,8 +7,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.FragmentResultListener
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.pintube.data.repository.entitiy.SearchEntity
+import com.example.pintube.data.local.entity.LocalSearchEntity
 import com.example.pintube.databinding.FragmentSearchResultBinding
+import com.example.pintube.domain.entitiy.SearchEntity
 
 
 class SearchResultFragment : Fragment() {

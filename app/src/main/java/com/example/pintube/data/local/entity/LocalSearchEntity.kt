@@ -1,10 +1,11 @@
-package com.example.pintube.data.repository.entitiy
+package com.example.pintube.data.local.entity
 
-import android.os.Parcelable
-import kotlinx.android.parcel.Parcelize
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 
-@Parcelize
-data class SearchEntity(
+@Entity(tableName = "search_info")
+data class LocalSearchEntity(
+    val query: String,
     val id: String?,
     val publishedAt: String?,
     val channelId: String?,
@@ -15,5 +16,6 @@ data class SearchEntity(
     val thumbnailLow: String?,
     val channelTitle: String?,
     val liveBroadcastContent: String?,
-    val viewCount: String?
-) : Parcelable
+){
+    @PrimaryKey(autoGenerate = true) var key:Int = 0
+}

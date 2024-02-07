@@ -6,11 +6,11 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.pintube.data.local.entity.LocalSearchEntity
 import com.example.pintube.data.local.entity.VideoCacheEntity
 import com.example.pintube.data.remote.VideoModel
-import com.example.pintube.data.repository.entitiy.SearchEntity
-import com.example.pintube.data.repository.entitiy.VideoEntity
 import com.example.pintube.databinding.RecyclerviewResultBinding
+import com.example.pintube.domain.entitiy.SearchEntity
 
 class SearchResultAdapter(private val mContext : Context, private val items : MutableList<SearchEntity>) : RecyclerView.Adapter<SearchResultAdapter.SearchResultViewHolder>(){
 
@@ -27,7 +27,6 @@ class SearchResultAdapter(private val mContext : Context, private val items : Mu
         holder.mainTitle.text = item. title
         holder.chTitle.text = item.channelTitle
         holder.uploadDate.text = item.publishedAt
-        holder.viewCount.text = item.viewCount
 
         Glide.with(mContext)
             .load(items[position].thumbnailHigh)
