@@ -4,12 +4,22 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.example.pintube.databinding.VideoItemBinding
 
 class CategoryVideoAdapter(
     private val onItemClick: (view: View, position: Int) -> Unit
+//) : ListAdapter<VideoItemData, CategoryVideoAdapter.CategoryVideoViewHolder>(object :
+//    DiffUtil.ItemCallback<VideoItemData>() {
+//    override fun areItemsTheSame(oldItem: VideoItemData, newItem: VideoItemData): Boolean =
+//        oldItem.id == newItem.id
+//
+//    override fun areContentsTheSame(oldItem: VideoItemData, newItem: VideoItemData): Boolean =
+//        oldItem == newItem
+//}) {
 ) : RecyclerView.Adapter<CategoryVideoAdapter.CategoryVideoViewHolder>() {
 
     var items = ArrayList<VideoItemData>()

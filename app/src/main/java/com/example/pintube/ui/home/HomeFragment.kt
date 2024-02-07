@@ -51,12 +51,13 @@ class HomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         initView()
+        initViewModel()
     }
 
     private fun initView() = binding.also { b ->
         //ddd
         popularVideoAdapter.items.addAll(List(10) { VideoItemData() })
-        categoryAdapter.items.addAll(List(10) { "카테고리$it" })
+//        categoryAdapter.submitList(List(10) { "카테고리$it" })
         categoryVideoAdapter.items.addAll(List(10) { VideoItemData() })
 
         b.rvHomeMain.adapter = homeAdapter
@@ -67,4 +68,22 @@ class HomeFragment : Fragment() {
             )
         )
     }
+
+    private fun initViewModel() = viewModel.also { vm ->
+        //ddd
+        vm.addAllToCategories(List(10) { "카테고리$it" } )
+        // TODO: 터짐
+//        vm.updatePopulars()
+
+        // 이건 왜 안되지..
+//        vm.dddSearch("아이유")
+
+        vm.categories.observe(viewLifecycleOwner) {
+            categoryAdapter.submitList(it)
+        }
+//        vm.populars.observe(viewLifecycleOwner) {
+//            popularVideoAdapter.items = it
+//        }
+    }
+
 }

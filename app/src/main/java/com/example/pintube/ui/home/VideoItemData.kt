@@ -9,4 +9,17 @@ data class VideoItemData(
     var date: String? = null,
     var length: String? = null,
     var isSaved: Boolean? = null,
+    val id: String? = null,
 )
+
+/*
+videoThumbnailUri = "https://picsum.photos/200/300",
+channelThumbnailUri = "https://picsum.photos/200/300",
+title = null,
+channelName = null,
+views = null,
+date = null,
+length = null,
+isSaved = null,
+id = null,
+ */

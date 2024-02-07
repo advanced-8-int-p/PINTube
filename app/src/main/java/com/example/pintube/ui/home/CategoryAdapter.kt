@@ -4,23 +4,28 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.pintube.databinding.CategoryItemBinding
 
 class CategoryAdapter(
     private val onItemClick: (view: View, position: Int) -> Unit
-) : RecyclerView.Adapter<CategoryAdapter.CategoryViewHolder>() {
-
-    var items = ArrayList<String>()
+) : ListAdapter<String, CategoryAdapter.CategoryViewHolder>(object :
+    DiffUtil.ItemCallback<String>() {
+    override fun areItemsTheSame(oldItem: String, newItem: String): Boolean = true
+    override fun areContentsTheSame(oldItem: String, newItem: String): Boolean =
+        oldItem == newItem
+}) {
 
     inner class CategoryViewHolder(private val binding: CategoryItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun onBind(model: String) = binding.also { b ->
+        fun onBind(item: String) = binding.also { b ->
 //            Log.d("myTag:카테고리뷰홀더 onBind", model)  //ddd
-            b.tvCategoryName.text = model
+            b.tvCategoryName.text = item
 
             b.root.setOnClickListener {
-                Log.d("myTag:카테고리어댑터 아이템 클릭", "$layoutPosition: ${items[layoutPosition]}")
+                Log.d("myTag:카테고리어댑터 아이템 클릭", "$layoutPosition: $item")
                 onItemClick(it, layoutPosition)
             }
         }
@@ -34,8 +39,7 @@ class CategoryAdapter(
     }
 
     override fun onBindViewHolder(holder: CategoryViewHolder, position: Int) {
-        holder.onBind(items[position])
+        holder.onBind(getItem(position))
     }
 
-    override fun getItemCount(): Int = items.count()
 }
