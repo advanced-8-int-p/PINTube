@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:paddingHorizontal="8dp"
+    android:paddingVertical="8dp">
+
+    <ImageView
+        android:id="@+id/iv_popular_item_video"
+        android:layout_width="360dp"
+        android:layout_height="270dp"
+        android:background="@drawable/round_corner"
+        android:clipToOutline="true"
+        android:maxHeight="350dp"
+        android:minHeight="250dp"
+        android:scaleType="centerCrop"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/hamster" />
+
+    <View
+        android:id="@+id/vv_popular_item_filter"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@drawable/round_corner"
+        android:backgroundTint="#33000000"
+        app:layout_constraintBottom_toBottomOf="@id/iv_popular_item_video"
+        app:layout_constraintEnd_toEndOf="@id/iv_popular_item_video"
+        app:layout_constraintStart_toStartOf="@id/iv_popular_item_video"
+        app:layout_constraintTop_toTopOf="@id/iv_popular_item_video" />
+
+    <FrameLayout
+        android:id="@+id/btn_fl_popular_item_pin_back"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:background="#8083FF"
+        app:layout_constraintBottom_toBottomOf="@id/iv_popular_item_video"
+        app:layout_constraintEnd_toEndOf="@id/iv_popular_item_video">
+
+        <ImageView
+            android:id="@+id/iv_popular_item_pin"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="2dp"
+            app:srcCompat="@drawable/push_pin" />
+    </FrameLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_popular_item_length"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:background="@drawable/round_corner_legnth_back"
+        android:paddingHorizontal="8dp"
+        android:paddingVertical="4dp"
+        app:layout_constraintEnd_toEndOf="@id/iv_popular_item_video"
+        app:layout_constraintTop_toTopOf="@id/iv_popular_item_video">
+
+        <ImageView
+            android:id="@+id/iv_popular_item_play_circle"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/tv_popular_item_length"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/play_circle" />
+
+        <TextView
+            android:id="@+id/tv_popular_item_length"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:text="00:00:00"
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@id/iv_popular_item_play_circle"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_popular_item_desc"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="4dp"
+        android:paddingVertical="4dp"
+        app:layout_constraintBottom_toBottomOf="@id/iv_popular_item_video"
+        app:layout_constraintEnd_toStartOf="@id/btn_fl_popular_item_pin_back"
+        app:layout_constraintStart_toStartOf="@id/iv_popular_item_video">
+
+        <ImageView
+            android:id="@+id/iv_popular_item_channel"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:background="@drawable/round_image"
+            android:clipToOutline="true"
+            android:scaleType="centerCrop"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/hamster" />
+
+        <TextView
+            android:id="@+id/tv_popular_item_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="제목입니다 tv_popular_item_title"
+            android:textColor="@color/white"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toEndOf="@id/iv_popular_item_channel"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_popular_item_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="채널명 어쩌구 tv"
+            android:textColor="@color/white"
+            android:textSize="9sp"
+            app:layout_constraintStart_toStartOf="@id/tv_popular_item_title"
+            app:layout_constraintTop_toBottomOf="@id/tv_popular_item_title" />
+
+        <TextView
+            android:id="@+id/tv_popular_item_views"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:text="조회수 0.0천회"
+            android:textColor="@color/white"
+            android:textSize="9sp"
+            app:layout_constraintBottom_toBottomOf="@id/tv_popular_item_name"
+            app:layout_constraintStart_toEndOf="@id/tv_popular_item_name" />
+
+        <TextView
+            android:id="@+id/tv_popular_item_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:text="0일전"
+            android:textColor="@color/white"
+            android:textSize="9sp"
+            app:layout_constraintBottom_toBottomOf="@id/tv_popular_item_name"
+            app:layout_constraintStart_toEndOf="@id/tv_popular_item_views"
+            app:layout_constraintTop_toTopOf="@id/tv_popular_item_name" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
