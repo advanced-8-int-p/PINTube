@@ -1,6 +1,7 @@
 package com.example.pintube.data.remote.api.retrofit
 
 import com.example.pintube.data.remote.dto.ApiResponse
+import com.example.pintube.data.remote.dto.SearchApiResponse
 import retrofit2.http.GET
 import retrofit2.http.Query
 
@@ -21,13 +22,14 @@ interface YoutubeSearchService {
         @Query("type") type: String = "video", // channel, playlist, video
         @Query("videoType") videoType: String = "any", // any – 모든 동영상을 반환합니다, episode - 프로그램의 에피소드만 검색합니다., movie - 영화만 검색합니다
         @Query("videoSyndicated") videoSyndicated: String = "true", // any – 배급 여부에 관계 없이 모든 동영상을 반환합니다.,true – 배급된 동영상만 검색합니다. 외부에서 재생할 수 있는 동영상
-    ) : ApiResponse
+    ) : SearchApiResponse
 
     @GET("videos")
     suspend fun getPopularVideo (
         @Query("part") part: String = "snippet,contentDetails,statistics,player,liveStreamingDetails,topicDetails",
         @Query("chart") chart: String = "mostPopular",
         @Query("maxResults") maxResult: Int = 50,
+        @Query("regionCode") regionCode: String = "kr",
     ) : ApiResponse
 
     @GET("videos")
@@ -35,6 +37,7 @@ interface YoutubeSearchService {
         @Query("part") part: String = "contentDetails,statistics,player,liveStreamingDetails,topicDetails",
         @Query("id") ids: List<String>,
         @Query("maxResults") maxResult: Int? = 50,
+        @Query("regionCode") regionCode: String = "kr",
     ) : ApiResponse
 
     @GET("channels")
