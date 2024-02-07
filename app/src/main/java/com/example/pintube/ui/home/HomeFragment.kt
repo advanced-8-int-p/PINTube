@@ -73,10 +73,8 @@ class HomeFragment : Fragment() {
     private fun initViewModel() = with(viewModel){
         //ddd
         addAllToCategories(List(10) { "카테고리$it" } )
-        // TODO: 터짐
         updatePopulars()
 
-        // 이건 왜 안되지..
 //        vm.dddSearch("아이유")
 
         categories.observe(viewLifecycleOwner) {
@@ -84,6 +82,7 @@ class HomeFragment : Fragment() {
         }
         populars.observe(viewLifecycleOwner) {
             popularVideoAdapter.items = it
+            popularVideoAdapter.notifyDataSetChanged()
             Log.d("pop", "$it")
         }
     }
