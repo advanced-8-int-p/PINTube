@@ -1,5 +1,6 @@
 package com.example.pintube.ui.Search
 
+import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -13,22 +14,34 @@ import com.example.pintube.domain.repository.ApiRepository
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
+
 class SearchActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySearchBinding
 
     private val apiRepository: ApiRepository = ApiRepositoryImpl()
-
-    private val searchList: ArrayList<SearchData>? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
         binding = ActivitySearchBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+
+
+
+
         binding.ivSearchFragmentSearch.setOnClickListener {
             val query = binding.etSearchFragmentBar.text.toString()
+            if (query.isNotBlank()) {
+                SharedPrefManager.saveSearchHistory(this, query)
+
+            }
             searchVideo(query)
         }
+        binding.ivSearchFragmentBackArrow.setOnClickListener {
+            super.onBackPressed()
+
+        }
+//        val adapter = SearchListAdapter()
 
 
 

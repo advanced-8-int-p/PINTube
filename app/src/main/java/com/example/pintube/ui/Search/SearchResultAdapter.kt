@@ -24,7 +24,7 @@ class SearchResultAdapter(private val mContext : Context, private val items : Mu
 
 
 
-        holder.mainTitle.text = item. title
+        holder.mainTitle.text = item.title
         holder.chTitle.text = item.channelTitle
         holder.uploadDate.text = item.publishedAt
 
