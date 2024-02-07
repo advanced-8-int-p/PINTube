@@ -10,11 +10,11 @@
 
     <item
         android:id="@+id/navigation_shorts"
-        android:enabled="true"
+        android:enabled="false"
         android:title="" />
     <item
         android:id="@+id/navigation_detail"
-        android:enabled="true"
+        android:enabled="false"
         android:title="" />
 
 

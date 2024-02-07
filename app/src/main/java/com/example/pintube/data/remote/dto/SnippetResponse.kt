@@ -16,7 +16,7 @@ data class SnippetResponse(
     val title: String?,
     val customUrl: String?,
     val country: String?,
-    val topLevelComment: ItemResponse?,
+    val topLevelComment: SearchItemResponse?,
     val textDisplay: String?,
     val textOriginal: String?,
     val authorDisplayName: String?,

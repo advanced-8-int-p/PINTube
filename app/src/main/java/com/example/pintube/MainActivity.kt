@@ -58,11 +58,5 @@ class MainActivity : AppCompatActivity() {
             mainMotion.transitionToStart()
         }
 
-        navController.addOnDestinationChangedListener{ _, it,_ ->
-            when(it.id){
-                R.id.navigation_shorts -> {}
-                else -> {}
-            }
-        }
     }
 }
