@@ -17,9 +17,6 @@
         android:enabled="false"
         android:title="" />
 
-
-    <!--        android:icon="@drawable/ic_dashboard_black_24dp"
-            android:title="@string/title_shorts"-->
     <item
         android:id="@+id/navigation_mypage"
         android:icon="@drawable/ic_nav_profile"

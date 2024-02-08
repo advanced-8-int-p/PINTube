@@ -64,7 +64,7 @@ class ApiRepositoryImpl @Inject constructor() : ApiRepository {
     }
     private fun convertVideoEntity(item: ItemResponse): VideoEntity {
         return VideoEntity(
-            id = item.id?.toString(),
+            id = item.id?: "",
             publishedAt = item.snippet?.publishedAt?: "",
             channelId = item.snippet?.channelId?: "",
             title = item.snippet?.title?: "",
@@ -97,7 +97,7 @@ class ApiRepositoryImpl @Inject constructor() : ApiRepository {
 
     private fun convertChannelEntity(item: ItemResponse): ChannelEntity {
         return ChannelEntity(
-            id = item.id?.toString(),
+            id = item.id?: "",
             title = item.brandingSettings?.channel?.title?: "",
             description = item.brandingSettings?.channel?.description?: "",
             customUrl = item.snippet?.customUrl?: "",
