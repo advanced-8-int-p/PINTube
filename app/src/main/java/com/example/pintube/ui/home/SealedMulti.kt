@@ -6,6 +6,9 @@ const val MULTI_POPULAR = 1
 /** 2 */
 const val MULTI_CATEGORY = 2
 
+/** 3 */
+const val MULTI_VIDEO = 3
+
 
 const val MULTI_HEADER = 0
 
@@ -13,11 +16,12 @@ sealed interface SealedMulti {
 
     val viewType: Int
 //    val holder: RecyclerView.ViewHolder  //TODO: (후순위) 실드에 뷰홀더 통합시킬 수 있을까
-data object Header: SealedMulti {
-    override val viewType: Int
-        get() = MULTI_HEADER
 
-}
+    data object Header : SealedMulti {
+        override val viewType: Int
+            get() = MULTI_HEADER
+
+    }
 
     data class Popular(
         val videoAdapter: PopularVideoAdapter
@@ -28,9 +32,14 @@ data object Header: SealedMulti {
 
     data class Category(
         val categoryAdapter: CategoryAdapter,
-        val videoAdapter: CategoryVideoAdapter,
     ) : SealedMulti {
         override val viewType: Int = MULTI_CATEGORY
+    }
+
+    data class Video(
+        val videoItemData: VideoItemData,
+    ) : SealedMulti {
+        override val viewType: Int = MULTI_VIDEO
     }
 
 }

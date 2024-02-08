@@ -4,15 +4,19 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import coil.load
 import com.example.pintube.databinding.HomeItemCategoryBinding
 import com.example.pintube.databinding.HomeItemPopularBinding
 import com.example.pintube.databinding.ItemHeaderBinding
+import com.example.pintube.databinding.VideoItemBinding
 
 class HomeAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     var sealedMultis = mutableListOf<SealedMulti>()
 
-    class HeaderHolder(private val binding: ItemHeaderBinding) : RecyclerView.ViewHolder(binding.root)
+    class HeaderHolder(private val binding: ItemHeaderBinding) :
+        RecyclerView.ViewHolder(binding.root)
+
     inner class MultiViewHolderPopular(private val binding: HomeItemPopularBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
@@ -28,7 +32,22 @@ class HomeAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
         fun onBind(item: SealedMulti.Category) = binding.also { b ->
             b.rvCategoryCategories.adapter = item.categoryAdapter
-            b.rvCategoryVideos.adapter = item.videoAdapter
+        }
+    }
+
+    inner class MultiViewHolderVideo(private val binding: VideoItemBinding) :
+        RecyclerView.ViewHolder(binding.root) {
+
+        fun onBind(item: SealedMulti.Video) = binding.also { b ->
+            item.videoItemData.videoThumbnailUri?.let { b.ivItemVideo.load(it) }
+            item.videoItemData.channelThumbnailUri?.let { b.ivItemChannel.load(it) }
+            item.videoItemData.title?.let { b.tvItemTitle.text = it }
+            item.videoItemData.channelName?.let { b.tvItemName.text = it }
+
+//            b.root.setOnClickListener {
+//                Log.d("jj-홈 아이템(비디오) 클릭", "$layoutPosition: ${getItem(layoutPosition)}")
+//                onItemClick(it, layoutPosition)
+//            }
         }
     }
 
@@ -37,19 +56,31 @@ class HomeAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
-            MULTI_HEADER -> HeaderHolder(ItemHeaderBinding.inflate(LayoutInflater.from(parent.context),parent, false))
+            MULTI_HEADER ->
+                HeaderHolder(
+                    ItemHeaderBinding
+                        .inflate(LayoutInflater.from(parent.context), parent, false)
+                )
+
             MULTI_POPULAR ->
                 MultiViewHolderPopular(
                     HomeItemPopularBinding
                         .inflate(LayoutInflater.from(parent.context), parent, false)
                 )
 
-            // MULTI_CATEGORY
-            else ->
+            MULTI_CATEGORY ->
                 MultiViewHolderCategory(
                     HomeItemCategoryBinding
                         .inflate(LayoutInflater.from(parent.context), parent, false)
                 )
+
+            MULTI_VIDEO ->
+                MultiViewHolderVideo(
+                    VideoItemBinding
+                        .inflate(LayoutInflater.from(parent.context), parent, false)
+                )
+
+            else -> error("jj-HomeAdapter.kt onCreateViewHolder viewType error")
         }
     }
 
@@ -66,9 +97,9 @@ class HomeAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 //                holder.setIsRecyclable(false)
             }
 
-            is SealedMulti.Header -> {
-                (holder as HeaderHolder)
-            }
+            is SealedMulti.Header -> Unit
+
+            is SealedMulti.Video -> (holder as MultiViewHolderVideo).onBind(item)
         }
     }
 
