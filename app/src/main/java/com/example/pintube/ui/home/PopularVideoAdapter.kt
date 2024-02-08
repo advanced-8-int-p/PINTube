@@ -28,8 +28,9 @@ class PopularVideoAdapter(
             item.channelThumbnailUri?.let { b.ivPopularItemChannel.load(it) }
             item.title?.let { b.tvPopularItemTitle.text = it }
             item.channelName?.let { b.tvPopularItemName.text = it }
+            item.date?.let { b.tvPopularItemDate.text = it }
+            item.views?.let { b.tvPopularItemViews.text = it }
             item.length?.let { b.tvPopularItemLength.text = it }
-            // item.isSaved
 
             b.root.setOnClickListener {
                 Log.d("jj-Popular 아이템 클릭", "$layoutPosition: ${getItem(layoutPosition)}")

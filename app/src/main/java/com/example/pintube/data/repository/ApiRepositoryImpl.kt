@@ -86,10 +86,10 @@ class ApiRepositoryImpl @Inject constructor() : ApiRepository {
             caption = item.contentDetails?.caption?: "",
             licensedContent = item.contentDetails?.licensedContent,
             projection = item.contentDetails?.projection?: "",
-            viewCount = item.statics?.viewCount?: "",
-            likeCount = item.statics?.likeCount?: "",
-            favoriteCount = item.statics?.favoriteCount?: "",
-            commentCount = item.statics?.commentCount?: "",
+            viewCount = item.statistics?.viewCount?: "",
+            likeCount = item.statistics?.likeCount?: "",
+            favoriteCount = item.statistics?.favoriteCount?: "",
+            commentCount = item.statistics?.commentCount?: "",
             player = item.player?.embedHtml?: "",
             topicDetails = item.topicDetails?.topicCategories?.toList()
         )
@@ -111,9 +111,9 @@ class ApiRepositoryImpl @Inject constructor() : ApiRepository {
             country = item.snippet?.country?: "",
             like = item.contentDetails?.relatedPlaylists?.like?: "",
             uploads = item.contentDetails?.relatedPlaylists?.uploads?: "",
-            viewCount = item.statics?.viewCount?: "",
-            subscriberCount = item.statics?.subscriberCount?: "",
-            videoCount = item.statics?.videoCount?: "",
+            viewCount = item.statistics?.viewCount?: "",
+            subscriberCount = item.statistics?.subscriberCount?: "",
+            videoCount = item.statistics?.videoCount?: "",
             bannerImageUrl = item.brandingSettings?.image?.bannerExternalUrl?: ""
         )
     }
