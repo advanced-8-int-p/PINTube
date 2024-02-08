@@ -8,9 +8,9 @@ import com.example.pintube.data.local.dao.ChannelDAO
 import com.example.pintube.data.local.dao.CommentDAO
 import com.example.pintube.data.local.dao.VideoDAO
 import com.example.pintube.domain.repository.ApiRepository
-import com.example.pintube.domain.usecase.ConvertDurationTime
-import com.example.pintube.domain.usecase.ConvertToDaysAgo
-import com.example.pintube.domain.usecase.ConvertViewCount
+import com.example.pintube.domain.usecase.convertDurationTime
+import com.example.pintube.domain.usecase.convertToDaysAgo
+import com.example.pintube.domain.usecase.convertViewCount
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -22,35 +22,28 @@ class HomeViewModel @Inject constructor(
     private val videoDao: VideoDAO,
     private val commentDao: CommentDAO,
     private val channelDao: ChannelDAO,
-    private val convertDurationTime: ConvertDurationTime,
-    private val convertToDaysAgo: ConvertToDaysAgo,
-    private val convertViewCount: ConvertViewCount
 ) : ViewModel() {
 
-    private val _text = MutableLiveData<String>().apply {
-        value = "This is home Fragment"
-    }
-    val text: LiveData<String> = _text
+    private var _populars: MutableLiveData<List<VideoItemData>> = MutableLiveData(emptyList())
+    val populars: LiveData<List<VideoItemData>> get() = _populars
 
-    private var _populars: MutableLiveData<ArrayList<VideoItemData>> = MutableLiveData(ArrayList())
-    val populars: LiveData<ArrayList<VideoItemData>> get() = _populars
+    private var _categories: MutableLiveData<List<String>> = MutableLiveData(emptyList())
+    val categories: LiveData<List<String>> get() = _categories
 
-    private var _categories: MutableLiveData<ArrayList<String>> = MutableLiveData(ArrayList())
-    val categories: LiveData<ArrayList<String>> get() = _categories
+    private var _categoryVideos: MutableLiveData<List<VideoItemData>> = MutableLiveData(emptyList())
+    val categoryVideos: LiveData<List<VideoItemData>> get() = _categoryVideos
 
-    // 카테고리 비디오 리스트
-
-    fun updatePopulars() = viewModelScope.launch(Dispatchers.IO) {
-        val videoEntities = repository.getPopularVideo()
-        val videoItemDatas = videoEntities?.map {
+    fun updatePopulars() = viewModelScope.launch(Dispatchers.Default) {
+        val videoEntities = repository.getPopularVideo() ?: return@launch
+        val videoItemDatas = videoEntities.map {
             VideoItemData(
                 videoThumbnailUri = it.thumbnailHigh,
-                channelThumbnailUri = "https://picsum.photos/200/300",  // 채널 썸네일은 다시 가져와야하는건가
+                channelThumbnailUri = null,  // 채널 썸네일은 다시 가져와야하는건가
                 title = it.title,
                 channelName = it.channelTitle,
-                views = convertViewCount(it.viewCount),
-                date = convertToDaysAgo(it.publishedAt),
-                length = convertDurationTime(it.duration),
+                views = it.viewCount?.convertViewCount(),
+                date = it.publishedAt?.convertToDaysAgo(),
+                length = it.duration?.convertDurationTime(),
                 isSaved = null,
                 id = it.id,
             )
@@ -58,9 +51,7 @@ class HomeViewModel @Inject constructor(
         _populars.postValue(ArrayList(videoItemDatas))
     }
 
-    fun searchResult(query: String) = viewModelScope.launch { repository.searchResult(query) }
-
-    fun dddSearch(query: String) = viewModelScope.launch {
+    fun searchCategory(query: String) = viewModelScope.launch(Dispatchers.Default) {
         val videoEntities = repository.searchResult(query) ?: return@launch
         val videoItemDatas = videoEntities.map {
             VideoItemData(
@@ -75,10 +66,11 @@ class HomeViewModel @Inject constructor(
                 id = it.id,
             )
         }
-        _populars.postValue(ArrayList(videoItemDatas))
+        _categoryVideos.postValue(videoItemDatas)
     }
 
-    fun addAllToCategories(elements: Collection<String>) =
-        _categories.value!!.addAll(elements.toList())
+    fun addAllToCategories(elements: Collection<String>) {
+        _categories.value = _categories.value!!.toMutableList().apply { addAll(elements.toList()) }
+    }
 
 }

@@ -10,11 +10,10 @@ import com.example.pintube.data.local.entity.LocalSearchEntity
 import com.example.pintube.data.local.entity.VideoCacheEntity
 import com.example.pintube.databinding.RecyclerviewResultBinding
 import com.example.pintube.domain.entitiy.SearchEntity
-import com.example.pintube.domain.usecase.ConvertHtml
+
 
 class SearchResultAdapter(private val mContext : Context, private val items : MutableList<SearchEntity>) : RecyclerView.Adapter<SearchResultAdapter.SearchResultViewHolder>(){
 
-    private val htmlConvert by lazy { ConvertHtml() }
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SearchResultViewHolder {
         val binding = RecyclerviewResultBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return SearchResultViewHolder(binding)
@@ -25,7 +24,7 @@ class SearchResultAdapter(private val mContext : Context, private val items : Mu
 
 
 
-        holder.mainTitle.text = item.title?.let { htmlConvert(it) }
+
         holder.chTitle.text = item.channelTitle
         holder.uploadDate.text = item.publishedAt
 
