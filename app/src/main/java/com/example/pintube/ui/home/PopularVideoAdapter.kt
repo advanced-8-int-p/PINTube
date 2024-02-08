@@ -4,15 +4,22 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.example.pintube.databinding.PopularItemBinding
 
 class PopularVideoAdapter(
     private val onItemClick: (view: View, position: Int) -> Unit
-) : RecyclerView.Adapter<PopularVideoAdapter.PopularViewHolder>() {
+) : ListAdapter<VideoItemData, PopularVideoAdapter.PopularViewHolder>(object :
+    DiffUtil.ItemCallback<VideoItemData>() {
+    override fun areItemsTheSame(oldItem: VideoItemData, newItem: VideoItemData): Boolean =
+        oldItem.id == newItem.id
 
-    var items = ArrayList<VideoItemData>()
+    override fun areContentsTheSame(oldItem: VideoItemData, newItem: VideoItemData): Boolean =
+        oldItem == newItem
+}) {
 
     inner class PopularViewHolder(private val binding: PopularItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
@@ -25,7 +32,7 @@ class PopularVideoAdapter(
             // item.isSaved
 
             b.root.setOnClickListener {
-                Log.d("myTag:Popular 아이템 클릭", "$layoutPosition: ${items[layoutPosition]}")
+                Log.d("myTag:Popular 아이템 클릭", "$layoutPosition: ${getItem(layoutPosition)}")
                 onItemClick(it, layoutPosition)
             }
         }
@@ -39,8 +46,7 @@ class PopularVideoAdapter(
     }
 
     override fun onBindViewHolder(holder: PopularViewHolder, position: Int) {
-        holder.onBind(items[position])
+        holder.onBind(getItem(position))
     }
 
-    override fun getItemCount(): Int = items.count()
 }

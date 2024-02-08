@@ -39,7 +39,6 @@ class HomeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
-
         return binding.root
     }
 
@@ -56,11 +55,6 @@ class HomeFragment : Fragment() {
     }
 
     private fun initView() = binding.also { b ->
-        //ddd
-        popularVideoAdapter.items.addAll(List(10) { VideoItemData() })
-//        categoryAdapter.submitList(List(10) { "카테고리$it" })
-        categoryVideoAdapter.items.addAll(List(10) { VideoItemData() })
-
         b.rvHomeMain.adapter = homeAdapter
         homeAdapter.sealedMultis.addAll(
             listOf(
@@ -71,21 +65,22 @@ class HomeFragment : Fragment() {
         )
     }
 
-    private fun initViewModel() = with(viewModel){
+    private fun initViewModel() = viewModel.also { vm ->
         //ddd
-        addAllToCategories(List(10) { "카테고리$it" } )
-        // TODO: 터짐
-        updatePopulars()
+        vm.addAllToCategories(List(10) { "카테고리$it" })
+        vm.updatePopulars()
+        vm.searchCategory("싱어게인3")
 
-        // 이건 왜 안되지..
-        dddSearch("아이유shorts")
-
-        categories.observe(viewLifecycleOwner) {
-            categoryAdapter.submitList(it)
-        }
-        populars.observe(viewLifecycleOwner) {
-            popularVideoAdapter.items = it
+        vm.populars.observe(viewLifecycleOwner) {
+            popularVideoAdapter.submitList(it)
             Log.d("pop", "$it")
         }
+        vm.categories.observe(viewLifecycleOwner) {
+            categoryAdapter.submitList(it)
+        }
+        vm.categoryVideos.observe(viewLifecycleOwner) {
+            categoryVideoAdapter.submitList(it)
+        }
     }
+
 }

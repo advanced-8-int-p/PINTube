@@ -12,17 +12,14 @@ import com.example.pintube.databinding.VideoItemBinding
 
 class CategoryVideoAdapter(
     private val onItemClick: (view: View, position: Int) -> Unit
-//) : ListAdapter<VideoItemData, CategoryVideoAdapter.CategoryVideoViewHolder>(object :
-//    DiffUtil.ItemCallback<VideoItemData>() {
-//    override fun areItemsTheSame(oldItem: VideoItemData, newItem: VideoItemData): Boolean =
-//        oldItem.id == newItem.id
-//
-//    override fun areContentsTheSame(oldItem: VideoItemData, newItem: VideoItemData): Boolean =
-//        oldItem == newItem
-//}) {
-) : RecyclerView.Adapter<CategoryVideoAdapter.CategoryVideoViewHolder>() {
+) : ListAdapter<VideoItemData, CategoryVideoAdapter.CategoryVideoViewHolder>(object :
+    DiffUtil.ItemCallback<VideoItemData>() {
+    override fun areItemsTheSame(oldItem: VideoItemData, newItem: VideoItemData): Boolean =
+        oldItem.id == newItem.id
 
-    var items = ArrayList<VideoItemData>()
+    override fun areContentsTheSame(oldItem: VideoItemData, newItem: VideoItemData): Boolean =
+        oldItem == newItem
+}) {
 
     inner class CategoryVideoViewHolder(private val binding: VideoItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
@@ -33,7 +30,7 @@ class CategoryVideoAdapter(
             model.channelName?.let { b.tvItemName.text = it }
 
             b.root.setOnClickListener {
-                Log.d("myTag:Popular 아이템 클릭", "$layoutPosition: ${items[layoutPosition]}")
+                Log.d("myTag:Popular 아이템 클릭", "$layoutPosition: ${getItem(layoutPosition)}")
                 onItemClick(it, layoutPosition)
             }
         }
@@ -47,8 +44,6 @@ class CategoryVideoAdapter(
     }
 
     override fun onBindViewHolder(holder: CategoryVideoViewHolder, position: Int) {
-        holder.onBind(items[position])
+        holder.onBind(getItem(position))
     }
-
-    override fun getItemCount(): Int = items.count()
 }
