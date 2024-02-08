@@ -1,5 +1,6 @@
 package com.example.pintube.ui.detailpage
 
+import android.annotation.SuppressLint
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
@@ -8,13 +9,17 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.webkit.JavascriptInterface
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.media3.common.MediaItem
 import androidx.media3.common.PlaybackException
 import androidx.media3.common.Player
 import androidx.media3.exoplayer.ExoPlayer
+import androidx.media3.exoplayer.source.DefaultMediaSourceFactory
 import androidx.media3.session.MediaSession
+import androidx.navigation.fragment.findNavController
 import com.example.pintube.MainActivity
 import com.example.pintube.data.remote.api.retrofit.YouTubeApi
 import com.example.pintube.data.remote.api.retrofit.YoutubeSearchService
@@ -28,6 +33,7 @@ import com.example.pintube.ui.home.HomeFragment
 import com.example.pintube.ui.home.HomeViewModel
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 
@@ -44,8 +50,8 @@ class DetailFragment : Fragment() {
     private lateinit var player: ExoPlayer
     private lateinit var mediaSession: MediaSession
 
-    private var videoSample =
-        "\"embedHtml\": \"\\u003ciframe width=\\\"480\\\" height=\\\"270\\\" src=\\\"//www.youtube.com/embed/kutvmV17kKg\\\" frameborder=\\\"0\\\" allow=\\\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\\\" allowfullscreen\\u003e\\u003c/iframe\\u003e\""
+//    private var videoSample = "https://demo.unified-streaming.com/k8s/features/stable/video/tears-of-steel/tears-of-steel.ism/.m3u8"
+    private var videoSample = "https://www.youtube.com/embed/IunP_b5FfhY"
 
     private val viewModel: DetailViewModel by viewModels()
 
@@ -65,7 +71,8 @@ class DetailFragment : Fragment() {
     ): View {
         binding = FragmentDetailBinding.inflate(inflater, container, false)
         binding!!.ivDetailClose.setOnClickListener {
-            parentFragmentManager.popBackStack()
+//            parentFragmentManager.popBackStack()
+            findNavController().navigateUp()
         }
         binding!!.ivDetailShare.setOnClickListener {
             shareLink()
@@ -80,23 +87,23 @@ class DetailFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         initPlayer()
-        initSession()
+//        initSession()
 
     }
 
     override fun onStart() {
         super.onStart()
-        player.playWhenReady = true
+//        player.playWhenReady = true
     }
 
     override fun onStop() {
         super.onStop()
-        player.playWhenReady = false
+//        player.playWhenReady = false
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        player.release()
+//        player.release()
         binding = null
     }
 
@@ -104,48 +111,71 @@ class DetailFragment : Fragment() {
         //뷰 초기화, 받아온 정보 배치
     }
 
+    @SuppressLint("SetJavaScriptEnabled")
     private fun initPlayer() {
-        val mediaItem = MediaItem.fromUri(videoSample)
+//        val mediaItem = MediaItem.fromUri(videoSample)
 
-        player = ExoPlayer.Builder(requireContext())
-            .build()
-            .also { exoPlayer ->
-                binding!!.playerDetail.player = exoPlayer
-            }
-        player.setMediaItem(mediaItem)
-        player.prepare()
-        player.play()
+        val webView = binding!!.playerDetail
 
-        player.addListener(object : Player.Listener{
-            override fun onPlayerError(error: PlaybackException) {
-                Snackbar.make(binding!!.detailFragment, "영상을 재생하는 중 문제가 발생했습니다.", Snackbar.LENGTH_SHORT).show()
-                Log.d("player", "error = ${error}")
-                super.onPlayerError(error)
-            }
-        })
+        webView.settings.javaScriptEnabled = true
+        webView.addJavascriptInterface(YoutubeInterface(), "Android")
+        webView.loadUrl(videoSample)
+
+//        val videoUrl = DefaultMediaSourceFactory(mContext)
+//
+//        player = ExoPlayer.Builder(requireContext())
+//            .build()
+//            .also { exoPlayer ->
+//                binding!!.playerDetail.player = exoPlayer
+//            }
+//        player.setMediaItem(mediaItem)
+//        player.prepare()
+//        player.play()
+//
+//        player.addListener(object : Player.Listener{
+//            override fun onPlayerError(error: PlaybackException) {
+//                Snackbar.make(binding!!.detailFragment, "영상을 재생하는 중 문제가 발생했습니다.", Snackbar.LENGTH_SHORT).show()
+//                Log.d("player", "error = ${error}")
+//                super.onPlayerError(error)
+//            }
+//        })
 
     }
 
-    private fun initSession() {
-        mediaSession = MediaSession.Builder(requireContext(), player)
-            .setSessionActivity(
-                PendingIntent.getActivity(
-                    requireContext(),
-                    0,
-                    Intent(requireContext(), MainActivity::class.java),
-                    PendingIntent.FLAG_IMMUTABLE
-                )
-            )
-            .build()
-    }
+    private inner class YoutubeInterface() {
 
-    private suspend fun getData(id: String?) {
-//        mediaId = //id값 받아와서 그 값으로 검색?해서 해당 영상 정보 가져오기
-        YouTubeApi.youtubeNetwork.getContentDetails(ids = listOf(tempMediaId))
-        ApiRepositoryImpl().getContentDetails(listOf(tempMediaId))?.forEach {
-            videoSample = it.player.toString()
+        @JavascriptInterface
+        fun onStateChanged(state: Int) {
+            when(state) {
+                0 -> Log.d("YouTube", "Ended")
+                1 -> Log.d("YouTube", "Playing")
+                2 -> Log.d("YouTube", "Paused")
+                3 -> Log.d("YouTube", "Buffering")
+            }
         }
-        val detailData = mediaItemData.player
+    }
+
+//    private fun initSession() {
+//        mediaSession = MediaSession.Builder(requireContext(), player)
+//            .setSessionActivity(
+//                PendingIntent.getActivity(
+//                    requireContext(),
+//                    0,
+//                    Intent(requireContext(), MainActivity::class.java),
+//                    PendingIntent.FLAG_IMMUTABLE
+//                )
+//            )
+//            .build()
+//    }
+
+    private fun getData(id: String?) {
+//        mediaId = //id값 받아와서 그 값으로 검색?해서 해당 영상 정보 가져오기 enquedhodksehlwl...
+//        YouTubeApi.youtubeNetwork.getContentDetails(ids = listOf(tempMediaId))
+//        ApiRepositoryImpl().getContentDetails(listOf(tempMediaId))?.forEach {
+//            videoSample = it.player.toString()
+//        }
+//        val detailData = mediaItemData.player
+//        lifecycleScope.launch {  }
     }
 
     private fun shareLink() {
