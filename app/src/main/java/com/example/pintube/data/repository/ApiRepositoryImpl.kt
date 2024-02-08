@@ -51,8 +51,10 @@ class ApiRepositoryImpl @Inject constructor() : ApiRepository {
             id = item.id?.videoId?: "",
             publishedAt = item.snippet?.publishedAt?: "",
             channelId = item.snippet?.channelId?: "",
-            title = item.snippet?.localized?.title?: "",
-            description = item.snippet?.localized?.description?: "",
+            title = item.snippet?.title?: "",
+            description = item.snippet?.description?: "",
+            localizedTitle = item.snippet?.localized?.title?: "",
+            localizedDescription = item.snippet?.localized?.description?: "",
             thumbnailHigh = item.snippet?.thumbnails?.high?.url?: "",
             thumbnailMedium = item.snippet?.thumbnails?.medium?.url?: "",
             thumbnailLow = item.snippet?.thumbnails?.default?.url?: "",
@@ -62,7 +64,7 @@ class ApiRepositoryImpl @Inject constructor() : ApiRepository {
     }
     private fun convertVideoEntity(item: ItemResponse): VideoEntity {
         return VideoEntity(
-            id = item.id?.toString(),
+            id = item.id?: "",
             publishedAt = item.snippet?.publishedAt?: "",
             channelId = item.snippet?.channelId?: "",
             title = item.snippet?.title?: "",
@@ -95,7 +97,7 @@ class ApiRepositoryImpl @Inject constructor() : ApiRepository {
 
     private fun convertChannelEntity(item: ItemResponse): ChannelEntity {
         return ChannelEntity(
-            id = item.id?.toString(),
+            id = item.id?: "",
             title = item.brandingSettings?.channel?.title?: "",
             description = item.brandingSettings?.channel?.description?: "",
             customUrl = item.snippet?.customUrl?: "",

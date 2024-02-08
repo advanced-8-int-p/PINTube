@@ -4,28 +4,27 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:paddingHorizontal="8dp"
+    android:layout_marginEnd="16dp"
     android:paddingVertical="8dp">
 
     <ImageView
         android:id="@+id/iv_popular_item_video"
-        android:layout_width="360dp"
-        android:layout_height="270dp"
-        android:background="@drawable/round_corner"
+        android:layout_width="416dp"
+        android:layout_height="234dp"
+        android:background="@drawable/round_left_top_corner"
         android:clipToOutline="true"
-        android:maxHeight="350dp"
-        android:minHeight="250dp"
         android:scaleType="centerCrop"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/hamster" />
 
-    <View
+    <ImageView
         android:id="@+id/vv_popular_item_filter"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:background="@drawable/round_corner"
-        android:backgroundTint="#33000000"
+        android:src="@drawable/main_filter"
+        android:scaleType="fitXY"
+        android:background="@drawable/round_left_top_corner"
         app:layout_constraintBottom_toBottomOf="@id/iv_popular_item_video"
         app:layout_constraintEnd_toEndOf="@id/iv_popular_item_video"
         app:layout_constraintStart_toStartOf="@id/iv_popular_item_video"
@@ -35,7 +34,8 @@
         android:id="@+id/btn_fl_popular_item_pin_back"
         android:layout_width="48dp"
         android:layout_height="48dp"
-        android:background="#8083FF"
+        android:background="@drawable/round_left_top_corner_16dp"
+        android:backgroundTint="#8083FF"
         app:layout_constraintBottom_toBottomOf="@id/iv_popular_item_video"
         app:layout_constraintEnd_toEndOf="@id/iv_popular_item_video">
 
@@ -52,9 +52,10 @@
         android:id="@+id/cl_popular_item_length"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
         android:background="@drawable/round_corner_legnth_back"
+        android:alpha="0.8"
         android:paddingHorizontal="8dp"
         android:paddingVertical="4dp"
         app:layout_constraintEnd_toEndOf="@id/iv_popular_item_video"
@@ -62,8 +63,8 @@
 
         <ImageView
             android:id="@+id/iv_popular_item_play_circle"
-            android:layout_width="16dp"
-            android:layout_height="16dp"
+            android:layout_width="12dp"
+            android:layout_height="12dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/tv_popular_item_length"
             app:layout_constraintHorizontal_bias="0.5"
@@ -77,6 +78,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="4dp"
             android:text="00:00:00"
+            android:textSize="10sp"
             android:textColor="@color/white"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -89,7 +91,8 @@
         android:id="@+id/cl_popular_item_desc"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:paddingHorizontal="4dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="4dp"
         android:paddingVertical="4dp"
         app:layout_constraintBottom_toBottomOf="@id/iv_popular_item_video"
         app:layout_constraintEnd_toStartOf="@id/btn_fl_popular_item_pin_back"
@@ -97,13 +100,15 @@
 
         <ImageView
             android:id="@+id/iv_popular_item_channel"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
+            android:layout_width="34dp"
+            android:layout_height="34dp"
             android:background="@drawable/round_image"
             android:clipToOutline="true"
             android:scaleType="centerCrop"
+            android:layout_marginBottom="8dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:srcCompat="@drawable/hamster" />
 
         <TextView
@@ -113,10 +118,13 @@
             android:layout_marginStart="8dp"
             android:text="제목입니다 tv_popular_item_title"
             android:textColor="@color/white"
-            android:textSize="12sp"
+            android:textSize="16sp"
             android:textStyle="bold"
+            android:layout_marginEnd="44dp"
+            android:maxLines="1"
+            android:ellipsize="end"
             app:layout_constraintStart_toEndOf="@id/iv_popular_item_channel"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="@id/iv_popular_item_channel" />
 
         <TextView
             android:id="@+id/tv_popular_item_name"
@@ -127,7 +135,7 @@
             android:textColor="@color/white"
             android:textSize="9sp"
             app:layout_constraintStart_toStartOf="@id/tv_popular_item_title"
-            app:layout_constraintTop_toBottomOf="@id/tv_popular_item_title" />
+            app:layout_constraintBottom_toBottomOf="@+id/iv_popular_item_channel"/>
 
         <TextView
             android:id="@+id/tv_popular_item_views"
@@ -137,9 +145,20 @@
             android:text="조회수 0.0천회"
             android:textColor="@color/white"
             android:textSize="9sp"
-            app:layout_constraintBottom_toBottomOf="@id/tv_popular_item_name"
-            app:layout_constraintStart_toEndOf="@id/tv_popular_item_name" />
+            app:layout_constraintBottom_toTopOf="@id/tv_popular_item_title"
+            app:layout_constraintStart_toStartOf="@+id/tv_popular_item_title" />
 
+        <TextView
+            android:id="@+id/pot"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="·"
+            android:textSize="9sp"
+            android:layout_marginStart="4dp"
+            android:textColor="@color/white"
+            app:layout_constraintStart_toEndOf="@+id/tv_popular_item_name"
+            app:layout_constraintTop_toTopOf="@+id/tv_popular_item_name"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_popular_item_name"/>
         <TextView
             android:id="@+id/tv_popular_item_date"
             android:layout_width="wrap_content"
@@ -149,7 +168,7 @@
             android:textColor="@color/white"
             android:textSize="9sp"
             app:layout_constraintBottom_toBottomOf="@id/tv_popular_item_name"
-            app:layout_constraintStart_toEndOf="@id/tv_popular_item_views"
+            app:layout_constraintStart_toEndOf="@id/pot"
             app:layout_constraintTop_toTopOf="@id/tv_popular_item_name" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
