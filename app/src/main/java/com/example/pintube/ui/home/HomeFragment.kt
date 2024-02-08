@@ -64,6 +64,7 @@ class HomeFragment : Fragment() {
         b.rvHomeMain.adapter = homeAdapter
         homeAdapter.sealedMultis.addAll(
             listOf(
+                SealedMulti.Header,
                 SealedMulti.Popular(popularVideoAdapter),
                 SealedMulti.Category(categoryAdapter, categoryVideoAdapter),
             )
@@ -77,7 +78,7 @@ class HomeFragment : Fragment() {
         updatePopulars()
 
         // 이건 왜 안되지..
-//        vm.dddSearch("아이유")
+        dddSearch("아이유shorts")
 
         categories.observe(viewLifecycleOwner) {
             categoryAdapter.submitList(it)
@@ -87,5 +88,4 @@ class HomeFragment : Fragment() {
             Log.d("pop", "$it")
         }
     }
-
 }

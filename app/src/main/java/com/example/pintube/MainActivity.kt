@@ -1,8 +1,12 @@
 package com.example.pintube
 
+import android.content.ContentValues.TAG
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.FragmentManager
+import androidx.navigation.NavOptions
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
@@ -31,7 +35,6 @@ class MainActivity : AppCompatActivity() {
 
         initView()
     }
-
     private fun initView() {
         initBottomNav()
     }
@@ -39,6 +42,8 @@ class MainActivity : AppCompatActivity() {
     private fun initBottomNav() = with(binding){
         navView.setupWithNavController(navController)
         navView.background = null
+
+        var currentFragment = (R.id.navigation_home)
 
         mainFab.setOnClickListener {
             if (mainMotion.currentState == mainMotion.startState) {
@@ -49,14 +54,37 @@ class MainActivity : AppCompatActivity() {
         }
 
         mainFabShorts.setOnClickListener {
-            navController.navigate(R.id.navigation_shorts)
+            val navOptions = NavOptions.Builder()
+                .setPopUpTo(currentFragment, true)
+                .build()
+            navController.navigate(
+                resId = R.id.navigation_shorts,
+                args = null,
+                navOptions = navOptions,
+                )
             mainMotion.transitionToStart()
         }
 
         mainFabPin.setOnClickListener {
-            navController.navigate(R.id.navigation_detail)
+            val navOptions = NavOptions.Builder()
+                .setPopUpTo(currentFragment, true)
+                .build()
+            navController.navigate(
+                R.id.navigation_detail,
+                    args = null,
+                navOptions = navOptions,
+            )
             mainMotion.transitionToStart()
         }
 
+
+        navController.addOnDestinationChangedListener { _, destination,_ ->
+
+            when (destination.id) {
+                R.id.navigation_home -> currentFragment = destination.id
+                R.id.navigation_mypage -> currentFragment = destination.id
+            }
+        }
     }
+
 }

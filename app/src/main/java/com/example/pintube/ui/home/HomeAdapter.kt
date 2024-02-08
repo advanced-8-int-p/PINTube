@@ -6,11 +6,13 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.pintube.databinding.HomeItemCategoryBinding
 import com.example.pintube.databinding.HomeItemPopularBinding
+import com.example.pintube.databinding.ItemHeaderBinding
 
 class HomeAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     var sealedMultis = mutableListOf<SealedMulti>()
 
+    class HeaderHolder(private val binding: ItemHeaderBinding) : RecyclerView.ViewHolder(binding.root)
     inner class MultiViewHolderPopular(private val binding: HomeItemPopularBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
@@ -35,6 +37,7 @@ class HomeAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
+            MULTI_HEADER -> HeaderHolder(ItemHeaderBinding.inflate(LayoutInflater.from(parent.context),parent, false))
             MULTI_POPULAR ->
                 MultiViewHolderPopular(
                     HomeItemPopularBinding
@@ -61,6 +64,10 @@ class HomeAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             is SealedMulti.Category -> {
                 (holder as MultiViewHolderCategory).onBind(item)
 //                holder.setIsRecyclable(false)
+            }
+
+            is SealedMulti.Header -> {
+                (holder as HeaderHolder)
             }
         }
     }

@@ -23,15 +23,11 @@ class ShortsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         val shortsViewModel =
-            ViewModelProvider(this).get(ShortsViewModel::class.java)
+            ViewModelProvider(this)[ShortsViewModel::class.java]
 
         _binding = FragmentShortsBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        val textView: TextView = binding.textDashboard
-        shortsViewModel.text.observe(viewLifecycleOwner) {
-            textView.text = it
-        }
         return root
     }
 
@@ -39,4 +35,5 @@ class ShortsFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
+
 }
