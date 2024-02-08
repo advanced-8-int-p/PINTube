@@ -19,7 +19,7 @@ object SharedPrefManager {
     fun saveSearchHistory(context: Context, searchQuery: String) {
         val sharedPreferences = getSharedPreferences(context)
         val editor = sharedPreferences.edit()
-        val searchHistorySet = HashSet<String>()
+        val searchHistorySet = LinkedHashSet<String>()
 
         // 기존의 검색 기록을 불러와 Set에 추가
         searchHistorySet.addAll(getSearchHistory(context))
@@ -35,7 +35,7 @@ object SharedPrefManager {
     // 검색 기록을 불러오는 메서드
     fun getSearchHistory(context: Context): Set<String> {
         val sharedPreferences = getSharedPreferences(context)
-        return sharedPreferences.getStringSet(KEY_SEARCH_HISTORY, HashSet()) ?: HashSet()
+        return sharedPreferences.getStringSet(KEY_SEARCH_HISTORY, LinkedHashSet()) ?: LinkedHashSet()
     }
 
     // 검색 기록을 삭제하는 메서드

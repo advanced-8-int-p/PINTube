@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import coil.load
 import com.bumptech.glide.Glide
 import com.example.pintube.data.local.entity.LocalSearchEntity
 import com.example.pintube.data.local.entity.VideoCacheEntity
@@ -28,9 +29,8 @@ class SearchResultAdapter(private val mContext : Context, private val items : Mu
         holder.chTitle.text = item.channelTitle
         holder.uploadDate.text = item.publishedAt
 
-        Glide.with(mContext)
-            .load(items[position].thumbnailHigh)
-            .into(holder.mainImage)
+        holder.mainImage.load(items[position].thumbnailHigh)
+
     }
 
     override fun getItemCount(): Int {
