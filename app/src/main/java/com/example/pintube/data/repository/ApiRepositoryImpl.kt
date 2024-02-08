@@ -44,55 +44,54 @@ class ApiRepositoryImpl @Inject constructor(
         convertCommentRepliesEntity(item)
     }
 
-    private fun convertSearchEntity(
-        item: SearchItemResponse
-    ): SearchEntity = SearchEntity(
-        id = item.id?.videoId ?: "",
-        publishedAt = item.snippet?.publishedAt ?: "",
-        channelId = item.snippet?.channelId ?: "",
-        title = item.snippet?.title ?: "",
-        description = item.snippet?.description ?: "",
-        localizedTitle = item.snippet?.localized?.title ?: "",
-        localizedDescription = item.snippet?.localized?.description ?: "",
-        thumbnailHigh = item.snippet?.thumbnails?.high?.url ?: "",
-        thumbnailMedium = item.snippet?.thumbnails?.medium?.url ?: "",
-        thumbnailLow = item.snippet?.thumbnails?.default?.url ?: "",
-        channelTitle = item.snippet?.channelTitle ?: "",
-        liveBroadcastContent = item.snippet?.liveBroadcastContent ?: ""
-    )
-
-    private fun convertVideoEntity(
-        item: ItemResponse
-    ): VideoEntity = VideoEntity(
-        id = item.id ?: "",
-        publishedAt = item.snippet?.publishedAt ?: "",
-        channelId = item.snippet?.channelId ?: "",
-        title = item.snippet?.title ?: "",
-        description = item.snippet?.description ?: "",
-        thumbnailHigh = item.snippet?.thumbnails?.high?.url ?: "",
-        thumbnailMedium = item.snippet?.thumbnails?.medium?.url ?: "",
-        thumbnailLow = item.snippet?.thumbnails?.default?.url ?: "",
-        channelTitle = item.snippet?.channelTitle ?: "",
-        tags = item.snippet?.tags?.toList(),
-        categoryId = item.snippet?.categoryId ?: "",
-        liveBroadcastContent = item.snippet?.liveBroadcastContent ?: "",
-        defaultLanguage = item.snippet?.defaultLanguage ?: "",
-        localizedTitle = item.snippet?.localized?.title ?: "",
-        localizedDescription = item.snippet?.localized?.description ?: "",
-        defaultAudioLanguage = item.snippet?.defaultAudioLanguage ?: "",
-        duration = item.contentDetails?.duration ?: "",
-        dimension = item.contentDetails?.dimension ?: "",
-        definition = item.contentDetails?.definition ?: "",
-        caption = item.contentDetails?.caption ?: "",
-        licensedContent = item.contentDetails?.licensedContent,
-        projection = item.contentDetails?.projection ?: "",
-        viewCount = item.statistics?.viewCount ?: "",
-        likeCount = item.statistics?.likeCount ?: "",
-        favoriteCount = item.statistics?.favoriteCount ?: "",
-        commentCount = item.statistics?.commentCount ?: "",
-        player = item.player?.embedHtml ?: "",
-        topicDetails = item.topicDetails?.topicCategories?.toList()
-    )
+    private fun convertSearchEntity(item: SearchItemResponse): SearchEntity {
+        return SearchEntity(
+            id = item.id?.videoId?: "",
+            publishedAt = item.snippet?.publishedAt?: "",
+            channelId = item.snippet?.channelId?: "",
+            title = item.snippet?.title?: "",
+            description = item.snippet?.description?: "",
+            localizedTitle = item.snippet?.localized?.title?: "",
+            localizedDescription = item.snippet?.localized?.description?: "",
+            thumbnailHigh = item.snippet?.thumbnails?.high?.url?: "",
+            thumbnailMedium = item.snippet?.thumbnails?.medium?.url?: "",
+            thumbnailLow = item.snippet?.thumbnails?.default?.url?: "",
+            channelTitle = item.snippet?.channelTitle?: "",
+            liveBroadcastContent = item.snippet?.liveBroadcastContent?: ""
+        )
+    }
+    private fun convertVideoEntity(item: ItemResponse): VideoEntity {
+        return VideoEntity(
+            id = item.id?: "",
+            publishedAt = item.snippet?.publishedAt?: "",
+            channelId = item.snippet?.channelId?: "",
+            title = item.snippet?.title?: "",
+            description = item.snippet?.description?: "",
+            thumbnailHigh = item.snippet?.thumbnails?.high?.url?: "",
+            thumbnailMedium = item.snippet?.thumbnails?.medium?.url?: "",
+            thumbnailLow = item.snippet?.thumbnails?.default?.url?: "",
+            channelTitle = item.snippet?.channelTitle?: "",
+            tags = item.snippet?.tags?.toList(),
+            categoryId = item.snippet?.categoryId?: "",
+            liveBroadcastContent = item.snippet?.liveBroadcastContent?: "",
+            defaultLanguage = item.snippet?.defaultLanguage?: "",
+            localizedTitle = item.snippet?.localized?.title?: "",
+            localizedDescription = item.snippet?.localized?.description?: "",
+            defaultAudioLanguage = item.snippet?.defaultAudioLanguage?: "",
+            duration = item.contentDetails?.duration?: "",
+            dimension = item.contentDetails?.dimension?: "",
+            definition = item.contentDetails?.definition?: "",
+            caption = item.contentDetails?.caption?: "",
+            licensedContent = item.contentDetails?.licensedContent,
+            projection = item.contentDetails?.projection?: "",
+            viewCount = item.statics?.viewCount?: "",
+            likeCount = item.statics?.likeCount?: "",
+            favoriteCount = item.statics?.favoriteCount?: "",
+            commentCount = item.statics?.commentCount?: "",
+            player = item.player?.embedHtml?: "",
+            topicDetails = item.topicDetails?.topicCategories?.toList()
+        )
+    }
 
     private fun convertChannelEntity(
         item: ItemResponse

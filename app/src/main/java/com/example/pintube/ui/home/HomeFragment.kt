@@ -7,6 +7,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.GridLayoutManager.SpanSizeLookup
 import com.example.pintube.databinding.FragmentHomeBinding
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -29,9 +31,6 @@ class HomeFragment : Fragment() {
     private val categoryAdapter = CategoryAdapter(
         onItemClick = { view, position -> }
     )
-    private val categoryVideoAdapter = CategoryVideoAdapter(
-        onItemClick = { view, position -> }
-    )
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -39,7 +38,6 @@ class HomeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
-
         return binding.root
     }
 
@@ -56,36 +54,43 @@ class HomeFragment : Fragment() {
     }
 
     private fun initView() = binding.also { b ->
-        //ddd
-        popularVideoAdapter.items.addAll(List(10) { VideoItemData() })
-//        categoryAdapter.submitList(List(10) { "카테고리$it" })
-        categoryVideoAdapter.items.addAll(List(10) { VideoItemData() })
-
-        b.rvHomeMain.adapter = homeAdapter
         homeAdapter.sealedMultis.addAll(
             listOf(
                 SealedMulti.Header,
                 SealedMulti.Popular(popularVideoAdapter),
-                SealedMulti.Category(categoryAdapter, categoryVideoAdapter),
+                SealedMulti.Category(categoryAdapter),
             )
         )
+        b.rvHomeMain.adapter = homeAdapter
+        b.rvHomeMain.layoutManager = GridLayoutManager(requireContext(), 2).also { manager ->
+            manager.spanSizeLookup = object : SpanSizeLookup() {
+                override fun getSpanSize(position: Int): Int {
+                    if (position < 3) return manager.spanCount
+                    return 1
+                }
+            }
+        }
     }
 
-    private fun initViewModel() = with(viewModel){
-        //ddd
-        addAllToCategories(List(10) { "카테고리$it" } )
-        // TODO: 터짐
-        updatePopulars()
+    private fun initViewModel() = viewModel.also { vm ->
+        vm.addAllToCategories(List(10) { "카테고리$it" })  //ddd
+        vm.updatePopulars()
+//        vm.searchCategory("요리")  //ddd
 
-        // 이건 왜 안되지..
-//        dddSearch("아이유shorts")
-
-        categories.observe(viewLifecycleOwner) {
+        vm.populars.observe(viewLifecycleOwner) {
+            popularVideoAdapter.submitList(it)
+            Log.d("pop", "$it")  //ddd
+        }
+        vm.categories.observe(viewLifecycleOwner) {
             categoryAdapter.submitList(it)
         }
-        populars.observe(viewLifecycleOwner) {
-            popularVideoAdapter.items = it
-            Log.d("pop", "$it")
+        vm.categoryVideos.observe(viewLifecycleOwner) {
+            // TODO: 리스트 어댑터로 변경
+            homeAdapter.sealedMultis = homeAdapter.sealedMultis.subList(0, 3).apply {
+                addAll(it.map { v -> SealedMulti.Video(v) })
+            }
+            homeAdapter.notifyDataSetChanged()
         }
     }
+
 }
