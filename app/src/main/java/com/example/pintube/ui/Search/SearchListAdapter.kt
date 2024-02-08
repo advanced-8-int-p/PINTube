@@ -7,7 +7,7 @@ import android.widget.ListView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.pintube.databinding.RecyclerviewSearchlistBinding
 
-class SearchListAdapter (private val context: Context, private val searchHistoryList : List<String>) : RecyclerView.Adapter<SearchListAdapter.ListViewHolder>() {
+class SearchListAdapter (private val context: Context, private val searchHistoryList : ArrayList<SearchData> = ArrayList()) : RecyclerView.Adapter<SearchListAdapter.ListViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ListViewHolder {
         val binding = RecyclerviewSearchlistBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -16,7 +16,7 @@ class SearchListAdapter (private val context: Context, private val searchHistory
 
     override fun onBindViewHolder(holder: ListViewHolder, position: Int) {
         val searchHistoryItem = searchHistoryList[position]
-
+        holder.searchHistory.text = searchHistoryItem.toString()
     }
 
     override fun getItemCount(): Int {

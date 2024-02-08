@@ -33,7 +33,6 @@ class SearchActivity : AppCompatActivity() {
             val query = binding.etSearchFragmentBar.text.toString()
             if (query.isNotBlank()) {
                 SharedPrefManager.saveSearchHistory(this, query)
-
             }
             searchVideo(query)
         }
@@ -41,7 +40,6 @@ class SearchActivity : AppCompatActivity() {
             super.onBackPressed()
 
         }
-//        val adapter = SearchListAdapter()
 
 
 
