@@ -87,23 +87,19 @@ class DetailFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         initPlayer()
-//        initSession()
 
     }
 
     override fun onStart() {
         super.onStart()
-//        player.playWhenReady = true
     }
 
     override fun onStop() {
         super.onStop()
-//        player.playWhenReady = false
     }
 
     override fun onDestroy() {
         super.onDestroy()
-//        player.release()
         binding = null
     }
 
@@ -123,22 +119,6 @@ class DetailFragment : Fragment() {
 
 //        val videoUrl = DefaultMediaSourceFactory(mContext)
 //
-//        player = ExoPlayer.Builder(requireContext())
-//            .build()
-//            .also { exoPlayer ->
-//                binding!!.playerDetail.player = exoPlayer
-//            }
-//        player.setMediaItem(mediaItem)
-//        player.prepare()
-//        player.play()
-//
-//        player.addListener(object : Player.Listener{
-//            override fun onPlayerError(error: PlaybackException) {
-//                Snackbar.make(binding!!.detailFragment, "영상을 재생하는 중 문제가 발생했습니다.", Snackbar.LENGTH_SHORT).show()
-//                Log.d("player", "error = ${error}")
-//                super.onPlayerError(error)
-//            }
-//        })
 
     }
 
@@ -155,18 +135,6 @@ class DetailFragment : Fragment() {
         }
     }
 
-//    private fun initSession() {
-//        mediaSession = MediaSession.Builder(requireContext(), player)
-//            .setSessionActivity(
-//                PendingIntent.getActivity(
-//                    requireContext(),
-//                    0,
-//                    Intent(requireContext(), MainActivity::class.java),
-//                    PendingIntent.FLAG_IMMUTABLE
-//                )
-//            )
-//            .build()
-//    }
 
     private fun getData(id: String?) {
 //        mediaId = //id값 받아와서 그 값으로 검색?해서 해당 영상 정보 가져오기 enquedhodksehlwl...
