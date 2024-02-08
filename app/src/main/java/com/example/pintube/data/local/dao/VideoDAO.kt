@@ -21,4 +21,7 @@ interface VideoDAO {
     // 비디오 아이디 입력시 테이블에 저장된 상세 비디오 값 호출
     @Query("Select * From video_info Where id = :id")
     fun findVideo(id: String): LocalVideoEntity?
+
+    @Query("SELECT * FROM video_info WHERE isPopular = 1 AND date(saveDate) >= date('now', '-1 day')")
+    fun findPopularVideos(): List<LocalVideoEntity>?
 }

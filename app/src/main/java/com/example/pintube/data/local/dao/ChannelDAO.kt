@@ -20,5 +20,14 @@ interface ChannelDAO {
     fun delete(item: LocalChannelEntity)
 
     @Query("Select * From channel_info Where id = :id")
-    fun findChannel(id: String): LocalVideoEntity?
+    fun findChannel(id: String): LocalChannelEntity?
+
+    @Query("SELECT thumbnailHigh, thumbnailMedium, thumbnailLow FROM channel_info WHERE id = :channelId")
+    fun getChannelThumbnail(channelId: String?): ChannelThumbnail?
 }
+
+data class ChannelThumbnail(
+    val thumbnailHigh: String?,
+    val thumbnailMedium: String?,
+    val thumbnailLow: String?
+)

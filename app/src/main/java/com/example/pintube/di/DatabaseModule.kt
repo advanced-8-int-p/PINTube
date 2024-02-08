@@ -43,7 +43,8 @@ object DatabaseModule {
             context.applicationContext,
             YoutubeDatabase::class.java,
             "youtube-database"
-        ).build()
+        ).fallbackToDestructiveMigration() // 마이그레이션 전략 설정
+            .build()
 
     @Singleton
     @Provides

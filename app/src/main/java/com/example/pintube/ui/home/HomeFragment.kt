@@ -78,7 +78,7 @@ class HomeFragment : Fragment() {
         updatePopulars()
 
         // 이건 왜 안되지..
-        dddSearch("아이유shorts")
+//        dddSearch("아이유shorts")
 
         categories.observe(viewLifecycleOwner) {
             categoryAdapter.submitList(it)

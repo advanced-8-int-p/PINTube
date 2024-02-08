@@ -5,17 +5,19 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "search_info")
 data class LocalSearchEntity(
-    val query: String,
-    val id: String?,
+    @PrimaryKey
+    val id: String,
     val publishedAt: String?,
     val channelId: String?,
     val title: String?,
     val description: String?,
+    val localizedTitle: String?,
+    val localizedDescription: String?,
     val thumbnailHigh: String?,
     val thumbnailMedium: String?,
     val thumbnailLow: String?,
     val channelTitle: String?,
     val liveBroadcastContent: String?,
-){
-    @PrimaryKey(autoGenerate = true) var key:Int = 0
-}
+    val query: String,
+    val saveDate: String?,
+)
