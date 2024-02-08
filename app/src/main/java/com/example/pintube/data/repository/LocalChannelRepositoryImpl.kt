@@ -20,7 +20,7 @@ class LocalChannelRepositoryImpl @Inject constructor(
         channelId: String,
     ): LocalChannelEntity? = channelDAO.findChannel(channelId)
     private fun ChannelEntity.convertToLocalChannelEntity(): LocalChannelEntity? {
-        // Check if 'id' is null and handle appropriately
+
         if (this.id == null) return null
 
         return LocalChannelEntity(

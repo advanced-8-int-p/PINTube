@@ -65,6 +65,7 @@ class HomeViewModel @Inject constructor(
     fun searchResult(query: String) = viewModelScope.launch { repository.searchResult(query) }
 
     fun dddSearch(query: String) = viewModelScope.launch {
+
         val videoEntities = repository.searchResult(query)
         val videoItemDatas = videoEntities?.map {
             VideoItemData(
@@ -87,13 +88,37 @@ class HomeViewModel @Inject constructor(
 
 
     private fun VideoWithThumbnail.convertVideoItemData() = VideoItemData(
-        videoThumbnailUri = this.video.thumbnailHigh,
-        title = this.video.title,
+        videoThumbnailUri = this.video?.thumbnailHigh,
+        title = this.video?.title,
         channelThumbnailUri = this.thumbnail?.thumbnailMedium,
-        channelName = this.video.channelTitle,
-        views = this.video.viewCount?.convertViewCount(),
-        date = this.video.publishedAt?.convertToDaysAgo(),
-        length = this.video.duration?.convertDurationTime(),
-        id = this.video.id,
+        channelName = this.video?.channelTitle,
+        views = this.video?.viewCount?.convertViewCount(),
+        date = this.video?.publishedAt?.convertToDaysAgo(),
+        length = this.video?.duration?.convertDurationTime(),
+        id = this.video?.id,
     )
 }
+
+
+/*
+* val channelIds = mutableListOf<String>()
+        val videoIds = mutableListOf<String>()
+        var searchResult = localSearchRepository.findSearchRecord(query)
+        if (searchResult == null) {
+            repository.searchResult(query)?.forEach { item ->
+                localSearchRepository.saveSearchResult(
+                    item = item ,
+                    query = query
+                )
+                item.id?.let { videoIds.add(it) }
+                item.channelId?.let { channelIds.add(it) }
+            }
+            repository.getContentDetails(videoIds)?.forEach {
+                localVideoRepository.saveVideos(it)
+            }
+            repository.getChannelDetails(channelIds)?.forEach {
+                localChannelRepository.saveChannel(it)
+            }
+            searchResult = localSearchRepository.findSearchRecord(query)
+        }
+* */

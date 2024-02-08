@@ -69,10 +69,9 @@ class LocalVideoRepositoryImpl @Inject constructor(
             )
         }else return null
     }
-
 }
 
 data class VideoWithThumbnail(
-    val video: LocalVideoEntity,
+    val video: LocalVideoEntity?,
     val thumbnail: ChannelThumbnail?
 )

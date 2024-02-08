@@ -21,7 +21,7 @@ import com.example.pintube.data.local.entity.LocalVideoEntity
         LocalChannelEntity::class,
         LocalCommentEntity::class
                ],
-    version = 1
+    version = 2
 )
 @TypeConverters(LocalTypeConverters::class)
 abstract class YoutubeDatabase : RoomDatabase() {
