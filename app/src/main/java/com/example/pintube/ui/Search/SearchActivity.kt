@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 import androidx.lifecycle.lifecycleScope
@@ -58,6 +59,28 @@ class SearchActivity : AppCompatActivity() {
             finish()
         }
 
+        binding.removeAll.setOnClickListener {
+            if(searchHistoryList.isEmpty()) {
+                Toast.makeText(this, "검색기록이 없습니다.", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            AlertDialog.Builder(this)
+                .setIcon(R.drawable.pintube_logo)
+                .setTitle("검색기록 전체삭제")
+                .setMessage("모든 검색기록을 삭제 하시겠습니까? \n 삭제 시 다시 되돌릴 수 없습니다.")
+                .setPositiveButton("삭제"){ dialog, _ ->
+                    searchHistoryList.clear()
+                    adapter.notifyDataSetChanged()
+                }
+                .setNegativeButton("취소") { dialog, _ ->
+                    dialog.dismiss()
+                }
+                .show()
+        }
+
+
+
         adapter.itemClick = object : SearchListAdapter.ItemClick {
             override fun onClick(view: View, position: Int) {
 
@@ -65,7 +88,6 @@ class SearchActivity : AppCompatActivity() {
             override fun onRemoveClick(position: Int) {
                 val itemRemove = searchHistoryList[position]
                 searchHistoryList.remove(itemRemove)
-
 
                 adapter.notifyDataSetChanged()
 

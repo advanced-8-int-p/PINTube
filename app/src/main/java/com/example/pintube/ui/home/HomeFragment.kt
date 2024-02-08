@@ -77,7 +77,7 @@ class HomeFragment : Fragment() {
         //ddd
         vm.addAllToCategories(List(10) { "카테고리$it" })
         vm.updatePopulars()
-        vm.searchCategory("싱어게인3")
+//        vm.searchCategory("싱어게인3")
 
         vm.populars.observe(viewLifecycleOwner) {
             popularVideoAdapter.submitList(it)

@@ -15,6 +15,8 @@ import com.example.pintube.domain.entitiy.SearchEntity
 
 class SearchResultAdapter(private val mContext : Context, private val items : MutableList<SearchEntity>) : RecyclerView.Adapter<SearchResultAdapter.SearchResultViewHolder>(){
 
+
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SearchResultViewHolder {
         val binding = RecyclerviewResultBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return SearchResultViewHolder(binding)
@@ -23,9 +25,7 @@ class SearchResultAdapter(private val mContext : Context, private val items : Mu
     override fun onBindViewHolder(holder: SearchResultViewHolder, position: Int) {
         val item = items[position]
 
-
-
-
+        holder.mainTitle.text = item.title
         holder.chTitle.text = item.channelTitle
         holder.uploadDate.text = item.publishedAt
 
