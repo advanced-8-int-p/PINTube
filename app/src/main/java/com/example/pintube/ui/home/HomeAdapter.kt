@@ -43,6 +43,9 @@ class HomeAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             item.videoItemData.channelThumbnailUri?.let { b.ivItemChannel.load(it) }
             item.videoItemData.title?.let { b.tvItemTitle.text = it }
             item.videoItemData.channelName?.let { b.tvItemName.text = it }
+            item.videoItemData.views?.let { b.tvItemViews.text = it }
+            item.videoItemData.date?.let { b.tvItemDate.text = it }
+            item.videoItemData.length?.let { b.tvPopularItemLength.text = it }
 
 //            b.root.setOnClickListener {
 //                Log.d("jj-홈 아이템(비디오) 클릭", "$layoutPosition: ${getItem(layoutPosition)}")
