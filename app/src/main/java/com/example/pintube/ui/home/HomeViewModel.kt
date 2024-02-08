@@ -38,10 +38,14 @@ class HomeViewModel @Inject constructor(
 
     fun updatePopulars() = viewModelScope.launch {
         val videoEntities = repository.getPopularVideo() ?: return@launch
+        val idSet = videoEntities.mapTo(mutableSetOf()) { it.channelId!! }  // not-null 이겠지?
+        val channelEntities = repository.getChannelDetails(idSet.toList())
+            ?: error("jj-홈뷰모델 - updatePopulars - getChannelDetails == null")
+        val thumbnailMap = channelEntities.associate { Pair(it.id!!, it.thumbnailMedium) }
         val videoItemDatas = videoEntities.map {
             VideoItemData(
                 videoThumbnailUri = it.thumbnailHigh,
-                channelThumbnailUri = null,  // 채널 썸네일은 다시 가져와야하는건가
+                channelThumbnailUri = thumbnailMap[it.channelId],
                 title = it.title,
                 channelName = it.channelTitle,
                 views = it.viewCount?.convertViewCount(),
@@ -56,10 +60,14 @@ class HomeViewModel @Inject constructor(
 
     fun searchCategory(query: String) = viewModelScope.launch {
         val searchEntities = repository.searchResult(query) ?: return@launch
+        val idSet = searchEntities.mapTo(mutableSetOf()) { it.channelId!! }  // not-null 이겠지?
+        val channelEntities = repository.getChannelDetails(idSet.toList())
+            ?: error("jj-홈뷰모델 - searchCategory - getChannelDetails == null")
+        val thumbnailMap = channelEntities.associate { Pair(it.id!!, it.thumbnailMedium) }
         val videoItemDatas = searchEntities.map {
             VideoItemData(
                 videoThumbnailUri = it.thumbnailMedium,
-                channelThumbnailUri = null,  // 채널 썸네일은 다시 가져와야하는건가
+                channelThumbnailUri = thumbnailMap[it.channelId],  // 채널 썸네일은 다시 가져와야하는건가
                 title = it.title,
                 channelName = it.channelTitle,
                 views = null,
