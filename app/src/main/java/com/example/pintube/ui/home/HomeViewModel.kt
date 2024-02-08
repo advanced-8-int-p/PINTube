@@ -8,9 +8,9 @@ import com.example.pintube.data.local.dao.ChannelDAO
 import com.example.pintube.data.local.dao.CommentDAO
 import com.example.pintube.data.local.dao.VideoDAO
 import com.example.pintube.domain.repository.ApiRepository
-import com.example.pintube.domain.usecase.convertDurationTime
-import com.example.pintube.domain.usecase.convertToDaysAgo
-import com.example.pintube.domain.usecase.convertViewCount
+import com.example.pintube.utill.convertDurationTime
+import com.example.pintube.utill.convertToDaysAgo
+import com.example.pintube.utill.convertViewCount
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

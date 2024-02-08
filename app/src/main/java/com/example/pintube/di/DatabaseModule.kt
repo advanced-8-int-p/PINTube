@@ -7,6 +7,8 @@ import com.example.pintube.data.local.dao.CommentDAO
 import com.example.pintube.data.local.dao.SearchDAO
 import com.example.pintube.data.local.dao.VideoDAO
 import com.example.pintube.data.local.database.YoutubeDatabase
+import com.example.pintube.data.remote.api.retrofit.YouTubeApi
+import com.example.pintube.data.remote.api.retrofit.YoutubeSearchService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -42,4 +44,9 @@ object DatabaseModule {
             YoutubeDatabase::class.java,
             "youtube-database"
         ).build()
+
+    @Singleton
+    @Provides
+    fun provideSearchService(): YoutubeSearchService =
+        YouTubeApi.youtubeNetwork
 }

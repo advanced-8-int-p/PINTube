@@ -36,21 +36,4 @@ abstract class YoutubeDatabase : RoomDatabase() {
     abstract fun channelDao(): ChannelDAO
     abstract fun commentDao(): CommentDAO
 
-    companion object {
-        private var instance: YoutubeDatabase? = null
-
-        @Synchronized
-        fun getInstance(context: Context): YoutubeDatabase? {
-            if (instance == null) {
-                synchronized(YoutubeDatabase::class){
-                    instance = Room.databaseBuilder(
-                        context.applicationContext,
-                        YoutubeDatabase::class.java,
-                        "youtube-database"
-                    ).build()
-                }
-            }
-            return instance
-        }
-    }
 }

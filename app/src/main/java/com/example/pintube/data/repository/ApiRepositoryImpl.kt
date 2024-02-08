@@ -1,6 +1,6 @@
 package com.example.pintube.data.repository
 
-import com.example.pintube.data.remote.api.retrofit.YouTubeApi
+import com.example.pintube.data.remote.api.retrofit.YoutubeSearchService
 import com.example.pintube.data.remote.dto.ItemResponse
 import com.example.pintube.data.remote.dto.SearchItemResponse
 import com.example.pintube.domain.entitiy.ChannelEntity
@@ -8,40 +8,40 @@ import com.example.pintube.domain.entitiy.CommentEntity
 import com.example.pintube.domain.entitiy.SearchEntity
 import com.example.pintube.domain.entitiy.VideoEntity
 import com.example.pintube.domain.repository.ApiRepository
-import javax.inject.Singleton
 import javax.inject.Inject
 
-@Singleton
-class ApiRepositoryImpl @Inject constructor() : ApiRepository {
+class ApiRepositoryImpl @Inject constructor(
+    private val remoteDataSource: YoutubeSearchService,
+) : ApiRepository {
 
     override suspend fun searchResult(
         query: String
     ): List<SearchEntity>? {
-        return YouTubeApi.youtubeNetwork.searchResult(query = query).items?.map { item ->
+        return remoteDataSource.searchResult(query = query).items?.map { item ->
             convertSearchEntity(item)
         }
     }
 
     override suspend fun getPopularVideo(): List<VideoEntity>? {
-        return YouTubeApi.youtubeNetwork.getPopularVideo().items?.map { item ->
+        return remoteDataSource.getPopularVideo().items?.map { item ->
             convertVideoEntity(item)
         }
     }
 
     override suspend fun getContentDetails(idList: List<String>): List<VideoEntity>? {
-        return YouTubeApi.youtubeNetwork.getContentDetails(ids = idList).items?.map { item ->
+        return remoteDataSource.getContentDetails(ids = idList).items?.map { item ->
             convertVideoEntity(item)
         }
     }
 
     override suspend fun getChannelDetails(idList: List<String>): List<ChannelEntity>? {
-        return YouTubeApi.youtubeNetwork.getChannelDetails(id = idList).items?.map { item ->
+        return remoteDataSource.getChannelDetails(id = idList).items?.map { item ->
             convertChannelEntity(item)
         }
     }
 
     override suspend fun getComments(videoId: String): List<CommentEntity>? {
-        return YouTubeApi.youtubeNetwork.getComments(videoId = videoId).items?.map { item ->
+        return remoteDataSource.getComments(videoId = videoId).items?.map { item ->
             convertCommentRepliesEntity(item)
         }
     }
