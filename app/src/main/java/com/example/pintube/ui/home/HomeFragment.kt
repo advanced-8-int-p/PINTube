@@ -1,6 +1,5 @@
 package com.example.pintube.ui.home
 
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -9,7 +8,6 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.example.pintube.databinding.FragmentHomeBinding
-import com.example.pintube.ui.Search.SearchActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -41,12 +39,6 @@ class HomeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
-
-        binding.ivHomeSearch.setOnClickListener {
-            val intent = Intent(requireContext(), SearchActivity::class.java)
-            startActivity(intent)
-        }
-
         return binding.root
     }
 
@@ -63,35 +55,31 @@ class HomeFragment : Fragment() {
     }
 
     private fun initView() = binding.also { b ->
-        //ddd
-        popularVideoAdapter.items.addAll(List(10) { VideoItemData() })
-//        categoryAdapter.submitList(List(10) { "카테고리$it" })
-        categoryVideoAdapter.items.addAll(List(10) { VideoItemData() })
-
         b.rvHomeMain.adapter = homeAdapter
         homeAdapter.sealedMultis.addAll(
             listOf(
+                SealedMulti.Header,
                 SealedMulti.Popular(popularVideoAdapter),
                 SealedMulti.Category(categoryAdapter, categoryVideoAdapter),
             )
         )
     }
 
-    private fun initViewModel() = with(viewModel){
+    private fun initViewModel() = viewModel.also { vm ->
         //ddd
-        addAllToCategories(List(10) { "카테고리$it" } )
-        // TODO: 터짐
-        updatePopulars()
+        vm.addAllToCategories(List(10) { "카테고리$it" })
+        vm.updatePopulars()
+        vm.searchCategory("싱어게인3")
 
-        // 이건 왜 안되지..
-//        vm.dddSearch("아이유")
-
-        categories.observe(viewLifecycleOwner) {
+        vm.populars.observe(viewLifecycleOwner) {
+            popularVideoAdapter.submitList(it)
+            Log.d("pop", "$it")
+        }
+        vm.categories.observe(viewLifecycleOwner) {
             categoryAdapter.submitList(it)
         }
-        populars.observe(viewLifecycleOwner) {
-            popularVideoAdapter.items = it
-            Log.d("pop", "$it")
+        vm.categoryVideos.observe(viewLifecycleOwner) {
+            categoryVideoAdapter.submitList(it)
         }
     }
 
