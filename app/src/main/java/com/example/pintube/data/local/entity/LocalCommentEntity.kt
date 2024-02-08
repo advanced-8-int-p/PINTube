@@ -6,7 +6,8 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "comment_info")
 data class LocalCommentEntity(
     val channelId: String?,
-    val videoId: String?,
+    @PrimaryKey
+    val videoId: String,
     val textDisplay: String?,
     val textOriginal: String?,
     val authorDisplayName: String?,
@@ -19,7 +20,5 @@ data class LocalCommentEntity(
     val publishedAt: String?,
     val updatedAt: String?,
     val totalReplyCount: Int?,
-    var replies: List<LocalCommentEntity>? = null,
-){
-    @PrimaryKey(autoGenerate = true) var key:Int = 0
-}
+    var replies: List<LocalCommentEntity?> = emptyList(),
+)

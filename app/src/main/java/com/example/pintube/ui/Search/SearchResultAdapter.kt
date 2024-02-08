@@ -1,13 +1,10 @@
 package com.example.pintube.ui.Search
 
 import android.content.Context
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.example.pintube.data.local.entity.LocalSearchEntity
-import com.example.pintube.data.local.entity.VideoCacheEntity
 import com.example.pintube.databinding.RecyclerviewResultBinding
 import com.example.pintube.domain.entitiy.SearchEntity
 

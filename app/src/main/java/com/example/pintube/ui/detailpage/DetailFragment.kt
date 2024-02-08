@@ -14,7 +14,7 @@ import androidx.media3.common.PlaybackException
 import androidx.media3.common.Player
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.session.MediaSession
-import com.example.pintube.MainActivity
+import com.example.pintube.ui.MainActivity
 import com.example.pintube.databinding.FragmentDetailBinding
 import com.example.pintube.ui.home.HomeViewModel
 import com.google.android.material.snackbar.Snackbar
