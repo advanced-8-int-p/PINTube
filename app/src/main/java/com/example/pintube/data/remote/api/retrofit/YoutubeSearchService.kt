@@ -34,7 +34,7 @@ interface YoutubeSearchService {
 
     @GET("videos")
     suspend fun getContentDetails (
-        @Query("part") part: String = "contentDetails,statistics,player,liveStreamingDetails,topicDetails",
+        @Query("part") part: String = "snippet,contentDetails,statistics,player,liveStreamingDetails,topicDetails",
         @Query("id") ids: List<String>,
         @Query("maxResults") maxResult: Int? = 50,
         @Query("regionCode") regionCode: String = "kr",

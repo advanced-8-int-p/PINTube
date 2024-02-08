@@ -12,20 +12,20 @@ import androidx.fragment.app.commit
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.pintube.R
+import com.example.pintube.data.remote.api.retrofit.YouTubeApi
 import com.example.pintube.data.repository.ApiRepositoryImpl
 import com.example.pintube.databinding.ActivitySearchBinding
 import com.example.pintube.domain.entitiy.SearchEntity
 import com.example.pintube.domain.repository.ApiRepository
+import com.example.pintube.domain.repository.LocalSearchRepository
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import androidx.recyclerview.widget.RecyclerView.Adapter
-
 
 
 class SearchActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySearchBinding
 
-    private val apiRepository: ApiRepository = ApiRepositoryImpl()
+    private val apiRepository: ApiRepository = ApiRepositoryImpl(YouTubeApi.youtubeNetwork)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
@@ -95,13 +95,20 @@ class SearchActivity : AppCompatActivity() {
         }
 
     }
-    private fun searchVideo(query : String) {
+    fun searchVideo(query : String) {
         lifecycleScope.launch {
-            val searchResults = apiRepository.searchResult(query)
-            val searchResultFragment = SearchResultFragment.newInstance(searchResults)
-            setFragment(searchResultFragment)
+            val channelIds = mutableListOf<String>()
+            val videoIds = mutableListOf<String>()
         }
     }
+
+//    private fun searchVideo(query : String) {
+//        lifecycleScope.launch {
+//            val searchResults = apiRepository.searchResult(query)
+//            val searchResultFragment = SearchResultFragment.newInstance(searchResults)
+//            setFragment(searchResultFragment)
+//        }
+//    }
 
     private fun setFragment(frag: Fragment) {
         supportFragmentManager.commit {

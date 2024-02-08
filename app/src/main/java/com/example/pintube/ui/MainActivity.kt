@@ -1,15 +1,11 @@
-package com.example.pintube
+package com.example.pintube.ui
 
-import android.content.ContentValues.TAG
 import android.os.Bundle
-import android.util.Log
-import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.FragmentManager
 import androidx.navigation.NavOptions
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
+import com.example.pintube.R
 import com.example.pintube.databinding.ActivityMainBinding
 import dagger.hilt.android.AndroidEntryPoint
 

@@ -18,13 +18,12 @@ class LocalTypeConverters {
     }
 
     @TypeConverter
-    fun fromCommentList(items: List<LocalCommentEntity>?): String {
-        val gson = Gson()
-        return gson.toJson(items)
+    fun fromCommentList(list: List<LocalCommentEntity?>?): String {
+        return Gson().toJson(list)
     }
 
     @TypeConverter
-    fun toCommentList(item: String): List<LocalCommentEntity>? {
+    fun toCommentList(item: String): List<LocalCommentEntity?> {
         val listType = object : TypeToken<List<LocalCommentEntity?>?>() {}.type
         return Gson().fromJson(item, listType)
     }
