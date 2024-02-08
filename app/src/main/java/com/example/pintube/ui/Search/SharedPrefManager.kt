@@ -45,4 +45,16 @@ object SharedPrefManager {
         editor.remove(KEY_SEARCH_HISTORY)
         editor.apply()
     }
+
+    fun removeSearchHistoryItem(context: Context, searchItem: String) {
+        val sharedPreferences = getSharedPreferences(context)
+        val editor = sharedPreferences.edit()
+        val removeHistorySet = getSearchHistory(context).toMutableSet()
+
+        removeHistorySet.remove(searchItem)
+
+        editor.putStringSet(KEY_SEARCH_HISTORY, removeHistorySet)
+        editor.apply()
+
+    }
 }

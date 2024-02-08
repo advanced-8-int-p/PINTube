@@ -8,6 +8,7 @@
     android:background="#8083FF"
     android:orientation="vertical">
 
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/item_srchframe_cons"
         android:layout_width="match_parent"
@@ -52,7 +53,6 @@
             app:layout_constraintTop_toTopOf="@+id/et_searchFragment_bar" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-        
 
     <FrameLayout
         android:id="@+id/search_frameLayout"
@@ -62,7 +62,8 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/frame_cons"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:paddingStart="15dp">
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_searchList"
