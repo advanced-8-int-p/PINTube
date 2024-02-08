@@ -21,11 +21,11 @@ class CategoryAdapter(
     inner class CategoryViewHolder(private val binding: CategoryItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun onBind(item: String) = binding.also { b ->
-//            Log.d("myTag:카테고리뷰홀더 onBind", model)  //ddd
+//            Log.d("jj-카테고리뷰홀더 onBind", model)  //ddd
             b.tvCategoryName.text = item
 
             b.root.setOnClickListener {
-                Log.d("myTag:카테고리어댑터 아이템 클릭", "$layoutPosition: $item")
+                Log.d("jj-카테고리어댑터 아이템 클릭", "$layoutPosition: $item")
                 onItemClick(it, layoutPosition)
             }
         }

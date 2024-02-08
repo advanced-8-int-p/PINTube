@@ -30,7 +30,7 @@ class CategoryVideoAdapter(
             model.channelName?.let { b.tvItemName.text = it }
 
             b.root.setOnClickListener {
-                Log.d("myTag:Popular 아이템 클릭", "$layoutPosition: ${getItem(layoutPosition)}")
+                Log.d("jj-Popular 아이템 클릭", "$layoutPosition: ${getItem(layoutPosition)}")
                 onItemClick(it, layoutPosition)
             }
         }

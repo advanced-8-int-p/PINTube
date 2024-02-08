@@ -32,7 +32,7 @@ class PopularVideoAdapter(
             // item.isSaved
 
             b.root.setOnClickListener {
-                Log.d("myTag:Popular 아이템 클릭", "$layoutPosition: ${getItem(layoutPosition)}")
+                Log.d("jj-Popular 아이템 클릭", "$layoutPosition: ${getItem(layoutPosition)}")
                 onItemClick(it, layoutPosition)
             }
         }

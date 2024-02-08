@@ -17,7 +17,7 @@ class HomeAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         RecyclerView.ViewHolder(binding.root) {
 
         fun onBind(item: SealedMulti.Popular) {
-            Log.d("myTag:홈어댑터 popular onBind", item.toString())  //ddd
+            Log.d("jj-홈어댑터 popular onBind", item.toString())  //ddd
 
             binding.rvPopularVideos.adapter = item.videoAdapter
         }
