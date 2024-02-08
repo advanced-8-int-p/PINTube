@@ -14,6 +14,7 @@ import com.example.pintube.utill.convertDurationTime
 import com.example.pintube.utill.convertToDaysAgo
 import com.example.pintube.utill.convertViewCount
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -38,8 +39,7 @@ class HomeViewModel @Inject constructor(
         MutableLiveData(List(10) { VideoItemData() })  //ddd
     val categoryVideos: LiveData<List<VideoItemData>> get() = _categoryVideos
 
-    fun updatePopulars() = viewModelScope.launch {
-        val videoEntities = repository.getPopularVideo() ?: return@launch
+    fun updatePopulars() = viewModelScope.launch(Dispatchers.IO) {
         val channelIds = mutableListOf<String>()
         runCatching {
             var result = localVideoRepository.findPopularVideos()
@@ -56,68 +56,20 @@ class HomeViewModel @Inject constructor(
                 }
                 result = localVideoRepository.findPopularVideos()
             }
-            _populars.postValue(result?.map { it.convertVideoItemData() } as ArrayList<VideoItemData>?)
+            _populars.postValue(result?.map { it.convertVideoItemData() })
         }.onFailure { error ->
             Log.e("HomeViewModel", "Error fetching data: ${error.message}", error)
         }
     }
 
-    fun searchCategory(query: String) = viewModelScope.launch {
-        val searchEntities = repository.searchResult(query) ?: return@launch
-
-        val channelIdSet = searchEntities.mapTo(mutableSetOf()) { it.channelId!! }  // not-null 이겠지?
-        val channelEntities = repository.getChannelDetails(channelIdSet.toList())
-            ?: error("jj-홈뷰모델 - searchCategory - getChannelDetails == null")
-        val channelThumbnailMap = channelEntities.associate { Pair(it.id!!, it.thumbnailMedium) }
-
-        val videoIdSet = searchEntities.mapTo(mutableSetOf()) { it.id!! }  // not-null 이겠지?
-        // getContentDetails 내용이 일부만 들어있음. duration은 있고 viewCount는 없다.
-        val videoEntities = repository.getContentDetails(videoIdSet.toList())
-            ?: error("jj-홈뷰모델 - searchCategory - getContentDetails == null")
-        val videoEntityMap = videoEntities.associateBy { it.id!! }
-
-        val videoItemDatas = searchEntities.map {
-            VideoItemData(
-                videoThumbnailUri = it.thumbnailMedium,
-                channelThumbnailUri = channelThumbnailMap[it.channelId],
-                title = it.title,
-                channelName = it.channelTitle,
-                views = "조회수 ${videoEntityMap[it.id]?.viewCount?.convertViewCount()}",
-                date = it.publishedAt?.convertToDaysAgo(),
-                length = videoEntityMap[it.id]?.duration?.convertDurationTime(),
-                isSaved = null,
-                id = it.id,
-            )
-        }
-        _categoryVideos.postValue(videoItemDatas)
-    }
-
-    fun addAllToCategories(elements: Collection<String>) {
-        _categories.value = _categories.value!!.toMutableList().apply { addAll(elements) }
-    }
-
-
-    private fun VideoWithThumbnail.convertVideoItemData() = VideoItemData(
-        videoThumbnailUri = this.video?.thumbnailHigh,
-        title = this.video?.title,
-        channelThumbnailUri = this.thumbnail?.thumbnailMedium,
-        channelName = this.video?.channelTitle,
-        views = this.video?.viewCount?.convertViewCount(),
-        date = this.video?.publishedAt?.convertToDaysAgo(),
-        length = this.video?.duration?.convertDurationTime(),
-        id = this.video?.id,
-    )
-}
-
-
-/*
-* val channelIds = mutableListOf<String>()
+    fun searchCategory(query: String) = viewModelScope.launch(Dispatchers.IO) {
+        val channelIds = mutableListOf<String>()
         val videoIds = mutableListOf<String>()
         var searchResult = localSearchRepository.findSearchRecord(query)
-        if (searchResult == null) {
+        if (searchResult?.size == 0) {
             repository.searchResult(query)?.forEach { item ->
                 localSearchRepository.saveSearchResult(
-                    item = item ,
+                    item = item,
                     query = query
                 )
                 item.id?.let { videoIds.add(it) }
@@ -131,4 +83,21 @@ class HomeViewModel @Inject constructor(
             }
             searchResult = localSearchRepository.findSearchRecord(query)
         }
-* */
+        _categoryVideos.postValue(searchResult?.map { it.convertVideoItemData() })
+    }
+
+    fun addAllToCategories(elements: Collection<String>) {
+        _categories.value = _categories.value!!.toMutableList().apply { addAll(elements) }
+    }
+
+    private fun VideoWithThumbnail.convertVideoItemData() = VideoItemData(
+        videoThumbnailUri = this.video?.thumbnailHigh,
+        title = this.video?.title,
+        channelThumbnailUri = this.thumbnail?.thumbnailMedium,
+        channelName = this.video?.channelTitle,
+        views = "· 조회수 " + this.video?.viewCount?.convertViewCount(),
+        date = this.video?.publishedAt?.convertToDaysAgo(),
+        length = this.video?.duration?.convertDurationTime(),
+        id = this.video?.id,
+    )
+}

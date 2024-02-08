@@ -84,10 +84,10 @@ class ApiRepositoryImpl @Inject constructor(
             caption = item.contentDetails?.caption?: "",
             licensedContent = item.contentDetails?.licensedContent,
             projection = item.contentDetails?.projection?: "",
-            viewCount = item.statics?.viewCount?: "",
-            likeCount = item.statics?.likeCount?: "",
-            favoriteCount = item.statics?.favoriteCount?: "",
-            commentCount = item.statics?.commentCount?: "",
+            viewCount = item.statistics?.viewCount?: "",
+            likeCount = item.statistics?.likeCount?: "",
+            favoriteCount = item.statistics?.favoriteCount?: "",
+            commentCount = item.statistics?.commentCount?: "",
             player = item.player?.embedHtml?: "",
             topicDetails = item.topicDetails?.topicCategories?.toList()
         )

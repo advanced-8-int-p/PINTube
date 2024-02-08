@@ -75,7 +75,7 @@ class HomeFragment : Fragment() {
     private fun initViewModel() = viewModel.also { vm ->
         vm.addAllToCategories(List(10) { "카테고리$it" })  //ddd
         vm.updatePopulars()
-//        vm.searchCategory("요리")  //ddd
+        vm.searchCategory("요리")  //ddd
 
         vm.populars.observe(viewLifecycleOwner) {
             popularVideoAdapter.submitList(it)
@@ -92,5 +92,4 @@ class HomeFragment : Fragment() {
             homeAdapter.notifyDataSetChanged()
         }
     }
-
 }
