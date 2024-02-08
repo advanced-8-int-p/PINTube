@@ -8,9 +8,9 @@ import com.example.pintube.data.local.dao.ChannelDAO
 import com.example.pintube.data.local.dao.CommentDAO
 import com.example.pintube.data.local.dao.VideoDAO
 import com.example.pintube.domain.repository.ApiRepository
-import com.example.pintube.domain.usecase.ConvertDurationTime
-import com.example.pintube.domain.usecase.ConvertToDaysAgo
-import com.example.pintube.domain.usecase.ConvertViewCount
+import com.example.pintube.domain.usecase.convertDurationTime
+import com.example.pintube.domain.usecase.convertToDaysAgo
+import com.example.pintube.domain.usecase.convertViewCount
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -22,9 +22,6 @@ class HomeViewModel @Inject constructor(
     private val videoDao: VideoDAO,
     private val commentDao: CommentDAO,
     private val channelDao: ChannelDAO,
-    private val convertDurationTime: ConvertDurationTime,
-    private val convertToDaysAgo: ConvertToDaysAgo,
-    private val convertViewCount: ConvertViewCount
 ) : ViewModel() {
 
     private val _text = MutableLiveData<String>().apply {
@@ -45,24 +42,24 @@ class HomeViewModel @Inject constructor(
         val videoItemDatas = videoEntities?.map {
             VideoItemData(
                 videoThumbnailUri = it.thumbnailHigh,
-                channelThumbnailUri = "https://picsum.photos/200/300",  // 채널 썸네일은 다시 가져와야하는건가
+                channelThumbnailUri = null,  // 채널 썸네일은 다시 가져와야하는건가
                 title = it.title,
                 channelName = it.channelTitle,
-                views = convertViewCount(it.viewCount),
-                date = convertToDaysAgo(it.publishedAt),
-                length = convertDurationTime(it.duration),
+                views = it.viewCount?.convertViewCount(),
+                date = it.publishedAt?.convertToDaysAgo(),
+                length = it.duration?.convertDurationTime(),
                 isSaved = null,
                 id = it.id,
             )
         }
-        _populars.postValue(ArrayList(videoItemDatas))
+        _populars.postValue(videoItemDatas?.let { ArrayList(it) })
     }
 
     fun searchResult(query: String) = viewModelScope.launch { repository.searchResult(query) }
 
     fun dddSearch(query: String) = viewModelScope.launch {
-        val videoEntities = repository.searchResult(query) ?: return@launch
-        val videoItemDatas = videoEntities.map {
+        val videoEntities = repository.searchResult(query)
+        val videoItemDatas = videoEntities?.map {
             VideoItemData(
                 videoThumbnailUri = it.thumbnailMedium,
                 channelThumbnailUri = "https://picsum.photos/200/300",  // 채널 썸네일은 다시 가져와야하는건가

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:paddingHorizontal="8dp"
+    android:layout_marginEnd="16dp"
     android:paddingVertical="8dp">
 
     <ImageView
@@ -19,6 +19,32 @@
         app:srcCompat="@drawable/hamster" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_popular_item_length"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:alpha="0.8"
+        android:background="@drawable/round_corner_legnth_back"
+        android:paddingHorizontal="8dp"
+        android:paddingVertical="4dp"
+        app:layout_constraintEnd_toEndOf="@id/iv_item_video"
+        app:layout_constraintBottom_toBottomOf="@id/iv_item_video">
+
+        <TextView
+            android:id="@+id/tv_popular_item_length"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:text="00:00"
+            android:textSize="10sp"
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cl_item_desc"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -30,8 +56,8 @@
 
         <ImageView
             android:id="@+id/iv_item_channel"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
+            android:layout_width="21.39dp"
+            android:layout_height="21.39dp"
             android:scaleType="centerCrop"
             android:background="@drawable/round_image"
             android:clipToOutline="true"
@@ -45,17 +71,17 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:text="제목입니다 tv_item_title"
-            android:textSize="10sp"
+            android:textSize="11sp"
             app:layout_constraintStart_toEndOf="@id/iv_item_channel"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="@id/iv_item_channel" />
 
         <TextView
             android:id="@+id/tv_item_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:text="채널명 어쩌구 tv"
+            android:text="채널명 어쩌구 tv ·"
             android:textSize="9sp"
+            android:textColor="@color/enable_color"
             app:layout_constraintStart_toStartOf="@id/tv_item_title"
             app:layout_constraintTop_toBottomOf="@id/tv_item_title" />
 
@@ -64,8 +90,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="4dp"
-            android:text="조회수 0.0천회"
+            android:text="조회수 0.0천회 ·"
             android:textSize="9sp"
+            android:textColor="@color/enable_color"
             app:layout_constraintBottom_toBottomOf="@id/tv_item_name"
             app:layout_constraintStart_toEndOf="@id/tv_item_name"
             app:layout_constraintTop_toTopOf="@id/tv_item_name" />
@@ -77,6 +104,7 @@
             android:layout_marginStart="4dp"
             android:text="0일전"
             android:textSize="9sp"
+            android:textColor="@color/enable_color"
             app:layout_constraintBottom_toBottomOf="@id/tv_item_views"
             app:layout_constraintStart_toEndOf="@id/tv_item_views"
             app:layout_constraintTop_toTopOf="@id/tv_item_views" />
