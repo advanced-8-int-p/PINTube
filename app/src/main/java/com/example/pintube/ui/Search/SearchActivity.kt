@@ -3,6 +3,8 @@ package com.example.pintube.ui.Search
 import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.View
 import android.widget.Toast
@@ -11,14 +13,19 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.room.Room
 import com.example.pintube.R
+import com.example.pintube.data.local.dao.SearchDAO
+import com.example.pintube.data.local.database.YoutubeDatabase
 import com.example.pintube.data.remote.api.retrofit.YouTubeApi
 import com.example.pintube.data.repository.ApiRepositoryImpl
+import com.example.pintube.data.repository.LocalSearchRepositoryImpl
 import com.example.pintube.databinding.ActivitySearchBinding
 import com.example.pintube.domain.entitiy.SearchEntity
 import com.example.pintube.domain.repository.ApiRepository
 import com.example.pintube.domain.repository.LocalSearchRepository
 import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 
 
@@ -26,12 +33,14 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySearchBinding
 
     private val apiRepository: ApiRepository = ApiRepositoryImpl(YouTubeApi.youtubeNetwork)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
         binding = ActivitySearchBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        showXButton()
 
         val recyclerView = binding.rvSearchList
         recyclerView.layoutManager = LinearLayoutManager(this)
@@ -79,6 +88,25 @@ class SearchActivity : AppCompatActivity() {
                 .show()
         }
 
+        binding.etSearchFragmentBar.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+                showXButton()
+                noShowXButton()
+            }
+        })
+
+        binding.removeQuery.setOnClickListener {
+            binding.etSearchFragmentBar.setText("")
+        }
+
 
 
         adapter.itemClick = object : SearchListAdapter.ItemClick {
@@ -95,20 +123,27 @@ class SearchActivity : AppCompatActivity() {
         }
 
     }
-    fun searchVideo(query : String) {
-        lifecycleScope.launch {
-            val channelIds = mutableListOf<String>()
-            val videoIds = mutableListOf<String>()
+
+    private fun showXButton() {
+        val text = binding.etSearchFragmentBar.text.toString()
+        if(text.length >= 1) {
+            binding.removeQuery.visibility = View.VISIBLE
+        }
+    }
+    private fun noShowXButton() {
+        val text = binding.etSearchFragmentBar.text.toString()
+        if(text.length == 0) {
+            binding.removeQuery.visibility = View.GONE
         }
     }
 
-//    private fun searchVideo(query : String) {
-//        lifecycleScope.launch {
-//            val searchResults = apiRepository.searchResult(query)
-//            val searchResultFragment = SearchResultFragment.newInstance(searchResults)
-//            setFragment(searchResultFragment)
-//        }
-//    }
+    private fun searchVideo(query : String) {
+        lifecycleScope.launch {
+            val searchResults = apiRepository.searchResult(query)
+            val searchResultFragment = SearchResultFragment.newInstance(searchResults)
+            setFragment(searchResultFragment)
+        }
+    }
 
     private fun setFragment(frag: Fragment) {
         supportFragmentManager.commit {
