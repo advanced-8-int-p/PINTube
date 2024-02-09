@@ -24,7 +24,10 @@ class LocalSearchRepositoryImpl @Inject constructor(
 
     override suspend fun findSearchRecord(
         query: String,
-    ): List<VideoWithThumbnail>? = searchDAO.findSearchRecord(query)?.map {
+    ): List<VideoWithThumbnail>? = searchDAO.findSearchRecord(
+        query,
+        LocalDateTime.now().minusDays(1).convertLocalDateTime()
+        )?.map {
         VideoWithThumbnail(
             video = videoDAO.findVideo(it.id),
             thumbnail = channelDAO.getChannelThumbnail(it.channelId)

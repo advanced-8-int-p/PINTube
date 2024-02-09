@@ -26,12 +26,15 @@ class LocalVideoRepositoryImpl @Inject constructor(
     ): LocalVideoEntity? = videoDAO.findVideo(videoId)
 
     override suspend fun findPopularVideos()
-            : List<VideoWithThumbnail>? = videoDAO.findPopularVideos()?.map { video ->
-        VideoWithThumbnail(
-            video = video,
-            thumbnail = channelDAO.getChannelThumbnail(video.channelId)
-        )
-    }
+            : List<VideoWithThumbnail>? =
+        videoDAO.findPopularVideos(
+            LocalDateTime.now().minusDays(1).convertLocalDateTime()
+        )?.map { video ->
+            VideoWithThumbnail(
+                video = video,
+                thumbnail = channelDAO.getChannelThumbnail(video.channelId)
+            )
+        }
 
     private fun VideoEntity.convertToLocalVideoEntity(popular: Boolean?): LocalVideoEntity? {
         if (this.id != null) {
@@ -67,7 +70,7 @@ class LocalVideoRepositoryImpl @Inject constructor(
                 saveDate = LocalDateTime.now().convertLocalDateTime(),
                 isPopular = popular
             )
-        }else return null
+        } else return null
     }
 }
 

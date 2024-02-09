@@ -23,6 +23,7 @@ class LocalCommentRepositoryImpl @Inject constructor(
         if (this.videoId != null) {
             return this.replies?.map { it.convertToLocalCommentEntity() }?.let {
                 LocalCommentEntity(
+                    id = this.id?: "",
                     channelId = this.channelId,
                     videoId = this.videoId,
                     textDisplay = this.textDisplay,

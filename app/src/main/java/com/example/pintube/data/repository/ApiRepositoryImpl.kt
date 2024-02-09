@@ -21,6 +21,11 @@ class ApiRepositoryImpl @Inject constructor(
             convertSearchEntity(item)
         }
 
+    override suspend fun getRandomShorts(): List<SearchEntity>?  = remoteDataSource
+        .searchResult(query = "#shorts", videoDuration = "short").items?.map { item ->
+            convertSearchEntity(item)
+        }
+
     override suspend fun getPopularVideo()
             : List<VideoEntity>? = remoteDataSource.getPopularVideo().items?.map { item ->
         convertVideoEntity(item)
@@ -132,6 +137,7 @@ class ApiRepositoryImpl @Inject constructor(
     private fun convertCommentEntity(
         item: ItemResponse
     ): CommentEntity = CommentEntity(
+        id = item.id?: "",
         channelId = item.snippet?.topLevelComment?.snippet?.channelId ?: "",
         videoId = item.snippet?.topLevelComment?.snippet?.videoId ?: "",
         textDisplay = item.snippet?.topLevelComment?.snippet?.textDisplay ?: "",

@@ -92,7 +92,7 @@ class HomeViewModel @Inject constructor(
 
     private fun VideoWithThumbnail.convertVideoItemData() = VideoItemData(
         videoThumbnailUri = this.video?.thumbnailHigh,
-        title = this.video?.title,
+        title = this.video?.localizedTitle?: this.video?.title,
         channelThumbnailUri = this.thumbnail?.thumbnailMedium,
         channelName = this.video?.channelTitle,
         views = "· 조회수 " + this.video?.viewCount?.convertViewCount(),

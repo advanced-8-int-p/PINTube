@@ -1,6 +1,7 @@
 package com.example.pintube.domain.entitiy
 
 data class CommentEntity(
+    val id: String?,
     val channelId: String?,
     val videoId: String?,
     val textDisplay: String?,

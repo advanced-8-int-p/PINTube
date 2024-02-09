@@ -11,4 +11,5 @@ interface ApiRepository {
     suspend fun getContentDetails(idList: List<String>): List<VideoEntity>?
     suspend fun getChannelDetails(idList: List<String>): List<ChannelEntity>?
     suspend fun getComments(videoId: String): List<CommentEntity>?
+    suspend fun getRandomShorts(): List<SearchEntity>?
 }

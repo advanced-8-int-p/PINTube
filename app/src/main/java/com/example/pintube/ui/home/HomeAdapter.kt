@@ -4,6 +4,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import androidx.viewpager2.widget.ViewPager2
 import coil.load
 import com.example.pintube.databinding.HomeItemCategoryBinding
 import com.example.pintube.databinding.HomeItemPopularBinding
@@ -20,10 +21,11 @@ class HomeAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     inner class MultiViewHolderPopular(private val binding: HomeItemPopularBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun onBind(item: SealedMulti.Popular) {
+        fun onBind(item: SealedMulti.Popular) = with(binding){
             Log.d("jj-홈어댑터 popular onBind", item.toString())  //ddd
 
-            binding.rvPopularVideos.adapter = item.videoAdapter
+            rvPopularVideos.adapter = item.videoAdapter
+            rvPopularVideos.orientation = ViewPager2.ORIENTATION_HORIZONTAL
         }
     }
 
