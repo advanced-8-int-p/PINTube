@@ -12,6 +12,7 @@ import com.example.pintube.databinding.UnknownItemBinding
 import com.example.pintube.ui.shorts.model.CommentsItem
 import com.example.pintube.ui.shorts.model.CommentsViewType
 import com.example.pintube.utill.convertViewCount
+import org.jsoup.Jsoup
 
 class CommentAdapter(
 ) : ListAdapter<CommentsItem, CommentAdapter.CommentsViewHolder>(
@@ -62,7 +63,7 @@ class CommentAdapter(
             }
             ivCommentUserprofile.load(item.userProfileImage)
             tvCommentUsername.text = item.userName
-            tvCommentDesc.text = item.textDisplay
+            tvCommentDesc.text = item.textOriginal
             tvCommentLikeCount.text = item.likeCount?.convertViewCount()
 
         }

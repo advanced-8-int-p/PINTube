@@ -1,12 +1,18 @@
 package com.example.pintube.ui.shorts.adapter
 
+import android.content.Context
 import android.graphics.Color
+import android.util.DisplayMetrics
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
+import androidx.core.content.ContextCompat.getSystemService
+import androidx.core.view.marginBottom
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.ListAdapter
+import coil.load
 import com.example.pintube.databinding.ItemShortsBinding
 import com.example.pintube.databinding.UnknownItemBinding
 import com.example.pintube.ui.shorts.model.ShortsViewType
@@ -18,7 +24,7 @@ import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.Abs
 class ShortsAdapter(
     private val onBookmarkChecked: (ShortsItem) -> Unit,
     private val onSharedChecked: (ShortsItem) -> Unit,
-    private val onCommentChecked: (String) -> Unit,
+    private val onCommentChecked: (ShortsItem.Item) -> Unit,
 ) : ListAdapter<ShortsItem, ShortsAdapter.ShortsViewHolder>(
 
     object : DiffUtil.ItemCallback<ShortsItem>() {
@@ -65,18 +71,36 @@ class ShortsAdapter(
         private val binding: ItemShortsBinding,
         private val onBookmarkChecked: (ShortsItem) -> Unit,
         private val onSharedChecked: (ShortsItem) -> Unit,
-        private val onCommentChecked: (String) -> Unit,
+        private val onCommentChecked: (ShortsItem.Item) -> Unit,
     ) : ShortsViewHolder(binding.root) {
         override fun onBind(item: ShortsItem) = with(binding) {
             if (item !is ShortsItem.Item) {
                 return@with
             }
             tvShortsCommentCount.text = item.commentCount
+            tvShortsTitle.text = item.title
+            tvShortsUser.text = item.channelTitle
+            ivShortsImage.load(item.channelThumbnail)
             ivShortsComments.setOnClickListener {
-                item.id?.let { id -> onCommentChecked(id) }
+                onCommentChecked(item)
             }
+            val windowManager = itemView.context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
+            val displayMetrics = DisplayMetrics()
+            windowManager.defaultDisplay.getMetrics(displayMetrics)
+            val height = displayMetrics.heightPixels
+            val width = displayMetrics.widthPixels
 
-            vvShortsVideo.matchParent()
+            // YouTube 플레이어의 크기 조정
+            val layoutParams = vvShortsVideo.layoutParams
+
+            // dp 값을 px 값으로 변환
+            val extraHeight = dpToPx(80, vvShortsVideo.context)
+
+            layoutParams.height = layoutParams.height + extraHeight + height
+            layoutParams.width = width
+            vvShortsVideo.layoutParams = layoutParams
+
+
             vvShortsVideo.setBackgroundColor(Color.parseColor("#000000"))
             vvShortsVideo.addYouTubePlayerListener(
                 object : AbstractYouTubePlayerListener() {
@@ -95,6 +119,10 @@ class ShortsAdapter(
                     }
                 }
             )
+        }
+
+        private fun dpToPx(dp: Int, context: Context): Int {
+            return (dp * context.resources.displayMetrics.density).toInt()
         }
 
     }

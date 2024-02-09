@@ -30,6 +30,7 @@
             android:textColor="@color/black"/>
 
         <TextView
+            android:id="@+id/tv_comment_count"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"
@@ -44,6 +45,7 @@
             android:layout_height="0dp"
             android:layout_weight="1"/>
         <ImageView
+            android:id="@+id/iv_comment_close"
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:src="@drawable/ic_close_x"

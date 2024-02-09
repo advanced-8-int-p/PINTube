@@ -19,6 +19,7 @@
 
 
     <ImageView
+        android:id="@+id/iv_shorts_back"
         android:src="@drawable/ic_back"
         android:layout_width="24dp"
         android:layout_height="24dp"
@@ -27,6 +28,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"/>
     <ImageView
+        android:id="@+id/iv_shorts_search"
         android:src="@drawable/ic_nav_fab_search"
         android:layout_width="24dp"
         android:layout_height="24dp"

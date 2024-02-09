@@ -4,6 +4,8 @@ import com.example.pintube.data.local.dao.ChannelDAO
 import com.example.pintube.data.local.entity.LocalChannelEntity
 import com.example.pintube.domain.entitiy.ChannelEntity
 import com.example.pintube.domain.repository.LocalChannelRepository
+import com.example.pintube.utill.convertLocalDateTime
+import java.time.LocalDateTime
 import javax.inject.Inject
 
 class LocalChannelRepositoryImpl @Inject constructor(
@@ -18,7 +20,10 @@ class LocalChannelRepositoryImpl @Inject constructor(
 
     override suspend fun findChannel(
         channelId: String,
-    ): LocalChannelEntity? = channelDAO.findChannel(channelId)
+    ): LocalChannelEntity? = channelDAO.findChannel(
+        channelId,
+        LocalDateTime.now().minusDays(1).convertLocalDateTime()
+    )
     private fun ChannelEntity.convertToLocalChannelEntity(): LocalChannelEntity? {
 
         if (this.id == null) return null
@@ -41,7 +46,8 @@ class LocalChannelRepositoryImpl @Inject constructor(
             viewCount = this.viewCount,
             subscriberCount = this.subscriberCount,
             videoCount = this.videoCount,
-            bannerImageUrl = this.bannerImageUrl
+            bannerImageUrl = this.bannerImageUrl,
+            saveDate = LocalDateTime.now().convertLocalDateTime(),
         )
     }
 

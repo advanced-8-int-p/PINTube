@@ -4,6 +4,8 @@ import com.example.pintube.data.local.dao.CommentDAO
 import com.example.pintube.data.local.entity.LocalCommentEntity
 import com.example.pintube.domain.entitiy.CommentEntity
 import com.example.pintube.domain.repository.LocalCommentRepository
+import com.example.pintube.utill.convertLocalDateTime
+import java.time.LocalDateTime
 import javax.inject.Inject
 
 class LocalCommentRepositoryImpl @Inject constructor(
@@ -17,7 +19,10 @@ class LocalCommentRepositoryImpl @Inject constructor(
 
     override suspend fun findComment(
         videoId: String,
-    ) : List<LocalCommentEntity>? = commentDAO.findComment(videoId)
+    ) : List<LocalCommentEntity>? = commentDAO.findComment(
+        videoId,
+        LocalDateTime.now().minusHours(2).convertLocalDateTime()
+        )
 
     private fun CommentEntity.convertToLocalCommentEntity(): LocalCommentEntity? {
         if (this.videoId != null) {
@@ -38,7 +43,8 @@ class LocalCommentRepositoryImpl @Inject constructor(
                     publishedAt = this.publishedAt,
                     updatedAt = this.updatedAt,
                     totalReplyCount = this.totalReplyCount,
-                    replies = it // Recursively convert replies
+                    replies = it,
+                    saveDate = LocalDateTime.now().convertLocalDateTime(),
                 )
             }
         } else return null
