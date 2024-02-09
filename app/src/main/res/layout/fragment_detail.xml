@@ -15,7 +15,7 @@
         android:layout_height="wrap_content"
         android:background="@drawable/bg_blur"
         android:elevation="1dp"
-        android:visibility="visible"
+        android:visibility="gone"
 
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -74,13 +74,13 @@
         app:layout_constraintBottom_toTopOf="@+id/sv_detail_info"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/cl_detail_top_bar" />
+        app:layout_constraintTop_toBottomOf="@+id/cl_detail_top_bar" />
 
     <ScrollView
         android:id="@+id/sv_detail_info"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginBottom="48dp"
+        android:layout_marginBottom="100dp"
 
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -205,14 +205,14 @@
         android:layout_height="wrap_content"
         android:background="@color/white"
         android:elevation="4dp"
-        android:maxHeight="500dp"
 
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/sv_detail_info">
 
         <TextView
-            android:id="@+id/tv_detail_comment"
+            android:id="@+id/tv_detail_comment_count"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:layout_margin="10dp"
@@ -229,20 +229,93 @@
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_marginHorizontal="10dp"
-            android:background="@color/black"
-            app:layout_constraintBottom_toTopOf="@+id/rv_detail_comment_list"
-            app:layout_constraintTop_toBottomOf="@+id/tv_detail_comment" />
+            android:background="@color/sub_color"
+            app:layout_constraintBottom_toTopOf="@+id/cl_detail_comment_list"
+            app:layout_constraintTop_toBottomOf="@+id/tv_detail_comment_count" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_detail_comment_list"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cl_detail_comment_list"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_marginTop="10dp"
-            android:visibility="gone"
+            android:paddingHorizontal="10dp"
+            android:visibility="visible"
 
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/line_detail_comment" />
+            app:layout_constraintTop_toBottomOf="@+id/line_detail_comment" >
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cv_detail_comment_first_profile"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginStart="10dp"
+                android:background="@drawable/ic_account_empty"
+                app:cardCornerRadius="200dp"
+
+                app:cardElevation="1dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:adjustViewBounds="true"
+                    android:clipToOutline="true"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/ic_account_empty" />
+
+            </androidx.cardview.widget.CardView>
+
+            <TextView
+                android:id="@+id/tv_detail_comment_first_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:text="이름"
+                android:textSize="11sp"
+                android:fontFamily="@font/roboto_bold"
+
+                app:layout_constraintTop_toTopOf="@+id/cv_detail_comment_first_profile"
+                app:layout_constraintStart_toEndOf="@+id/cv_detail_comment_first_profile"
+                />
+            <TextView
+                android:id="@+id/tv_detail_comment_first"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="댓글 내용"
+                android:textSize="12sp"
+                android:fontFamily="@font/roboto_medium"
+
+                app:layout_constraintTop_toBottomOf="@+id/tv_detail_comment_first_name"
+                app:layout_constraintStart_toStartOf="@+id/tv_detail_comment_first_name"
+                />
+            <ImageView
+                android:id="@+id/iv_detail_comment_first_like"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:layout_marginTop="4dp"
+                android:src="@drawable/ic_favorite"
+
+                app:layout_constraintTop_toBottomOf="@+id/tv_detail_comment_first"
+                app:layout_constraintStart_toStartOf="@+id/tv_detail_comment_first"
+                />
+            <TextView
+                android:id="@+id/tv_detail_comment_first_like_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="10"
+                android:textSize="10sp"
+                android:fontFamily="@font/roboto_regular"
+
+                app:layout_constraintTop_toTopOf="@+id/iv_detail_comment_first_like"
+                app:layout_constraintStart_toEndOf="@+id/iv_detail_comment_first_like"
+                app:layout_constraintBottom_toBottomOf="@+id/iv_detail_comment_first_like"
+                />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
