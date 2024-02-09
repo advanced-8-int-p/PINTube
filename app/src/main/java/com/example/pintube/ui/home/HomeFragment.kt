@@ -7,8 +7,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.NavOptions
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.GridLayoutManager.SpanSizeLookup
+import com.example.pintube.R
 import com.example.pintube.databinding.FragmentHomeBinding
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -26,7 +29,21 @@ class HomeFragment : Fragment() {
     //ddd
     private val homeAdapter by lazy { HomeAdapter() }
     private val popularVideoAdapter = PopularVideoAdapter(
-        onItemClick = { view, position -> }
+        onItemClick = { item ->
+            findNavController().navigate(
+                resId = R.id.navigation_detail,
+                //args = null,
+                args = Bundle().apply {
+                    putString("video_id", item.id)
+                    putString("channel_id", "bbb")
+                    putParcelable("videoItemData", VideoItemData())
+                },
+                navOptions = NavOptions.Builder()
+                    .setPopUpTo(R.id.navigation_home, true)
+                    .build(),
+            )
+//            mainMotion.transitionToStart()
+        }
     )
     private val categoryAdapter = CategoryAdapter(
         onItemClick = { view, position -> }
@@ -75,7 +92,7 @@ class HomeFragment : Fragment() {
     private fun initViewModel() = viewModel.also { vm ->
         vm.addAllToCategories(List(10) { "카테고리$it" })  //ddd
         vm.updatePopulars()
-        vm.searchCategory("요리")  //ddd
+//        vm.searchCategory("요리")  //ddd
 
         vm.populars.observe(viewLifecycleOwner) {
             popularVideoAdapter.submitList(it)
@@ -92,4 +109,5 @@ class HomeFragment : Fragment() {
             homeAdapter.notifyDataSetChanged()
         }
     }
+
 }
