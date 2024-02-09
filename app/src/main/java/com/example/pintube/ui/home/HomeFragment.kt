@@ -46,7 +46,7 @@ class HomeFragment : Fragment() {
         }
     )
     private val categoryAdapter = CategoryAdapter(
-        onItemClick = { view, position -> }
+        onItemClick = { query -> viewModel.searchCategory(query) }
     )
 
     override fun onCreateView(
@@ -90,7 +90,6 @@ class HomeFragment : Fragment() {
     }
 
     private fun initViewModel() = viewModel.also { vm ->
-        vm.addAllToCategories(List(10) { "카테고리$it" })  //ddd
         vm.updatePopulars()
 //        vm.searchCategory("요리")  //ddd
 
