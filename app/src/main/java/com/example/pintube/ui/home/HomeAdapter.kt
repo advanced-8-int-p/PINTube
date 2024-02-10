@@ -1,11 +1,14 @@
 package com.example.pintube.ui.home
 
+import android.graphics.Color
+import android.graphics.drawable.GradientDrawable
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import coil.load
+import com.example.pintube.R
 import com.example.pintube.databinding.HomeItemCategoryBinding
 import com.example.pintube.databinding.HomeItemPopularBinding
 import com.example.pintube.databinding.ItemHeaderBinding
@@ -41,8 +44,17 @@ class HomeAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         RecyclerView.ViewHolder(binding.root) {
 
         fun onBind(item: SealedMulti.Video) = binding.also { b ->
-            item.videoItemData.videoThumbnailUri?.let { b.ivItemVideo.load(it) }
-            item.videoItemData.channelThumbnailUri?.let { b.ivItemChannel.load(it) }
+
+            item.videoItemData.videoThumbnailUri?.let {
+                b.ivItemVideo.load(it){
+                    crossfade(true)
+                }
+            }
+            item.videoItemData.channelThumbnailUri?.let {
+                b.ivItemChannel.load(it){
+                    crossfade(true)
+                }
+            }
             item.videoItemData.title?.let { b.tvItemTitle.text = it }
             item.videoItemData.channelName?.let { b.tvItemName.text = it }
             item.videoItemData.views?.let { b.tvItemViews.text = it }

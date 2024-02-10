@@ -1,5 +1,6 @@
 package com.example.pintube.ui.home
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -14,6 +15,7 @@ import androidx.recyclerview.widget.GridLayoutManager.SpanSizeLookup
 import androidx.room.util.query
 import com.example.pintube.R
 import com.example.pintube.databinding.FragmentHomeBinding
+import com.example.pintube.ui.Search.SearchActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -87,6 +89,10 @@ class HomeFragment : Fragment() {
                     return 1
                 }
             }
+        }
+
+        b.ivHomeSearch.setOnClickListener {
+            startActivity(Intent(requireContext(), SearchActivity::class.java))
         }
     }
 

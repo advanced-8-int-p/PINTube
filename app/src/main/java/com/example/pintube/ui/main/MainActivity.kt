@@ -9,6 +9,7 @@ import androidx.navigation.ui.setupWithNavController
 import com.example.pintube.R
 import com.example.pintube.databinding.ActivityMainBinding
 import com.example.pintube.ui.shorts.ShortsActivity
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -45,10 +46,21 @@ class MainActivity : AppCompatActivity() {
         var currentFragment = (R.id.navigation_home)
 
         mainFab.setOnClickListener {
-            if (mainMotion.currentState == mainMotion.startState) {
-                mainMotion.transitionToEnd()
+            if (currentFragment == R.id.navigation_detail) {
+                mainFab.setImageResource(R.drawable.ic_main_fab_plus)
+                if (mainMotion.currentState == mainMotion.startState) {
+                    mainMotion.transitionToEnd()
+                } else {
+                    mainMotion.transitionToStart()
+                }
             } else {
-                mainMotion.transitionToStart()
+                mainFab.setImageResource(R.drawable.ic_nav_fab_shorts)
+                startActivity(
+                    Intent(
+                        this@MainActivity,
+                        ShortsActivity::class.java
+                    )
+                )
             }
         }
 

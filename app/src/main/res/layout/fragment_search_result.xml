@@ -4,28 +4,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.Search.SearchResultFragment"
-    android:background="#8083FF"
-    android:orientation="vertical">
+    android:background="@color/white"
+    android:orientation="vertical"
+    tools:context=".ui.Search.SearchResultFragment">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/item_searchFragment_cons2"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_result"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/substract1"
-        android:padding="15dp">
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_result"
-            android:layout_width="355dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 </LinearLayout>
