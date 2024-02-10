@@ -10,7 +10,7 @@ import com.example.pintube.data.local.entity.LocalVideoEntity
 
 @Dao
 interface VideoDAO {
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun insert(item: LocalVideoEntity)
 
     @Update

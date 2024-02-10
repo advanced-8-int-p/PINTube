@@ -101,8 +101,8 @@
             android:text="281"
             android:textSize="14sp"
             android:textColor="@color/white"
-            app:layout_constraintEnd_toEndOf="@+id/iv_shorts_comments"
-            app:layout_constraintStart_toStartOf="@+id/iv_shorts_comments"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/iv_shorts_comments"/>
 
         <ImageView
