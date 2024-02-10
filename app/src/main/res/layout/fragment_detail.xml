@@ -70,7 +70,6 @@
         android:id="@+id/player_detail"
         android:layout_width="match_parent"
         android:layout_height="250dp"
-        app:bar_gravity="center"
         app:layout_constraintBottom_toTopOf="@+id/sv_detail_info"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

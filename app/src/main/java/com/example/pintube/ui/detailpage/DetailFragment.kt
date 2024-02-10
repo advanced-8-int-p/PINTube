@@ -1,7 +1,6 @@
 package com.example.pintube.ui.detailpage
 
 import android.annotation.SuppressLint
-import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -10,28 +9,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.webkit.JavascriptInterface
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.media3.common.MediaItem
-import androidx.media3.common.PlaybackException
-import androidx.media3.common.Player
-import androidx.media3.exoplayer.ExoPlayer
-import androidx.media3.exoplayer.source.DefaultMediaSourceFactory
-import androidx.media3.session.MediaSession
 import androidx.navigation.fragment.findNavController
-import com.example.pintube.MainActivity
 import com.example.pintube.data.remote.api.retrofit.YouTubeApi
-import com.example.pintube.data.remote.api.retrofit.YoutubeSearchService
 import com.example.pintube.data.remote.dto.ApiResponse
 import com.example.pintube.data.repository.ApiRepositoryImpl
 import com.example.pintube.databinding.FragmentDetailBinding
-import com.example.pintube.domain.entitiy.VideoEntity
 import com.example.pintube.domain.repository.ApiRepository
-import com.example.pintube.ui.detailpage.comment.CommentAdapter
-import com.example.pintube.ui.home.HomeFragment
-import com.example.pintube.ui.home.HomeViewModel
-import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -39,7 +26,9 @@ import kotlinx.coroutines.launch
 
 class DetailFragment : Fragment() {
 
-    private var binding : FragmentDetailBinding? = null
+    private var _binding : FragmentDetailBinding? = null
+
+    private val binding get() = _binding!!
 
     private var tempMediaId: String = "rkuE-ygaSgQ"
     private lateinit var mediaItemData: DetailItemModel
@@ -47,11 +36,10 @@ class DetailFragment : Fragment() {
     private lateinit var mContext: Context
 //    private lateinit var commentAdapter: CommentAdapter
 
-    private lateinit var player: ExoPlayer
-    private lateinit var mediaSession: MediaSession
 
-//    private var videoSample = "https://demo.unified-streaming.com/k8s/features/stable/video/tears-of-steel/tears-of-steel.ism/.m3u8"
     private var videoSample = "https://www.youtube.com/embed/IunP_b5FfhY"
+
+    private var isPlaying = false
 
     private val viewModel: DetailViewModel by viewModels()
 
@@ -69,24 +57,30 @@ class DetailFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentDetailBinding.inflate(inflater, container, false)
-        binding!!.ivDetailClose.setOnClickListener {
-//            parentFragmentManager.popBackStack()
-            findNavController().navigateUp()
-        }
-        binding!!.ivDetailShare.setOnClickListener {
-            shareLink()
-        }
-        binding!!.ivDetailPin.setOnClickListener {
-            //보관함 저장
-        }
-        return binding!!.root
+        _binding = FragmentDetailBinding.inflate(inflater, container, false)
+
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         initPlayer()
+
+        binding.ivDetailClose.setOnClickListener {
+//            parentFragmentManager.popBackStack()
+            findNavController().navigateUp()
+        }
+        binding.ivDetailShare.setOnClickListener {
+            shareLink()
+        }
+        binding.ivDetailPin.setOnClickListener {
+            //보관함 저장
+        }
+        binding.playerDetail.setOnClickListener {
+            isPlaying = !isPlaying
+            binding.clDetailTopBar.isVisible = isPlaying
+        }
 
     }
 
@@ -100,7 +94,7 @@ class DetailFragment : Fragment() {
 
     override fun onDestroy() {
         super.onDestroy()
-        binding = null
+        _binding = null
     }
 
     private fun initView() {
@@ -111,7 +105,7 @@ class DetailFragment : Fragment() {
     private fun initPlayer() {
 //        val mediaItem = MediaItem.fromUri(videoSample)
 
-        val webView = binding!!.playerDetail
+        val webView = binding.playerDetail
 
         webView.settings.javaScriptEnabled = true
         webView.addJavascriptInterface(YoutubeInterface(), "Android")
@@ -136,14 +130,24 @@ class DetailFragment : Fragment() {
     }
 
 
-    private fun getData(id: String?) {
+    private fun getData(id: String?) = lifecycleScope.launch {
 //        mediaId = //id값 받아와서 그 값으로 검색?해서 해당 영상 정보 가져오기 enquedhodksehlwl...
-//        YouTubeApi.youtubeNetwork.getContentDetails(ids = listOf(tempMediaId))
+        YouTubeApi.youtubeNetwork.getContentDetails(ids = listOf(tempMediaId))
 //        ApiRepositoryImpl().getContentDetails(listOf(tempMediaId))?.forEach {
 //            videoSample = it.player.toString()
 //        }
-//        val detailData = mediaItemData.player
-//        lifecycleScope.launch {  }
+        val detailData = ApiRepository
+        mediaItemData.id
+        mediaItemData.player
+        mediaItemData.channelProfile
+        mediaItemData.channelTitle
+        mediaItemData.viewCount
+        mediaItemData.likeCount
+        mediaItemData.title
+        mediaItemData.publishedAt
+        mediaItemData.description
+        mediaItemData.commentCount
+        mediaItemData.isPinned = false
     }
 
     private fun shareLink() {

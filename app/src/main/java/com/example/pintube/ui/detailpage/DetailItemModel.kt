@@ -13,12 +13,14 @@ data class DetailItemModel(
     val likeCount: String?,
     val commentCount: String?,
     val player: String?,
-    //comment
-    val videoId: String?,
-    val textDisplay: String?,
-    val authorDisplayName: String?,
-    val authorProfileImageUrl: String?,
-    val totalReplyCount: Int?,
+    //channel
+    val channelProfile: String?,
+//    //comment
+//    val videoId: String?,
+//    val textDisplay: String?,
+//    val authorDisplayName: String?,
+//    val authorProfileImageUrl: String?,
+//    val totalReplyCount: Int?,
     //pin
     var isPinned: Boolean = false
 )
