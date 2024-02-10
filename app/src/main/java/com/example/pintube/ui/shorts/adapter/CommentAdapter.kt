@@ -1,5 +1,6 @@
 package com.example.pintube.ui.shorts.adapter
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,6 +13,7 @@ import com.example.pintube.databinding.ItemCommentBinding
 import com.example.pintube.databinding.UnknownItemBinding
 import com.example.pintube.ui.shorts.model.CommentsItem
 import com.example.pintube.ui.shorts.model.CommentsViewType
+import com.example.pintube.utill.convertToDaysAgo
 import com.example.pintube.utill.convertViewCount
 import org.jsoup.Jsoup
 
@@ -61,12 +63,14 @@ class CommentAdapter(
         private val binding: ItemCommentBinding,
         private val onRepliesClick: (replies: List<CommentsItem.Comments?>?) -> Unit,
     ) : CommentsViewHolder(binding.root) {
+        @SuppressLint("SetTextI18n")
         override fun onBind(item: CommentsItem) = with(binding){
             if (item !is CommentsItem.Comments) {
                 return@with
             }
             ivCommentUserprofile.load(item.userProfileImage)
             tvCommentUsername.text = item.userName
+            tvCommentDaysAgo.text = " · " + item.publishedAt
             tvCommentDesc.text = item.textOriginal
             tvCommentLikeCount.text = item.likeCount?.toString()?.convertViewCount()
             if (item.likeCount == 0){
