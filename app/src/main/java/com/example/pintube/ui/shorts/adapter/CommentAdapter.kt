@@ -10,12 +10,11 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.example.pintube.databinding.ItemCommentBinding
+import com.example.pintube.databinding.ItemCommentEmptyBinding
 import com.example.pintube.databinding.UnknownItemBinding
 import com.example.pintube.ui.shorts.model.CommentsItem
 import com.example.pintube.ui.shorts.model.CommentsViewType
-import com.example.pintube.utill.convertToDaysAgo
 import com.example.pintube.utill.convertViewCount
-import org.jsoup.Jsoup
 
 class CommentAdapter(
     private val onRepliesClick: (replies: List<CommentsItem.Comments?>?) -> Unit,
@@ -42,24 +41,27 @@ class CommentAdapter(
         abstract fun onBind(item: CommentsItem)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CommentsViewHolder {
-        return when(CommentsViewType.from(viewType)) {
-            CommentsViewType.ITEM -> CommentsItemAdapter(
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CommentsViewHolder = when(CommentsViewType.from(viewType)) {
+            CommentsViewType.ITEM -> CommentsItemViewHolder(
                 binding = ItemCommentBinding.inflate(LayoutInflater.from(parent.context),parent,false),
                 onRepliesClick = onRepliesClick
+            )
+
+            CommentsViewType.NO_ITEM -> NoCommentsViewHolder(
+                binding = ItemCommentEmptyBinding.inflate(LayoutInflater.from(parent.context), parent, false),
             )
 
             else -> CommentsUnknownViewHolder(
                 binding = UnknownItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
             )
         }
-    }
+
 
     override fun onBindViewHolder(holder: CommentsViewHolder, position: Int) {
         holder.onBind(getItem(position))
     }
 
-    class CommentsItemAdapter (
+    class CommentsItemViewHolder (
         private val binding: ItemCommentBinding,
         private val onRepliesClick: (replies: List<CommentsItem.Comments?>?) -> Unit,
     ) : CommentsViewHolder(binding.root) {
@@ -78,13 +80,19 @@ class CommentAdapter(
             }
 
             if (item.totalReplyCount!! > 0) {
-                tvCommentReplies.isVisible = true
+                tvCommentRepliesBtn.isVisible = true
                 tvCommentReplies.text = "답글 " + item.totalReplyCount + " 개"
             }
-            tvCommentReplies.setOnClickListener {
+            tvCommentRepliesBtn.setOnClickListener {
                 onRepliesClick(item.replies)
             }
         }
+    }
+
+    class NoCommentsViewHolder (
+        private val binding: ItemCommentEmptyBinding,
+    ) : CommentsViewHolder(binding.root) {
+        override fun onBind(item: CommentsItem) = Unit
     }
 
     class CommentsUnknownViewHolder(

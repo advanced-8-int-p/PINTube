@@ -2,6 +2,7 @@ package com.example.pintube.ui.shorts.model
 
 enum class CommentsViewType {
     ITEM,
+    NO_ITEM,
     UNKNOWN
     ;
 

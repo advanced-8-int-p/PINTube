@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="utf-8"?>
+<MotionScene xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <ConstraintSet android:id="@+id/start">
+        <Constraint android:id="@+id/iv_splash_play"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:src="@drawable/ic_splash_play"
+            app:layout_constraintWidth_percent="0.13"
+            app:layout_constraintHeight_percent="0.15"
+            app:layout_constraintVertical_bias="0.3"
+            app:layout_constraintHorizontal_bias="0.54"
+            app:layout_constraintTop_toTopOf="@+id/iv_splash_pin"
+            app:layout_constraintStart_toStartOf="@+id/iv_splash_pin"
+            app:layout_constraintEnd_toEndOf="@+id/iv_splash_pin"
+            app:layout_constraintBottom_toBottomOf="@+id/iv_splash_pin"
+            app:tint="@color/main_color" />
+        <Constraint
+            android:id="@+id/iv_splash_pin"
+            app:layout_constraintWidth_percent="0.4"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintHeight_percent="0.4"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+    </ConstraintSet>
+
+    <ConstraintSet android:id="@+id/end">
+        <Constraint android:id="@+id/iv_splash_play"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:src="@drawable/ic_splash_play"
+            app:layout_constraintWidth_percent="0.03"
+            app:layout_constraintHeight_percent="0.05"
+            app:layout_constraintVertical_bias="0.5"
+            app:layout_constraintHorizontal_bias="0.2"
+            app:layout_constraintTop_toTopOf="@+id/iv_splash_pin"
+            app:layout_constraintStart_toStartOf="@+id/iv_splash_pin"
+            app:layout_constraintEnd_toEndOf="@+id/iv_splash_pin"
+            app:layout_constraintBottom_toBottomOf="@+id/iv_splash_pin"
+            app:tint="@color/main_color" />
+        <Constraint
+            android:id="@+id/iv_splash_pin"
+            app:layout_constraintWidth_percent="0.1"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:rotation="-90"
+            app:layout_constraintHorizontal_bias="0.4"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintHeight_percent="0.1"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+        <Constraint
+            android:id="@+id/iv_splash_status"
+            app:layout_constraintWidth_percent="0.55"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_width="0.01dp"
+            android:alpha="0.01"
+            android:layout_height="14dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+        <Constraint
+            android:id="@+id/iv_splash_status_loading"
+            app:layout_constraintWidth_percent="0.55"
+            android:layout_width="0dp"
+            android:layout_height="14dp"
+            app:layout_constraintBottom_toBottomOf="@+id/iv_splash_status"
+            android:visibility="gone"
+            app:layout_constraintTop_toTopOf="@+id/iv_splash_status"
+            app:layout_constraintStart_toStartOf="@+id/iv_splash_status" />
+    </ConstraintSet>
+
+    <Transition
+        app:constraintSetEnd="@id/end"
+        app:constraintSetStart="@+id/start"
+        app:duration="600">
+
+    </Transition>
+    <ConstraintSet android:id="@+id/statusbar" >
+        <Constraint android:id="@+id/iv_splash_play"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:src="@drawable/ic_splash_play"
+            app:layout_constraintWidth_percent="0.03"
+            app:layout_constraintHeight_percent="0.05"
+            app:layout_constraintVertical_bias="0.5"
+            app:layout_constraintHorizontal_bias="0.2"
+            app:layout_constraintTop_toTopOf="@+id/iv_splash_pin"
+            app:layout_constraintStart_toStartOf="@+id/iv_splash_pin"
+            app:layout_constraintEnd_toEndOf="@+id/iv_splash_pin"
+            app:layout_constraintBottom_toBottomOf="@+id/iv_splash_pin"/>
+        <Constraint
+            android:id="@+id/iv_splash_pin"
+            app:layout_constraintWidth_percent="0.1"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:rotation="-90"
+            app:layout_constraintHorizontal_bias="0.2"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintHeight_percent="0.1"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+        <Constraint
+            android:id="@+id/iv_splash_status"
+            app:layout_constraintWidth_percent="0.45"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.6"
+            android:layout_width="0dp"
+            android:layout_height="14dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+        <Constraint
+            android:id="@+id/iv_splash_status_loading"
+            app:layout_constraintWidth_percent="0.01"
+            android:layout_width="0dp"
+            android:layout_height="14dp"
+            app:layout_constraintBottom_toBottomOf="@+id/iv_splash_status"
+            app:layout_constraintTop_toTopOf="@+id/iv_splash_status"
+            app:layout_constraintStart_toStartOf="@+id/iv_splash_status" />
+    </ConstraintSet>
+
+    <Transition
+        app:constraintSetEnd="@id/statusbar"
+        app:constraintSetStart="@+id/end"
+        app:duration="600"/>
+    <ConstraintSet android:id="@+id/loading" >
+        <Constraint android:id="@+id/iv_splash_play"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:src="@drawable/ic_splash_play"
+            app:layout_constraintWidth_percent="0.03"
+            app:layout_constraintHeight_percent="0.05"
+            app:layout_constraintVertical_bias="0.5"
+            app:layout_constraintHorizontal_bias="0.2"
+            app:layout_constraintTop_toTopOf="@+id/iv_splash_pin"
+            app:layout_constraintStart_toStartOf="@+id/iv_splash_pin"
+            app:layout_constraintEnd_toEndOf="@+id/iv_splash_pin"
+            app:layout_constraintBottom_toBottomOf="@+id/iv_splash_pin"/>
+        <Constraint
+            android:id="@+id/iv_splash_pin"
+            app:layout_constraintWidth_percent="0.1"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:rotation="-90"
+            app:layout_constraintHorizontal_bias="0.2"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintHeight_percent="0.1"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+        <Constraint
+            android:id="@+id/iv_splash_status"
+            app:layout_constraintWidth_percent="0.45"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.6"
+            android:layout_width="0dp"
+            android:layout_height="14dp"
+            android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+        <Constraint
+            android:id="@+id/iv_splash_status_loading"
+            app:layout_constraintWidth_percent="1"
+            android:layout_width="0dp"
+            android:layout_height="14dp"
+            app:layout_constraintEnd_toEndOf="@+id/iv_splash_status"
+            app:layout_constraintBottom_toBottomOf="@+id/iv_splash_status"
+            app:layout_constraintTop_toTopOf="@+id/iv_splash_status"
+            app:layout_constraintStart_toStartOf="@+id/iv_splash_status" />
+    </ConstraintSet>
+    <Transition
+        app:constraintSetStart="@+id/statusbar"
+        app:constraintSetEnd="@+id/loading"
+        app:duration="700"/>
+</MotionScene>

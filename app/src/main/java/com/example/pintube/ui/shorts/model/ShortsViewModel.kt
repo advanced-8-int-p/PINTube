@@ -36,7 +36,7 @@ class ShortsViewModel @Inject constructor(
     val comments: LiveData<List<CommentsItem.Comments>> get() = _comments
 
     fun getShortsVideos() = viewModelScope.launch(Dispatchers.IO) {
-        var result = localSearchRepository.findSearchRecord("#shorts")
+        var result = localSearchRepository.findSearchRecord("#쇼츠")
 
         if (result?.size == 0) {
             result = getShortsApiResponse()

@@ -13,4 +13,6 @@ sealed interface CommentsItem {
         val totalReplyCount: Int?,
         val replies: List<Comments?>?,
     ): CommentsItem
+
+    data object NoComments : CommentsItem
 }
