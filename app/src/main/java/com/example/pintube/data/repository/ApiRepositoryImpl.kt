@@ -21,6 +21,11 @@ class ApiRepositoryImpl @Inject constructor(
             convertSearchEntity(item)
         }
 
+    override suspend fun getRandomShorts(): List<SearchEntity>?  = remoteDataSource
+        .searchResult(query = "#shorts", videoDuration = "short").items?.map { item ->
+            convertSearchEntity(item)
+        }
+
     override suspend fun getPopularVideo()
             : List<VideoEntity>? = remoteDataSource.getPopularVideo().items?.map { item ->
         convertVideoEntity(item)
@@ -40,7 +45,7 @@ class ApiRepositoryImpl @Inject constructor(
 
     override suspend fun getComments(
         videoId: String
-    ): List<CommentEntity>? = remoteDataSource.getComments(videoId = videoId).items?.map { item ->
+    ): List<CommentEntity?>? = remoteDataSource.getComments(videoId = videoId).items?.map { item ->
         convertCommentRepliesEntity(item)
     }
 
@@ -118,33 +123,36 @@ class ApiRepositoryImpl @Inject constructor(
 
     private fun convertCommentRepliesEntity(
         item: ItemResponse
-    ): CommentEntity {
-        val comment = convertCommentEntity(item)
-        if (item.replies?.comments != null) {
-            val replies = item.replies.comments.map {
-                convertCommentEntity(it)
-            }
-            comment.replies = replies
-        }
-        return comment
+    ): CommentEntity? {
+        val topLevelComment = item.snippet?.topLevelComment?.let { convertCommentEntity(it) }
+
+        val replies = item.replies?.comments?.map { replyItem ->
+            convertCommentEntity(replyItem).copy(parentId = item.id)
+        } ?: emptyList()
+
+        return topLevelComment?.copy(replies = replies, totalReplyCount = item.snippet.totalReplyCount)
     }
 
     private fun convertCommentEntity(
-        item: ItemResponse
+        item: ItemResponse,
+        parentId: String? = null
     ): CommentEntity = CommentEntity(
-        channelId = item.snippet?.topLevelComment?.snippet?.channelId ?: "",
-        videoId = item.snippet?.topLevelComment?.snippet?.videoId ?: "",
-        textDisplay = item.snippet?.topLevelComment?.snippet?.textDisplay ?: "",
-        textOriginal = item.snippet?.topLevelComment?.snippet?.textOriginal ?: "",
-        authorDisplayName = item.snippet?.topLevelComment?.snippet?.authorDisplayName ?: "",
-        authorProfileImageUrl = item.snippet?.topLevelComment?.snippet?.authorProfileImageUrl ?: "",
-        authorChannelId = item.snippet?.topLevelComment?.snippet?.authorChannelId?.value ?: "",
-        authorChannelUrl = item.snippet?.topLevelComment?.snippet?.authorChannelUrl ?: "",
-        canRate = item.snippet?.topLevelComment?.snippet?.canRate ?: false,
-        viewerRating = item.snippet?.topLevelComment?.snippet?.viewerRating ?: "",
-        likeCount = item.snippet?.topLevelComment?.snippet?.likeCount ?: 0,
-        publishedAt = item.snippet?.topLevelComment?.snippet?.publishedAt ?: "",
-        updatedAt = item.snippet?.topLevelComment?.snippet?.updatedAt ?: "",
+        id = item.id?: "",
+        channelId = item.snippet?.channelId ?: "",
+        videoId = item.snippet?.videoId ?: "",
+        textDisplay = item.snippet?.textDisplay ?: "",
+        textOriginal = item.snippet?.textOriginal ?: "",
+        authorDisplayName = item.snippet?.authorDisplayName ?: "",
+        authorProfileImageUrl = item.snippet?.authorProfileImageUrl ?: "",
+        authorChannelId = item.snippet?.authorChannelId?.value ?: "",
+        authorChannelUrl = item.snippet?.authorChannelUrl ?: "",
+        canRate = item.snippet?.canRate ?: false,
+        viewerRating = item.snippet?.viewerRating ?: "",
+        likeCount = item.snippet?.likeCount ?: 0,
+        publishedAt = item.snippet?.publishedAt ?: "",
+        updatedAt = item.snippet?.updatedAt ?: "",
         totalReplyCount = item.snippet?.totalReplyCount ?: 0,
+        replies = emptyList(),
+        parentId = parentId
     )
 }

@@ -1,5 +1,6 @@
-package com.example.pintube.ui
+package com.example.pintube.ui.main
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavOptions
@@ -7,6 +8,7 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.example.pintube.R
 import com.example.pintube.databinding.ActivityMainBinding
+import com.example.pintube.ui.shorts.ShortsActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -31,11 +33,12 @@ class MainActivity : AppCompatActivity() {
 
         initView()
     }
+
     private fun initView() {
         initBottomNav()
     }
 
-    private fun initBottomNav() = with(binding){
+    private fun initBottomNav() = with(binding) {
         navView.setupWithNavController(navController)
         navView.background = null
 
@@ -50,15 +53,12 @@ class MainActivity : AppCompatActivity() {
         }
 
         mainFabShorts.setOnClickListener {
-            val navOptions = NavOptions.Builder()
-                .setPopUpTo(currentFragment, true)
-                .build()
-            navController.navigate(
-                resId = R.id.navigation_shorts,
-                args = null,
-                navOptions = navOptions,
+            startActivity(
+                Intent(
+                    this@MainActivity,
+                    ShortsActivity::class.java
                 )
-            mainMotion.transitionToStart()
+            )
         }
 
         mainFabPin.setOnClickListener {
@@ -67,14 +67,14 @@ class MainActivity : AppCompatActivity() {
                 .build()
             navController.navigate(
                 R.id.navigation_detail,
-                    args = null,
+                args = null,
                 navOptions = navOptions,
             )
             mainMotion.transitionToStart()
         }
 
 
-        navController.addOnDestinationChangedListener { _, destination,_ ->
+        navController.addOnDestinationChangedListener { _, destination, _ ->
 
             when (destination.id) {
                 R.id.navigation_home -> currentFragment = destination.id

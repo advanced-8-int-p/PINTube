@@ -1,5 +1,6 @@
 package com.example.pintube.data.repository
 
+import android.util.Log
 import com.example.pintube.data.local.dao.ChannelDAO
 import com.example.pintube.data.local.dao.SearchDAO
 import com.example.pintube.data.local.dao.VideoDAO
@@ -24,7 +25,10 @@ class LocalSearchRepositoryImpl @Inject constructor(
 
     override suspend fun findSearchRecord(
         query: String,
-    ): List<VideoWithThumbnail>? = searchDAO.findSearchRecord(query)?.map {
+    ): List<VideoWithThumbnail>? = searchDAO.findSearchRecord(
+        query,
+        LocalDateTime.now().minusHours(12).convertLocalDateTime()
+        )?.map {
         VideoWithThumbnail(
             video = videoDAO.findVideo(it.id),
             thumbnail = channelDAO.getChannelThumbnail(it.channelId)

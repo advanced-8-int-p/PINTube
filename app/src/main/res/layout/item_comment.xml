@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="12dp"
+    android:layout_marginBottom="20dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <ImageView
+        android:id="@+id/iv_comment_userprofile"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:src="@drawable/hamster"
+        android:scaleType="centerCrop"
+        android:background="@drawable/round_image"
+        android:clipToOutline="true"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+    <TextView
+        android:id="@+id/tv_comment_username"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:text="\@usewerwe"
+        android:textSize="11sp"
+        android:fontFamily="@font/roboto_regular"
+        android:textColor="#686868"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/iv_comment_userprofile"/>
+
+    <TextView
+        android:id="@+id/tv_comment_days_ago"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=" 2개월 전"
+        android:textSize="11sp"
+        android:textColor="#686868"
+        android:fontFamily="@font/roboto_regular"
+        app:layout_constraintStart_toEndOf="@+id/tv_comment_username"
+        app:layout_constraintTop_toTopOf="@+id/tv_comment_username"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_comment_username"/>
+
+    <kr.co.prnd.readmore.ReadMoreTextView
+        android:id="@+id/tv_comment_desc"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="신혜선의 표정연기는 1등급"
+        android:textColor="@color/black"
+        android:layout_marginEnd="12dp"
+        android:textSize="12sp"
+        app:readMoreMaxLine="4"
+        app:readMoreText="...더보기"
+        app:readMoreColor="@color/ios_color"
+        android:fontFamily="@font/roboto_regular"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@id/tv_comment_username"
+        app:layout_constraintTop_toBottomOf="@+id/tv_comment_username"/>
+
+    <ImageView
+        android:id="@+id/iv_comment_like"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
+        android:layout_marginTop="16dp"
+        android:src="@drawable/ic_favorite"
+        app:layout_constraintTop_toBottomOf="@+id/tv_comment_desc"
+        app:layout_constraintStart_toStartOf="@id/tv_comment_username"
+        app:tint="#383838" />
+
+    <TextView
+        android:id="@+id/tv_comment_like_count"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="2.1천"
+        android:textSize="12sp"
+        android:layout_marginStart="4dp"
+        android:textColor="#686868"
+        app:layout_constraintBottom_toBottomOf="@+id/iv_comment_like"
+        app:layout_constraintStart_toEndOf="@+id/iv_comment_like"
+        app:layout_constraintTop_toTopOf="@+id/iv_comment_like"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <TextView
+        android:id="@+id/tv_comment_replies"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:text="답글 57개"
+        android:textSize="12sp"
+        android:textColor="@color/ios_color"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@+id/tv_comment_like_count"
+        app:layout_constraintStart_toStartOf="@id/tv_comment_username"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

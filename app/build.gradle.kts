@@ -84,5 +84,13 @@ android {
         implementation("com.google.dagger:hilt-android:2.50")
         ksp("com.google.dagger:hilt-android-compiler:2.50")
 
+        // 더보기
+        implementation("kr.co.prnd:readmore-textview:1.0.0")
+
+        // youtube player
+        implementation("com.pierfrancescosoffritti.androidyoutubeplayer:core:12.1.0")
+
+        // jsoup html데이터 파싱
+        implementation("org.jsoup:jsoup:1.17.2")
     }
 }

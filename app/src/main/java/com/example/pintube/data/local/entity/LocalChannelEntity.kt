@@ -24,4 +24,5 @@ data class LocalChannelEntity (
     val subscriberCount: String?,
     val videoCount: String?,
     val bannerImageUrl: String?,
+    val saveDate: String?,
 )

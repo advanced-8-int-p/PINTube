@@ -11,7 +11,7 @@ import com.example.pintube.data.local.entity.LocalVideoEntity
 
 @Dao
 interface CommentDAO {
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(item: LocalCommentEntity)
 
     @Update
@@ -21,6 +21,10 @@ interface CommentDAO {
     fun delete(item: LocalCommentEntity)
 
     // 비디오 아이디 입력시 테이블에 저장된 댓글 목록 호출
-    @Query("Select * From comment_info Where videoId = :id")
-    fun findComment(id: String): List<LocalCommentEntity>?
+    @Query("Select * From comment_info Where videoId = :id AND saveDate >= :date")
+    fun findComment(id: String, date: String): List<LocalCommentEntity>?
+
+    @Query("SELECT * FROM comment_info WHERE parentId = :parentId")
+    fun findReplies(parentId: String): List<LocalCommentEntity>?
+
 }

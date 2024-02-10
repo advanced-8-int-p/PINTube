@@ -19,6 +19,7 @@ interface YoutubeSearchService {
         @Query("regionCode") regionCode: String = "kr", // 국가에서 볼 수 있는 동영상
         @Query("relevanceLanguage") relevanceLanguage: String = "ko", // 언어랑 관련성 높은 영상
         @Query("q") query: String = "react", // 검색어
+        @Query("videoDuration") videoDuration: String = "any", // long – 20분보다 긴 동영상, medium – 4분에서 20분 사이의 동영상, short – 4분 미만의 동영상
         @Query("type") type: String = "video", // channel, playlist, video
         @Query("videoType") videoType: String = "any", // any – 모든 동영상을 반환합니다, episode - 프로그램의 에피소드만 검색합니다., movie - 영화만 검색합니다
         @Query("videoSyndicated") videoSyndicated: String = "true", // any – 배급 여부에 관계 없이 모든 동영상을 반환합니다.,true – 배급된 동영상만 검색합니다. 외부에서 재생할 수 있는 동영상
@@ -28,6 +29,7 @@ interface YoutubeSearchService {
     suspend fun getPopularVideo (
         @Query("part") part: String = "snippet,contentDetails,statistics,player,liveStreamingDetails,topicDetails",
         @Query("chart") chart: String = "mostPopular",
+        @Query("h1") h1: String = "ko",
         @Query("maxResults") maxResult: Int = 50,
         @Query("regionCode") regionCode: String = "kr",
     ) : ApiResponse
@@ -36,6 +38,7 @@ interface YoutubeSearchService {
     suspend fun getContentDetails (
         @Query("part") part: String = "snippet,contentDetails,statistics,player,liveStreamingDetails,topicDetails",
         @Query("id") ids: List<String>,
+        @Query("h1") h1: String = "ko",
         @Query("maxResults") maxResult: Int? = 50,
         @Query("regionCode") regionCode: String = "kr",
     ) : ApiResponse
@@ -50,7 +53,7 @@ interface YoutubeSearchService {
 
     @GET("commentThreads")
     suspend fun getComments (
-        @Query("part") part: String = "snippet",
+        @Query("part") part: String = "snippet,id,replies",
         @Query("videoId") videoId: String,
         @Query("maxResults") maxResult: Int? = 100,
     ) : ApiResponse

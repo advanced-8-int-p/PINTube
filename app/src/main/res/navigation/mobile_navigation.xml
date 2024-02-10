@@ -13,12 +13,6 @@
         tools:layout="@layout/fragment_home" />
 
     <fragment
-        android:id="@+id/navigation_shorts"
-        android:name="com.example.pintube.ui.shorts.ShortsFragment"
-        android:label="@string/title_shorts"
-        tools:layout="@layout/fragment_shorts" />
-
-    <fragment
         android:id="@+id/navigation_mypage"
         android:name="com.example.pintube.ui.mypage.MypageFragment"
         android:label="@string/title_mypage"
