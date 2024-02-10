@@ -1,7 +1,7 @@
 package com.example.pintube.domain.repository
 
 import com.example.pintube.data.local.entity.LocalVideoEntity
-import com.example.pintube.data.repository.VideoWithThumbnail
+import com.example.pintube.data.repository.local.VideoWithThumbnail
 import com.example.pintube.domain.entitiy.VideoEntity
 
 interface LocalVideoRepository {

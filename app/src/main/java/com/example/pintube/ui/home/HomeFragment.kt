@@ -116,4 +116,8 @@ class HomeFragment : Fragment() {
         }
     }
 
+    fun loadData() = with(viewModel) {
+        updatePopulars()
+
+    }
 }

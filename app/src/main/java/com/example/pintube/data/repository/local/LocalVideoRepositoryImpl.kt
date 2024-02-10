@@ -1,4 +1,4 @@
-package com.example.pintube.data.repository
+package com.example.pintube.data.repository.local
 
 import com.example.pintube.data.local.dao.ChannelDAO
 import com.example.pintube.data.local.dao.ChannelThumbnail

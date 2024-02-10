@@ -1,4 +1,4 @@
-package com.example.pintube.data.remote.api.retrofit
+package com.example.pintube.data.remote.retrofit
 
 import com.example.pintube.BuildConfig
 import okhttp3.ConnectionPool

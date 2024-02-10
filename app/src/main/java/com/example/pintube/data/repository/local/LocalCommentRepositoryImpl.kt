@@ -1,6 +1,5 @@
-package com.example.pintube.data.repository
+package com.example.pintube.data.repository.local
 
-import android.util.Log
 import com.example.pintube.data.local.dao.CommentDAO
 import com.example.pintube.data.local.entity.LocalCommentEntity
 import com.example.pintube.domain.entitiy.CommentEntity

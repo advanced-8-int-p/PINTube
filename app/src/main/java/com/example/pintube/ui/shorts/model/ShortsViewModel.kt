@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.pintube.data.local.entity.LocalCommentEntity
-import com.example.pintube.data.repository.VideoWithThumbnail
+import com.example.pintube.data.repository.local.VideoWithThumbnail
 import com.example.pintube.domain.repository.ApiRepository
 import com.example.pintube.domain.repository.LocalChannelRepository
 import com.example.pintube.domain.repository.LocalCommentRepository
@@ -13,7 +13,6 @@ import com.example.pintube.domain.repository.LocalSearchRepository
 import com.example.pintube.domain.repository.LocalVideoRepository
 import com.example.pintube.utill.convertToDaysAgo
 import com.example.pintube.utill.convertViewCount
-import com.google.android.exoplayer2.util.Log
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

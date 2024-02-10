@@ -1,6 +1,6 @@
-package com.example.pintube.data.repository
+package com.example.pintube.data.repository.sever
 
-import com.example.pintube.data.remote.api.retrofit.YoutubeSearchService
+import com.example.pintube.data.remote.retrofit.YoutubeSearchService
 import com.example.pintube.data.remote.dto.ItemResponse
 import com.example.pintube.data.remote.dto.SearchItemResponse
 import com.example.pintube.domain.entitiy.ChannelEntity

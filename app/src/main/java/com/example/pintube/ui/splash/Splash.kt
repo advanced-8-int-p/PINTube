@@ -4,10 +4,16 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.constraintlayout.motion.widget.MotionLayout
+import androidx.lifecycle.lifecycleScope
 import com.example.pintube.R
 import com.example.pintube.databinding.ActivitySplashBinding
 import com.example.pintube.ui.main.MainActivity
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
+@AndroidEntryPoint
 class Splash : AppCompatActivity() {
 
     private val binding: ActivitySplashBinding by lazy {
@@ -16,7 +22,20 @@ class Splash : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
+
+        init()
     }
+
+    private fun init() {
+        loadBackgroundData()
+    }
+
+    private fun loadBackgroundData() {
+        lifecycleScope.launch(Dispatchers.IO) {
+
+        }
+    }
+
     override fun onResume() {
         super.onResume()
         binding.mlSplashLayout.post {
