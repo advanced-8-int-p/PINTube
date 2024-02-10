@@ -119,7 +119,8 @@ class ShortsActivity : AppCompatActivity() {
         bottomSheetDialog.show()
     }
 
-    private fun onRepliesClick(comments: List<CommentsItem.Comments?>?) {
-        TODO("Not yet implemented")
-    }
+    /*
+    * Todo 대댓글 클릭시 화면 전환후 보여주기
+    * */
+    private fun onRepliesClick(comments: List<CommentsItem.Comments?>?) = Unit
 }

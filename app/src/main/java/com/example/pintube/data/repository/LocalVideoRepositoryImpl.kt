@@ -30,7 +30,7 @@ class LocalVideoRepositoryImpl @Inject constructor(
     override suspend fun findPopularVideos()
             : List<VideoWithThumbnail>? =
         videoDAO.findPopularVideos(
-            LocalDateTime.now().minusHours(2).convertLocalDateTime()
+            LocalDateTime.now().minusHours(12).convertLocalDateTime()
         )?.map { video ->
             VideoWithThumbnail(
                 video = video,

@@ -17,6 +17,7 @@ import com.example.pintube.databinding.ItemShortsBinding
 import com.example.pintube.databinding.UnknownItemBinding
 import com.example.pintube.ui.shorts.model.ShortsViewType
 import com.example.pintube.ui.shorts.model.ShortsItem
+import com.example.pintube.utill.dpToPx
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.PlayerConstants
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
@@ -90,11 +91,9 @@ class ShortsAdapter(
             val height = displayMetrics.heightPixels
             val width = displayMetrics.widthPixels
 
-            // YouTube 플레이어의 크기 조정
             val layoutParams = vvShortsVideo.layoutParams
 
-            // dp 값을 px 값으로 변환
-            val extraHeight = dpToPx(80, vvShortsVideo.context)
+            val extraHeight = 80.dpToPx(vvShortsVideo.context)
 
             layoutParams.height = layoutParams.height + extraHeight + height
             layoutParams.width = width
@@ -119,10 +118,6 @@ class ShortsAdapter(
                     }
                 }
             )
-        }
-
-        private fun dpToPx(dp: Int, context: Context): Int {
-            return (dp * context.resources.displayMetrics.density).toInt()
         }
 
     }

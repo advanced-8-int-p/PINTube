@@ -27,7 +27,7 @@ class LocalSearchRepositoryImpl @Inject constructor(
         query: String,
     ): List<VideoWithThumbnail>? = searchDAO.findSearchRecord(
         query,
-        LocalDateTime.now().minusHours(2).convertLocalDateTime()
+        LocalDateTime.now().minusHours(12).convertLocalDateTime()
         )?.map {
         VideoWithThumbnail(
             video = videoDAO.findVideo(it.id),
