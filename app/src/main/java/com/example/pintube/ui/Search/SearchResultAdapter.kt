@@ -8,9 +8,13 @@ import coil.load
 import com.bumptech.glide.Glide
 import com.example.pintube.databinding.RecyclerviewResultBinding
 import com.example.pintube.domain.entitiy.SearchEntity
+import com.example.pintube.domain.entitiy.VideoEntity
+import com.example.pintube.utill.convertToDaysAgo
+import com.example.pintube.utill.convertViewCount
+import java.time.LocalDateTime
 
 
-class SearchResultAdapter(private val mContext : Context, private val items : MutableList<SearchEntity>) : RecyclerView.Adapter<SearchResultAdapter.SearchResultViewHolder>(){
+class SearchResultAdapter( private val items : MutableList<SearchEntity>) : RecyclerView.Adapter<SearchResultAdapter.SearchResultViewHolder>(){
 
 
 
@@ -21,12 +25,15 @@ class SearchResultAdapter(private val mContext : Context, private val items : Mu
 
     override fun onBindViewHolder(holder: SearchResultViewHolder, position: Int) {
         val item = items[position]
+//        val vCount = countItem[position]
 
         holder.mainTitle.text = item.title
         holder.chTitle.text = item.channelTitle
-        holder.uploadDate.text = item.publishedAt
-
+        holder.uploadDate.text = item.publishedAt?.convertToDaysAgo()
+//        holder.viewCount.text = vCount.viewCount?.convertViewCount()
         holder.mainImage.load(items[position].thumbnailHigh)
+
+
 
     }
 
@@ -41,5 +48,14 @@ class SearchResultAdapter(private val mContext : Context, private val items : Mu
         var chTitle = binding.rvSearchChTitle
         var uploadDate = binding.rvSearchUploadDate
         var viewCount =binding.rvSearchViewCount
+    }
+
+    fun sortByAscending() {
+        items.sortBy { it.publishedAt?.replace("Z", "").let { date -> LocalDateTime.parse(date) } }
+        notifyDataSetChanged()
+    }
+    fun sortByDescending() {
+        items.sortByDescending { it.publishedAt?.replace("Z", "").let { date -> LocalDateTime.parse(date) } }
+        notifyDataSetChanged()
     }
 }

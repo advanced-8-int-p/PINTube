@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="view">
+        <item></item>
+        <item>조휘수 순</item>
+        <item>업로드 순(오름차순)</item>
+        <item>업로드 순(내림차순)</item>
+    </string-array>
+
+
+
+</resources>

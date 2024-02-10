@@ -86,6 +86,7 @@ class SearchActivity : AppCompatActivity() {
                     dialog.dismiss()
                 }
                 .show()
+
         }
 
         binding.etSearchFragmentBar.addTextChangedListener(object : TextWatcher {
@@ -99,18 +100,19 @@ class SearchActivity : AppCompatActivity() {
 
             override fun afterTextChanged(s: Editable?) {
                 showXButton()
-                noShowXButton()
             }
         })
 
         binding.removeQuery.setOnClickListener {
             binding.etSearchFragmentBar.setText("")
+
+            supportFragmentManager.popBackStack()
         }
-
-
 
         adapter.itemClick = object : SearchListAdapter.ItemClick {
             override fun onClick(view: View, position: Int) {
+
+                Toast.makeText(this@SearchActivity, "클릭", Toast.LENGTH_SHORT).show()
 
             }
             override fun onRemoveClick(position: Int) {
@@ -118,7 +120,6 @@ class SearchActivity : AppCompatActivity() {
                 searchHistoryList.remove(itemRemove)
 
                 adapter.notifyDataSetChanged()
-
             }
         }
 
@@ -128,11 +129,7 @@ class SearchActivity : AppCompatActivity() {
         val text = binding.etSearchFragmentBar.text.toString()
         if(text.length >= 1) {
             binding.removeQuery.visibility = View.VISIBLE
-        }
-    }
-    private fun noShowXButton() {
-        val text = binding.etSearchFragmentBar.text.toString()
-        if(text.length == 0) {
+        } else {
             binding.removeQuery.visibility = View.GONE
         }
     }
@@ -144,6 +141,7 @@ class SearchActivity : AppCompatActivity() {
             setFragment(searchResultFragment)
         }
     }
+
 
     private fun setFragment(frag: Fragment) {
         supportFragmentManager.commit {
