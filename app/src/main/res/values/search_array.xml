@@ -2,9 +2,9 @@
 <resources>
     <string-array name="view">
         <item></item>
-        <item>조휘수 순</item>
-        <item>업로드 순(오름차순)</item>
-        <item>업로드 순(내림차순)</item>
+        <item>조회수 순</item>
+        <item>최근 업로드 순</item>
+        <item>오래된 순</item>
     </string-array>
 
 

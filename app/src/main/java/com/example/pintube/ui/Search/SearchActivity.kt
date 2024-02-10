@@ -14,6 +14,7 @@ import androidx.fragment.app.commit
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.room.Room
+import androidx.room.util.query
 import com.example.pintube.R
 import com.example.pintube.data.local.dao.SearchDAO
 import com.example.pintube.data.local.database.YoutubeDatabase
@@ -89,6 +90,7 @@ class SearchActivity : AppCompatActivity() {
 
         }
 
+        //검색창 텍스트 변화 감지
         binding.etSearchFragmentBar.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
 
@@ -97,7 +99,7 @@ class SearchActivity : AppCompatActivity() {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
 
             }
-
+            //텍스트 입력되면 x버튼 나옴.
             override fun afterTextChanged(s: Editable?) {
                 showXButton()
             }
@@ -110,7 +112,10 @@ class SearchActivity : AppCompatActivity() {
         }
 
         adapter.itemClick = object : SearchListAdapter.ItemClick {
-            override fun onClick(view: View, position: Int) {
+            override fun onClick(query: String) {
+
+                searchVideo(query)
+                binding.etSearchFragmentBar.setText("$query")
 
                 Toast.makeText(this@SearchActivity, "클릭", Toast.LENGTH_SHORT).show()
 
@@ -125,6 +130,7 @@ class SearchActivity : AppCompatActivity() {
 
     }
 
+    //검색창에 텍스트 입력되면 x버튼 나옴. 지워지면 없어짐.
     private fun showXButton() {
         val text = binding.etSearchFragmentBar.text.toString()
         if(text.length >= 1) {

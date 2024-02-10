@@ -14,7 +14,7 @@ import org.w3c.dom.Text
 class SearchListAdapter (private val searchHistoryList: MutableList<String>) : RecyclerView.Adapter<SearchListAdapter.ListViewHolder>() {
 
     interface ItemClick {
-        fun onClick(view: View, position: Int)
+        fun onClick(query: String)
         fun onRemoveClick(position: Int)
     }
     var itemClick : ItemClick? = null
@@ -25,12 +25,13 @@ class SearchListAdapter (private val searchHistoryList: MutableList<String>) : R
     }
 
     override fun onBindViewHolder(holder: ListViewHolder, position: Int) {
-        holder.itemView.setOnClickListener{
-            itemClick?.onClick(it, position)
-        }
-
         val searchQuery = searchHistoryList[position]
         holder.searchList.text = searchQuery
+
+
+        holder.itemView.setOnClickListener{
+            itemClick?.onClick(searchQuery)
+        }
 
         holder.removeSearch.setOnClickListener {
             itemClick?.onRemoveClick(position) // 클릭된 항목의 위치를 전달
