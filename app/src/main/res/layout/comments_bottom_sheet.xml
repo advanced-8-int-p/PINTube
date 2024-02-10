@@ -10,7 +10,7 @@
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="24dp"
+        android:layout_height="16dp"
         android:background="@drawable/round_top_corner_20dp"
         android:backgroundTint="@color/background"
         android:clipToOutline="true"/>
@@ -20,12 +20,12 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:background="@color/background"
-        android:padding="12dp">
+        android:padding="16dp">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="댓글"
-            android:textSize="24sp"
+            android:textSize="20sp"
             android:textStyle="bold"
             android:textColor="@color/black"/>
 
@@ -46,11 +46,11 @@
             android:layout_weight="1"/>
         <ImageView
             android:id="@+id/iv_comment_close"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:src="@drawable/ic_close_x"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:src="@drawable/ic_comment_x"
             android:layout_gravity="center_vertical|end"
-            app:tint="@color/black" />
+            app:tint="#808080" />
     </LinearLayout>
 
     <View

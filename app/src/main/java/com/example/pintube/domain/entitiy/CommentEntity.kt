@@ -1,7 +1,7 @@
 package com.example.pintube.domain.entitiy
 
 data class CommentEntity(
-    val id: String?,
+    val id: String,
     val channelId: String?,
     val videoId: String?,
     val textDisplay: String?,
@@ -17,4 +17,5 @@ data class CommentEntity(
     val updatedAt: String?,
     val totalReplyCount: Int?,
     var replies: List<CommentEntity>? = null,
+    var parentId: String?,
 )

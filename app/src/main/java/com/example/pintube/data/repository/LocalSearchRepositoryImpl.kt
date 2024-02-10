@@ -1,5 +1,6 @@
 package com.example.pintube.data.repository
 
+import android.util.Log
 import com.example.pintube.data.local.dao.ChannelDAO
 import com.example.pintube.data.local.dao.SearchDAO
 import com.example.pintube.data.local.dao.VideoDAO

@@ -29,5 +29,5 @@ interface ChannelDAO {
 data class ChannelThumbnail(
     val thumbnailHigh: String?,
     val thumbnailMedium: String?,
-    val thumbnailLow: String?
+    val thumbnailLow: String?,
 )

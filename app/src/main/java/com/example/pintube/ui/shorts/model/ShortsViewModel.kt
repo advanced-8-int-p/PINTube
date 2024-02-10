@@ -13,6 +13,7 @@ import com.example.pintube.domain.repository.LocalSearchRepository
 import com.example.pintube.domain.repository.LocalVideoRepository
 import com.example.pintube.utill.convertToDaysAgo
 import com.example.pintube.utill.convertViewCount
+import com.google.android.exoplayer2.util.Log
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -40,7 +41,9 @@ class ShortsViewModel @Inject constructor(
         if (result?.size == 0) {
             result = getShortsApiResponse()
         }
-        _videos.postValue(result?.map { it.convertShortsItem() })
+        _videos.postValue(result?.map {
+            it.convertShortsItem()
+        })
     }
 
     fun getComments(id: String) = viewModelScope.launch(Dispatchers.IO) {
@@ -48,7 +51,7 @@ class ShortsViewModel @Inject constructor(
 
         if (comments?.isEmpty() == true) {
             apiRepository.getComments(id)?.forEach { item ->
-                localCommentRepository.saveComment(item)
+                    localCommentRepository.saveComment(item)
             }
 
             comments = localCommentRepository.findComment(id)
@@ -62,7 +65,7 @@ class ShortsViewModel @Inject constructor(
 
         apiRepository.getRandomShorts()?.forEach { item ->
             item.id?.let { videoIds.add(it) }
-            item.id?.let { channelIds.add(it) }
+            item.channelId?.let { channelIds.add(it) }
             localSearchRepository.saveSearchResult(item, "#shorts")
         }
         apiRepository.getContentDetails(videoIds)?.forEach { item ->
@@ -79,7 +82,7 @@ class ShortsViewModel @Inject constructor(
         id = this.video?.id,
         channelId = this.video?.channelId,
         channelTitle = this.video?.channelTitle,
-        channelThumbnail = this.thumbnail?.thumbnailLow,
+        channelThumbnail = this.thumbnail?.thumbnailMedium,
         title = this.video?.title,
         commentCount = this.video?.commentCount?.convertViewCount(),
     )
@@ -93,9 +96,9 @@ class ShortsViewModel @Inject constructor(
             userProfileImage = this.authorProfileImageUrl,
             likeCount = this.likeCount.toString().convertViewCount(),
             publishedAt = this.publishedAt?.convertToDaysAgo(),
-            isUpdate = (this.updatedAt != null),
+            isUpdate = (this.updatedAt != this.publishedAt),
             totalReplyCount = this.totalReplyCount,
-            replies = this.replies.map { it?.convertComment() },
+            replies = null,
         )
     }
 }

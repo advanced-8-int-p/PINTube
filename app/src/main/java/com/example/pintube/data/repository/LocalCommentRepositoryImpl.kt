@@ -1,5 +1,6 @@
 package com.example.pintube.data.repository
 
+import android.util.Log
 import com.example.pintube.data.local.dao.CommentDAO
 import com.example.pintube.data.local.entity.LocalCommentEntity
 import com.example.pintube.domain.entitiy.CommentEntity
@@ -10,25 +11,26 @@ import javax.inject.Inject
 
 class LocalCommentRepositoryImpl @Inject constructor(
     private val commentDAO: CommentDAO,
-): LocalCommentRepository {
+) : LocalCommentRepository {
     override suspend fun saveComment(
-        item: CommentEntity,
-    ) : LocalCommentEntity? = item.convertToLocalCommentEntity().apply {
-        this?.let { commentDAO.insert(it) }
+        item: CommentEntity?,
+    ): LocalCommentEntity? = item?.convertToLocalCommentEntity().apply {
+        this?.let {
+            commentDAO.insert(it)
         }
+    }
 
     override suspend fun findComment(
         videoId: String,
-    ) : List<LocalCommentEntity>? = commentDAO.findComment(
+    ): List<LocalCommentEntity>? = commentDAO.findComment(
         videoId,
         LocalDateTime.now().minusHours(2).convertLocalDateTime()
-        )
+    )
 
     private fun CommentEntity.convertToLocalCommentEntity(): LocalCommentEntity? {
         if (this.videoId != null) {
-            return this.replies?.map { it.convertToLocalCommentEntity() }?.let {
-                LocalCommentEntity(
-                    id = this.id?: "",
+            return LocalCommentEntity(
+                    id = this.id,
                     channelId = this.channelId,
                     videoId = this.videoId,
                     textDisplay = this.textDisplay,
@@ -43,10 +45,9 @@ class LocalCommentRepositoryImpl @Inject constructor(
                     publishedAt = this.publishedAt,
                     updatedAt = this.updatedAt,
                     totalReplyCount = this.totalReplyCount,
-                    replies = it,
+                    parentId = this.parentId,
                     saveDate = LocalDateTime.now().convertLocalDateTime(),
                 )
-            }
         } else return null
     }
 }

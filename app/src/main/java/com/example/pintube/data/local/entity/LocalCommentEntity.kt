@@ -21,6 +21,6 @@ data class LocalCommentEntity(
     val publishedAt: String?,
     val updatedAt: String?,
     val totalReplyCount: Int?,
-    var replies: List<LocalCommentEntity?> = emptyList(),
+    var parentId: String? = null,
     val saveDate: String?,
 )
