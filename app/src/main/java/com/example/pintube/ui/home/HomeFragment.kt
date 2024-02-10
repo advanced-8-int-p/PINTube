@@ -7,6 +7,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.NavOptions
+import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.GridLayoutManager.SpanSizeLookup
+import com.example.pintube.R
 import com.example.pintube.databinding.FragmentHomeBinding
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -24,13 +29,24 @@ class HomeFragment : Fragment() {
     //ddd
     private val homeAdapter by lazy { HomeAdapter() }
     private val popularVideoAdapter = PopularVideoAdapter(
-        onItemClick = { view, position -> }
+        onItemClick = { item ->
+            findNavController().navigate(
+                resId = R.id.navigation_detail,
+                //args = null,
+                args = Bundle().apply {
+                    putString("video_id", item.id)
+                    putString("channel_id", "bbb")
+                    putParcelable("videoItemData", item)
+                },
+                navOptions = NavOptions.Builder()
+                    .setPopUpTo(R.id.navigation_home, true)
+                    .build(),
+            )
+//            mainMotion.transitionToStart()
+        }
     )
     private val categoryAdapter = CategoryAdapter(
-        onItemClick = { view, position -> }
-    )
-    private val categoryVideoAdapter = CategoryVideoAdapter(
-        onItemClick = { view, position -> }
+        onItemClick = { query -> viewModel.searchCategory(query) }
     )
 
     override fun onCreateView(
@@ -55,31 +71,41 @@ class HomeFragment : Fragment() {
     }
 
     private fun initView() = binding.also { b ->
-        b.rvHomeMain.adapter = homeAdapter
         homeAdapter.sealedMultis.addAll(
             listOf(
                 SealedMulti.Header,
                 SealedMulti.Popular(popularVideoAdapter),
-                SealedMulti.Category(categoryAdapter, categoryVideoAdapter),
+                SealedMulti.Category(categoryAdapter),
             )
         )
+        b.rvHomeMain.adapter = homeAdapter
+        b.rvHomeMain.layoutManager = GridLayoutManager(requireContext(), 2).also { manager ->
+            manager.spanSizeLookup = object : SpanSizeLookup() {
+                override fun getSpanSize(position: Int): Int {
+                    if (position < 3) return manager.spanCount
+                    return 1
+                }
+            }
+        }
     }
 
     private fun initViewModel() = viewModel.also { vm ->
-        //ddd
-        vm.addAllToCategories(List(10) { "카테고리$it" })
         vm.updatePopulars()
-//        vm.searchCategory("싱어게인3")
+//        vm.searchCategory("요리")  //ddd
 
         vm.populars.observe(viewLifecycleOwner) {
             popularVideoAdapter.submitList(it)
-            Log.d("pop", "$it")
+            Log.d("pop", "$it")  //ddd
         }
         vm.categories.observe(viewLifecycleOwner) {
             categoryAdapter.submitList(it)
         }
         vm.categoryVideos.observe(viewLifecycleOwner) {
-            categoryVideoAdapter.submitList(it)
+            // TODO: 리스트 어댑터로 변경
+            homeAdapter.sealedMultis = homeAdapter.sealedMultis.subList(0, 3).apply {
+                addAll(it.map { v -> SealedMulti.Video(v) })
+            }
+            homeAdapter.notifyDataSetChanged()
         }
     }
 

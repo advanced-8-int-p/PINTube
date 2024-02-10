@@ -1,5 +1,9 @@
 package com.example.pintube.ui.home
 
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
+
+@Parcelize
 data class VideoItemData(
     var videoThumbnailUri: String? = "https://picsum.photos/200/300",
     var channelThumbnailUri: String? = "https://picsum.photos/200/300",
@@ -10,11 +14,11 @@ data class VideoItemData(
     var length: String? = null,
     var isSaved: Boolean? = null,
     val id: String? = null,
-)
+) : Parcelable
 
 /*
-videoThumbnailUri = "https://picsum.photos/200/300",
-channelThumbnailUri = "https://picsum.photos/200/300",
+videoThumbnailUri = null,
+channelThumbnailUri = null,
 title = null,
 channelName = null,
 views = null,

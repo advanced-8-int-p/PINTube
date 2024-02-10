@@ -19,9 +19,6 @@ import javax.inject.Inject
 @HiltViewModel
 class DetailViewModel @Inject constructor(
     private val repository: ApiRepository,
-    private val videoDao: VideoDAO,
-    private val commentDao: CommentDAO,
-    private val channelDao: ChannelDAO,
 ) : ViewModel() {
 
     private val _media: MutableLiveData<DetailItemModel> = MutableLiveData()

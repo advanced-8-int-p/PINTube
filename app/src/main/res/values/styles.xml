@@ -14,4 +14,9 @@
         <item name="android:fontFamily">@font/roboto_medium</item>
         <item name="android:textColor">@color/black</item>
     </style>
+
+    <style name="customAppBarOverlay" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="contentInsetStart">0dp</item>
+        <item name="contentInsetStartWithNavigation">0dp</item>
+    </style>
 </resources>

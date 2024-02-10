@@ -1,4 +1,4 @@
-package com.example.pintube.domain.usecase
+package com.example.pintube.utill
 
 import java.time.LocalDateTime
 import java.time.ZoneOffset
@@ -6,8 +6,7 @@ import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
 
-fun String.convertDurationTime(): String {
-    return run {
+fun String.convertDurationTime(): String = run {
         val pattern = """PT(?:([0-9]+)H)?(?:([0-9]+)M)?(?:([0-9]+)S)?""".toRegex()
         val result = pattern.find(this)
 
@@ -20,8 +19,12 @@ fun String.convertDurationTime(): String {
             else -> String.format("%02d:%02d:%02d", hour, minute, seconds)
         }
     }
-}
 
+
+fun LocalDateTime.convertLocalDateTime(): String = run {
+    val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+    this.format(formatter)
+}
 fun String.convertPublishedAt(): String {
     return run {
         val originalFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.'Z'")

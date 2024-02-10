@@ -19,8 +19,8 @@
         android:id="@+id/main_coordinator"
         android:layout_width="match_parent"
         android:layout_height="100dp"
-        android:theme="@style/Theme.MaterialComponents"
-        app:layout_constraintBottom_toBottomOf="parent">
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:theme="@style/Theme.MaterialComponents">
 
         <com.google.android.material.bottomappbar.BottomAppBar
             android:id="@+id/main_bottom_appbar"
@@ -38,7 +38,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="56dp"
                 android:layout_marginRight="16dp"
-                android:background="@android:color/transparent"
+                android:background ="@android:color/transparent"
                 app:itemIconTint="@color/selector_navi_icon_colors"
                 app:labelVisibilityMode="unlabeled"
                 app:menu="@menu/bottom_nav_menu" />
@@ -50,11 +50,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_main_fab"
+            app:tint = "@android:color/transparent"
             app:backgroundTint="@android:color/transparent"
             app:fabCustomSize="60dp"
-            app:layout_anchor="@id/main_bottom_appbar"
             app:maxImageSize="28.67dp"
-            app:tint="@android:color/transparent" />
+            app:layout_anchor="@id/main_bottom_appbar" />
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
@@ -63,59 +63,59 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/ic_nav_fab_shorts"
+        app:tint = "@color/main_color"
         app:backgroundTint="@color/white"
         app:fabCustomSize="40dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.36"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/main_coordinator"
-        app:layout_constraintVertical_bias="0"
         app:maxImageSize="24dp"
-        app:tint="@color/main_color" />
+        app:layout_constraintHorizontal_bias="0.36"
+        app:layout_constraintVertical_bias="0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/main_coordinator"/>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/main_fab_pin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/ic_nav_fab_pin"
+        app:tint = "@color/main_color"
         app:backgroundTint="@color/white"
         app:fabCustomSize="40dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.64"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/main_coordinator"
-        app:layout_constraintVertical_bias="0"
         app:maxImageSize="24dp"
-        app:tint="@color/main_color" />
+        app:layout_constraintHorizontal_bias="0.64"
+        app:layout_constraintVertical_bias="0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/main_coordinator"/>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/main_fab_search"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/ic_nav_fab_search"
+        app:tint = "@color/main_color"
         app:backgroundTint="@color/white"
         app:fabCustomSize="40dp"
-        app:layout_constraintBottom_toTopOf="@+id/main_coordinator"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         app:maxImageSize="20dp"
-        app:tint="@color/main_color" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/main_coordinator"/>
 
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/main_fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_main_fab"
+        android:src="@drawable/ic_nav_fab_shorts"
+        app:tint = "@color/main_color"
         app:backgroundTint="@color/white"
         app:fabCustomSize="60dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/main_coordinator"
-        app:layout_constraintVertical_bias="0.38"
         app:maxImageSize="28.67dp"
-        app:tint="@color/main_color" />
+        app:layout_constraintVertical_bias="0.38"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/main_coordinator"/>
 </androidx.constraintlayout.motion.widget.MotionLayout>

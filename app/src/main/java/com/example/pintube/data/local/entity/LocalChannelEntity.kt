@@ -5,7 +5,8 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "channel_info")
 data class LocalChannelEntity (
-    val id: String?,
+    @PrimaryKey
+    val id: String,
     val title: String?,
     val description: String?,
     val customUrl: String?,
@@ -23,6 +24,4 @@ data class LocalChannelEntity (
     val subscriberCount: String?,
     val videoCount: String?,
     val bannerImageUrl: String?,
-){
-    @PrimaryKey(autoGenerate = true) var key:Int = 0
-}
+)

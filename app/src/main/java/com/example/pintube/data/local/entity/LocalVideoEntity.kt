@@ -5,7 +5,8 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "video_info")
 data class LocalVideoEntity(
-    val id: String?,
+    @PrimaryKey
+    val id: String,
     val publishedAt: String?,
     val channelId: String?,
     val title: String?,
@@ -33,6 +34,6 @@ data class LocalVideoEntity(
     val commentCount: String?,
     val player: String?,
     val topicDetails: List<String>?,
-){
-    @PrimaryKey(autoGenerate = true) var key:Int = 0
-}
+    val saveDate: String?,
+    val isPopular: Boolean? = false,
+)
