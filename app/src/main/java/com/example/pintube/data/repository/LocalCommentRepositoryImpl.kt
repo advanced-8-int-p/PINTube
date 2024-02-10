@@ -27,6 +27,10 @@ class LocalCommentRepositoryImpl @Inject constructor(
         LocalDateTime.now().minusHours(2).convertLocalDateTime()
     )
 
+    override suspend fun findReplies(
+        parentId: String
+    ): List<LocalCommentEntity>? = commentDAO.findReplies(parentId)
+
     private fun CommentEntity.convertToLocalCommentEntity(): LocalCommentEntity? {
         if (this.videoId != null) {
             return LocalCommentEntity(

@@ -94,7 +94,7 @@ class ShortsViewModel @Inject constructor(
             textOriginal = this.textOriginal,
             userName = this.authorDisplayName,
             userProfileImage = this.authorProfileImageUrl,
-            likeCount = this.likeCount.toString().convertViewCount(),
+            likeCount = this.likeCount,
             publishedAt = this.publishedAt?.convertToDaysAgo(),
             isUpdate = (this.updatedAt != this.publishedAt),
             totalReplyCount = this.totalReplyCount,

@@ -10,7 +10,7 @@ import com.example.pintube.data.local.entity.LocalChannelEntity
 
 @Dao
 interface ChannelDAO {
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(item: LocalChannelEntity)
 
     @Update

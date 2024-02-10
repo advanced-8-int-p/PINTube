@@ -7,7 +7,7 @@ sealed interface CommentsItem {
         val textOriginal: String?,
         val userName: String?,
         val userProfileImage: String?,
-        val likeCount: String?,
+        val likeCount: Int?,
         val publishedAt: String?,
         val isUpdate: Boolean?,
         val totalReplyCount: Int?,

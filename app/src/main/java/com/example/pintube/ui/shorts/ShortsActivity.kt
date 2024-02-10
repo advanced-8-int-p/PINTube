@@ -14,6 +14,7 @@ import com.example.pintube.databinding.ActivityShortsBinding
 import com.example.pintube.ui.Search.SearchActivity
 import com.example.pintube.ui.shorts.adapter.CommentAdapter
 import com.example.pintube.ui.shorts.adapter.ShortsAdapter
+import com.example.pintube.ui.shorts.model.CommentsItem
 import com.example.pintube.ui.shorts.model.ShortsItem
 import com.example.pintube.ui.shorts.model.ShortsViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -41,7 +42,9 @@ class ShortsActivity : AppCompatActivity() {
     }
 
     private val commentAdapter: CommentAdapter by lazy {
-        CommentAdapter()
+        CommentAdapter(
+            onRepliesClick = this::onRepliesClick
+        )
     }
 
     private val commentSheetView by lazy {
@@ -114,5 +117,9 @@ class ShortsActivity : AppCompatActivity() {
         item.id?.let { viewModel.getComments(it) }
         item.commentCount?.let { setCommentSheet(it) }
         bottomSheetDialog.show()
+    }
+
+    private fun onRepliesClick(comments: List<CommentsItem.Comments?>?) {
+        TODO("Not yet implemented")
     }
 }

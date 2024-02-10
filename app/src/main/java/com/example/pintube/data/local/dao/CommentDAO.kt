@@ -11,7 +11,7 @@ import com.example.pintube.data.local.entity.LocalVideoEntity
 
 @Dao
 interface CommentDAO {
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(item: LocalCommentEntity)
 
     @Update
@@ -25,5 +25,6 @@ interface CommentDAO {
     fun findComment(id: String, date: String): List<LocalCommentEntity>?
 
     @Query("SELECT * FROM comment_info WHERE parentId = :parentId")
-    fun findReplies(parentId: String): List<LocalCommentEntity>
+    fun findReplies(parentId: String): List<LocalCommentEntity>?
+
 }

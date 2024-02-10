@@ -130,7 +130,7 @@ class ApiRepositoryImpl @Inject constructor(
             convertCommentEntity(replyItem).copy(parentId = item.id)
         } ?: emptyList()
 
-        return topLevelComment?.copy(replies = replies)
+        return topLevelComment?.copy(replies = replies, totalReplyCount = item.snippet.totalReplyCount)
     }
 
     private fun convertCommentEntity(

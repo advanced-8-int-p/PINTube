@@ -18,7 +18,9 @@ class LocalVideoRepositoryImpl @Inject constructor(
         item: VideoEntity,
         isPopular: Boolean?,
     ): LocalVideoEntity? = item.convertToLocalVideoEntity(isPopular).apply {
-        this?.let { videoDAO.insert(it) }
+        this?.let {
+            videoDAO.insert(it)
+        }
     }
 
     override suspend fun findVideoDetail(
