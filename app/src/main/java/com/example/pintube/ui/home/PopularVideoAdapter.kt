@@ -2,7 +2,6 @@ package com.example.pintube.ui.home
 
 import android.util.Log
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -11,7 +10,7 @@ import coil.load
 import com.example.pintube.databinding.PopularItemBinding
 
 class PopularVideoAdapter(
-    private val onItemClick: (view: View, position: Int) -> Unit
+    private val onItemClick: (item: VideoItemData) -> Unit
 ) : ListAdapter<VideoItemData, PopularVideoAdapter.PopularViewHolder>(object :
     DiffUtil.ItemCallback<VideoItemData>() {
     override fun areItemsTheSame(oldItem: VideoItemData, newItem: VideoItemData): Boolean =
@@ -34,7 +33,7 @@ class PopularVideoAdapter(
 
             b.root.setOnClickListener {
                 Log.d("jj-Popular 아이템 클릭", "$layoutPosition: ${getItem(layoutPosition)}")
-                onItemClick(it, layoutPosition)
+                onItemClick(item)
             }
         }
     }

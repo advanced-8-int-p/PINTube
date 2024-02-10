@@ -31,7 +31,9 @@ class HomeViewModel @Inject constructor(
         MutableLiveData(List(10) { VideoItemData() })  //ddd
     val populars: LiveData<List<VideoItemData>> get() = _populars
 
-    private var _categories: MutableLiveData<List<String>> = MutableLiveData(emptyList())
+    private var _categories: MutableLiveData<List<String>> =
+        //MutableLiveData(emptyList())
+        MutableLiveData(listOf("박보영", "ytn", "안드로이드 스튜디오", "jazz bgm", "#shorts"))  //ddd
     val categories: LiveData<List<String>> get() = _categories
 
     private var _categoryVideos: MutableLiveData<List<VideoItemData>> =
@@ -86,9 +88,9 @@ class HomeViewModel @Inject constructor(
         _categoryVideos.postValue(searchResult?.map { it.convertVideoItemData() })
     }
 
-    fun addAllToCategories(elements: Collection<String>) {
-        _categories.value = _categories.value!!.toMutableList().apply { addAll(elements) }
-    }
+//    fun addAllToCategories(elements: Collection<String>) {
+//        _categories.value = _categories.value!!.toMutableList().apply { addAll(elements) }
+//    }
 
     private fun VideoWithThumbnail.convertVideoItemData() = VideoItemData(
         videoThumbnailUri = this.video?.thumbnailHigh,
