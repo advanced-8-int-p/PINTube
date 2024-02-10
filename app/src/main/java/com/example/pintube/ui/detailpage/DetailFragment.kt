@@ -8,19 +8,17 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.webkit.JavascriptInterface
+import android.webkit.WebChromeClient
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
-import com.example.pintube.data.remote.api.retrofit.YouTubeApi
-import com.example.pintube.data.remote.dto.ApiResponse
-import com.example.pintube.data.repository.ApiRepositoryImpl
+import coil.load
 import com.example.pintube.databinding.FragmentDetailBinding
-import com.example.pintube.domain.repository.ApiRepository
+import com.example.pintube.utill.convertToDaysAgo
+import com.example.pintube.utill.convertViewCount
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 
@@ -30,27 +28,22 @@ class DetailFragment : Fragment() {
 
     private val binding get() = _binding!!
 
-    private var tempMediaId: String = "rkuE-ygaSgQ"
-    private lateinit var mediaItemData: DetailItemModel
-
+    //    private lateinit var mediaItemData: DetailItemModel
     private lateinit var mContext: Context
-//    private lateinit var commentAdapter: CommentAdapter
 
+    private var tempMediaId: String = "rkuE-ygaSgQ"
 
-    private var videoSample = "https://www.youtube.com/embed/IunP_b5FfhY"
+    private lateinit var playerSrc: String
+
+    private lateinit var videoUrl: String
 
     private var isPlaying = false
 
-    private val viewModel: DetailViewModel by viewModels()
+    private lateinit var viewModel: DetailViewModel
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
         mContext = context
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
     }
 
     override fun onCreateView(
@@ -59,13 +52,23 @@ class DetailFragment : Fragment() {
     ): View {
         _binding = FragmentDetailBinding.inflate(inflater, container, false)
 
+        viewModel = ViewModelProvider(this).get(DetailViewModel::class.java)
+
+
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        initPlayer()
+        videoUrl = "youtube.com"
+
+        initViewModel()
+
+//        Log.d("viewModel", "player bf $videoUrl")
+//        getUrlFromSrc()
+//        Log.d("viewModel", "player af $videoUrl")
+//        initPlayer()
 
         binding.ivDetailClose.setOnClickListener {
 //            parentFragmentManager.popBackStack()
@@ -101,59 +104,58 @@ class DetailFragment : Fragment() {
         //뷰 초기화, 받아온 정보 배치
     }
 
+    @SuppressLint("SetTextI18n")
+    private fun initViewModel() = viewModel.also { viewModel1 ->
+        viewModel1.getData(id = tempMediaId)
+        viewModel1.media.observe(viewLifecycleOwner, Observer {
+            Log.d("viewModel", "init video data $it")
+            playerSrc = it.player.toString()
+            videoUrl = getUrlFromSrc(playerSrc)
+            Log.d("viewModel", "player af $videoUrl")
+            initPlayer()
+            binding.ivDetailProfilePic.load(it.channelProfile)
+            binding.tvDetailChannelName.text = it.channelTitle.toString()
+            binding.tvDetailViewCount.text = it.viewCount?.convertViewCount().toString() + " views"
+            binding.tvDetailFavCount.text = it.likeCount?.convertViewCount().toString()
+            binding.tvDetailTitle.text = it.title.toString()
+            binding.tvDetailContent.text = it.publishedAt?.convertToDaysAgo().toString() + "\n\n\n" + it.description.toString()
+            binding.tvDetailCommentCount.text = "댓글 " + it.commentCount.toString()
+        })
+    }
+
     @SuppressLint("SetJavaScriptEnabled")
     private fun initPlayer() {
-//        val mediaItem = MediaItem.fromUri(videoSample)
+
+        //왜안되지...........으악
 
         val webView = binding.playerDetail
 
         webView.settings.javaScriptEnabled = true
-        webView.addJavascriptInterface(YoutubeInterface(), "Android")
-        webView.loadUrl(videoSample)
+        webView.settings.loadWithOverviewMode = true
+        webView.settings.useWideViewPort = true
+        webView.settings.mediaPlaybackRequiresUserGesture = false
+        webView.webChromeClient = WebChromeClient()
 
-//        val videoUrl = DefaultMediaSourceFactory(mContext)
-//
+        Log.d("viewModel", "play link $videoUrl")
+        webView.loadUrl("https://$videoUrl")
+
 
     }
 
-    private inner class YoutubeInterface() {
+    private fun getUrlFromSrc(src: String): String {
+        val urlRegex = """src="//([^"]*)"""".toRegex()
 
-        @JavascriptInterface
-        fun onStateChanged(state: Int) {
-            when(state) {
-                0 -> Log.d("YouTube", "Ended")
-                1 -> Log.d("YouTube", "Playing")
-                2 -> Log.d("YouTube", "Paused")
-                3 -> Log.d("YouTube", "Buffering")
-            }
-        }
+        val matchResult = urlRegex.find(src)
+
+        return matchResult?.groups?.get(1)?.value.toString()
     }
 
 
-    private fun getData(id: String?) = lifecycleScope.launch {
-//        mediaId = //id값 받아와서 그 값으로 검색?해서 해당 영상 정보 가져오기 enquedhodksehlwl...
-        YouTubeApi.youtubeNetwork.getContentDetails(ids = listOf(tempMediaId))
-//        ApiRepositoryImpl().getContentDetails(listOf(tempMediaId))?.forEach {
-//            videoSample = it.player.toString()
-//        }
-        val detailData = ApiRepository
-        mediaItemData.id
-        mediaItemData.player
-        mediaItemData.channelProfile
-        mediaItemData.channelTitle
-        mediaItemData.viewCount
-        mediaItemData.likeCount
-        mediaItemData.title
-        mediaItemData.publishedAt
-        mediaItemData.description
-        mediaItemData.commentCount
-        mediaItemData.isPinned = false
-    }
 
     private fun shareLink() {
         val intent = Intent().apply {
             action = Intent.ACTION_SEND
-            putExtra(Intent.EXTRA_TEXT, "link")
+            putExtra(Intent.EXTRA_TEXT, "https:$videoUrl")
             type = "text/plain"
         }
         val shareChooser = Intent.createChooser(intent, null)

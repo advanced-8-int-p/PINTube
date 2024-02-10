@@ -14,7 +14,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.PINTube"
-        tools:targetApi="tiramisu">
+        tools:targetApi="tiramisu"
+        android:enableOnBackInvokedCallback="true">
         <activity
             android:name=".ui.Search.SearchActivity"
             android:exported="true">
