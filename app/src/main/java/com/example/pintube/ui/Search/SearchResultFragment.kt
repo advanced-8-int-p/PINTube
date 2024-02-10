@@ -56,13 +56,20 @@ class SearchResultFragment : Fragment() {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 val selectedItem = viewSelect[position]
 
-                when (selectedItem) {
-                    "조회수 순" -> {
+                when (position) {
+                    //
+                    0 -> {
                     }
-                    "업로드 순(오름차순)" -> {
+                    //조회수 순
+                    1 -> {
+
+                    }
+                    //최근 업로드 순
+                    2 -> {
                         searchAdapter?.sortByDescending()
                     }
-                    "업로드 순(내림차순)" -> {
+                    //오래된 순
+                    3 -> {
                         searchAdapter?.sortByAscending()
                     }
                 }

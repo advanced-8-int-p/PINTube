@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="view">
-        <item></item>
+        <item>정렬 설정</item>
         <item>조회수 순</item>
         <item>최근 업로드 순</item>
         <item>오래된 순</item>
