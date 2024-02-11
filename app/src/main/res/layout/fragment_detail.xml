@@ -212,7 +212,7 @@
         android:layout_height="0dp"
         android:background="@color/white"
         android:elevation="4dp"
-        app:layout_constraintHeight_percent="0.3"
+        app:layout_constraintHeight_percent="0.24"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -290,16 +290,19 @@
                 app:layout_constraintTop_toTopOf="@+id/cv_detail_comment_first_profile"
                 app:layout_constraintStart_toEndOf="@+id/cv_detail_comment_first_profile"
                 />
-            <TextView
+            <kr.co.prnd.readmore.ReadMoreTextView
                 android:id="@+id/tv_detail_comment_first"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="댓글 내용"
                 android:textSize="12sp"
+                android:paddingStart="64dp"
                 android:fontFamily="@font/roboto_medium"
-
                 app:layout_constraintTop_toBottomOf="@+id/tv_detail_comment_first_name"
                 app:layout_constraintStart_toStartOf="@+id/tv_detail_comment_first_name"
+                app:readMoreMaxLine="2"
+                app:readMoreText="...더보기"
+                app:readMoreColor="@color/enable_color"
                 />
             <ImageView
                 android:id="@+id/iv_detail_comment_first_like"
