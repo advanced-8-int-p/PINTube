@@ -38,8 +38,6 @@ class HomeFragment : Fragment() {
                 //args = null,
                 args = Bundle().apply {
                     putString("video_id", item.id)
-                    putString("channel_id", "bbb")
-                    putParcelable("videoItemData", item)
                 },
                 navOptions = NavOptions.Builder()
                     .setPopUpTo(R.id.navigation_home, true)

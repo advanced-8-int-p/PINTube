@@ -4,14 +4,13 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.pintube.data.local.entity.LocalCommentEntity
 import com.example.pintube.data.repository.local.VideoWithThumbnail
 import com.example.pintube.domain.repository.ApiRepository
 import com.example.pintube.domain.repository.LocalChannelRepository
 import com.example.pintube.domain.repository.LocalCommentRepository
 import com.example.pintube.domain.repository.LocalSearchRepository
 import com.example.pintube.domain.repository.LocalVideoRepository
-import com.example.pintube.utill.convertToDaysAgo
+import com.example.pintube.utill.convertComment
 import com.example.pintube.utill.convertViewCount
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -37,7 +36,7 @@ class ShortsViewModel @Inject constructor(
     fun getShortsVideos() = viewModelScope.launch(Dispatchers.IO) {
         var result = localSearchRepository.findSearchRecord("#쇼츠")
 
-        if (result?.size == 0) {
+        if (result.isNullOrEmpty()) {
             result = getShortsApiResponse()
         }
         _videos.postValue(result?.map {
@@ -48,7 +47,7 @@ class ShortsViewModel @Inject constructor(
     fun getComments(id: String) = viewModelScope.launch(Dispatchers.IO) {
         var comments = localCommentRepository.findComment(id)
 
-        if (comments?.isEmpty() == true) {
+        if (comments.isNullOrEmpty()) {
             apiRepository.getComments(id)?.forEach { item ->
                     localCommentRepository.saveComment(item)
             }
@@ -86,19 +85,5 @@ class ShortsViewModel @Inject constructor(
         commentCount = this.video?.commentCount?.convertViewCount(),
     )
 
-    private fun LocalCommentEntity.convertComment() : CommentsItem.Comments {
-        return CommentsItem.Comments(
-            id = this.id,
-            textDisplay = this.textDisplay,
-            textOriginal = this.textOriginal,
-            userName = this.authorDisplayName,
-            userProfileImage = this.authorProfileImageUrl,
-            likeCount = this.likeCount,
-            publishedAt = this.publishedAt?.convertToDaysAgo(),
-            isUpdate = (this.updatedAt != this.publishedAt),
-            totalReplyCount = this.totalReplyCount,
-            replies = null,
-        )
-    }
 }
 

@@ -85,22 +85,20 @@ class ShortsAdapter(
             ivShortsComments.setOnClickListener {
                 onCommentChecked(item)
             }
+
             val windowManager = itemView.context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
             val displayMetrics = DisplayMetrics()
             windowManager.defaultDisplay.getMetrics(displayMetrics)
             val height = displayMetrics.heightPixels
             val width = displayMetrics.widthPixels
-
             val layoutParams = vvShortsVideo.layoutParams
-
             val extraHeight = 80.dpToPx(vvShortsVideo.context)
 
             layoutParams.height = layoutParams.height + extraHeight + height
             layoutParams.width = width
             vvShortsVideo.layoutParams = layoutParams
-
-
             vvShortsVideo.setBackgroundColor(Color.parseColor("#000000"))
+
             vvShortsVideo.addYouTubePlayerListener(
                 object : AbstractYouTubePlayerListener() {
                     override fun onReady(youTubePlayer: YouTubePlayer) {
