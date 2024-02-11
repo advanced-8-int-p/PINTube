@@ -14,8 +14,10 @@ class LocalChannelRepositoryImpl @Inject constructor(
 
     override suspend fun saveChannel(
         item: ChannelEntity,
-    ): LocalChannelEntity? = item.convertToLocalChannelEntity().apply {
-        channelDAO.insert(this?: return@apply)
+    ){
+        item.convertToLocalChannelEntity().apply {
+            channelDAO.insert(this?: return@apply)
+        }
     }
 
     override suspend fun findChannel(

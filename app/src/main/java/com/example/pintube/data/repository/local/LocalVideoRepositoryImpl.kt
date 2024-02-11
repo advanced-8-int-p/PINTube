@@ -17,9 +17,11 @@ class LocalVideoRepositoryImpl @Inject constructor(
     override suspend fun saveVideos(
         item: VideoEntity,
         isPopular: Boolean?,
-    ): LocalVideoEntity? = item.convertToLocalVideoEntity(isPopular).apply {
-        this?.let {
-            videoDAO.insert(it)
+    ) {
+        item.convertToLocalVideoEntity(isPopular).apply {
+            this?.let {
+                videoDAO.insert(it)
+            }
         }
     }
 

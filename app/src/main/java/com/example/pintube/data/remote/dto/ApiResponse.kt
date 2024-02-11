@@ -6,6 +6,7 @@ data class SearchApiResponse(
     val kind: String?,
     val regionCode: String?,
     val nextPageToken: String?,
+    val prevPageToken: String?,
     val pageInfo: PageInfo?
 )
 

@@ -14,21 +14,35 @@ class ApiRepositoryImpl @Inject constructor(
     private val remoteDataSource: YoutubeSearchService,
 ) : ApiRepository {
 
+    private var nextPageToken: String? = null
     override suspend fun searchResult(
-        query: String
+        query: String,
+        pageToken: String?,
     ): List<SearchEntity>? = remoteDataSource
-        .searchResult(query = query).items?.map { item ->
-            convertSearchEntity(item)
+        .searchResult(
+            query = query,
+            pageToken = pageToken
+        ).let {
+            nextPageToken = it.nextPageToken
+            it.items?.map { item ->
+                convertSearchEntity(item)
+            }
         }
 
-    override suspend fun getRandomShorts(): List<SearchEntity>?  = remoteDataSource
-        .searchResult(query = "#shorts", videoDuration = "short").items?.map { item ->
-            convertSearchEntity(item)
+    override suspend fun getRandomShorts(): List<SearchEntity>? = remoteDataSource
+        .searchResult(query = "#shorts #쇼츠", videoDuration = "short").let {
+            nextPageToken = it.nextPageToken
+            it.items?.map { item ->
+                convertSearchEntity(item)
+            }
         }
 
     override suspend fun getPopularVideo()
-            : List<VideoEntity>? = remoteDataSource.getPopularVideo().items?.map { item ->
-        convertVideoEntity(item)
+            : List<VideoEntity>? = remoteDataSource.getPopularVideo().let {
+        nextPageToken = it.nextPageToken
+        it.items?.map { item ->
+            convertVideoEntity(item)
+        }
     }
 
     override suspend fun getContentDetails(
@@ -45,55 +59,61 @@ class ApiRepositoryImpl @Inject constructor(
 
     override suspend fun getComments(
         videoId: String
-    ): List<CommentEntity?>? = remoteDataSource.getComments(videoId = videoId).items?.map { item ->
-        convertCommentRepliesEntity(item)
+    ): List<CommentEntity?>? = remoteDataSource.getComments(videoId = videoId).let {
+        nextPageToken = it.nextPageToken
+        it.items?.map { item ->
+            convertCommentRepliesEntity(item)
+        }
     }
+
+    override fun getNextPageToken(): String? = nextPageToken
 
     private fun convertSearchEntity(item: SearchItemResponse): SearchEntity {
         return SearchEntity(
-            id = item.id?.videoId?: "",
-            publishedAt = item.snippet?.publishedAt?: "",
-            channelId = item.snippet?.channelId?: "",
-            title = item.snippet?.title?: "",
-            description = item.snippet?.description?: "",
-            localizedTitle = item.snippet?.localized?.title?: "",
-            localizedDescription = item.snippet?.localized?.description?: "",
-            thumbnailHigh = item.snippet?.thumbnails?.high?.url?: "",
-            thumbnailMedium = item.snippet?.thumbnails?.medium?.url?: "",
-            thumbnailLow = item.snippet?.thumbnails?.default?.url?: "",
-            channelTitle = item.snippet?.channelTitle?: "",
-            liveBroadcastContent = item.snippet?.liveBroadcastContent?: ""
+            id = item.id?.videoId ?: "",
+            publishedAt = item.snippet?.publishedAt ?: "",
+            channelId = item.snippet?.channelId ?: "",
+            title = item.snippet?.title ?: "",
+            description = item.snippet?.description ?: "",
+            localizedTitle = item.snippet?.localized?.title ?: "",
+            localizedDescription = item.snippet?.localized?.description ?: "",
+            thumbnailHigh = item.snippet?.thumbnails?.high?.url ?: "",
+            thumbnailMedium = item.snippet?.thumbnails?.medium?.url ?: "",
+            thumbnailLow = item.snippet?.thumbnails?.default?.url ?: "",
+            channelTitle = item.snippet?.channelTitle ?: "",
+            liveBroadcastContent = item.snippet?.liveBroadcastContent ?: ""
         )
     }
+
     private fun convertVideoEntity(item: ItemResponse): VideoEntity {
         return VideoEntity(
-            id = item.id?: "",
-            publishedAt = item.snippet?.publishedAt?: "",
-            channelId = item.snippet?.channelId?: "",
-            title = item.snippet?.title?: "",
-            description = item.snippet?.description?: "",
-            thumbnailHigh = item.snippet?.thumbnails?.high?.url?: "",
-            thumbnailMedium = item.snippet?.thumbnails?.medium?.url?: "",
-            thumbnailLow = item.snippet?.thumbnails?.default?.url?: "",
-            channelTitle = item.snippet?.channelTitle?: "",
+            id = item.id ?: "",
+            publishedAt = item.snippet?.publishedAt ?: "",
+            channelId = item.snippet?.channelId ?: "",
+            title = item.snippet?.title ?: "",
+            description = item.snippet?.description ?: "",
+            thumbnailHigh = item.snippet?.thumbnails?.high?.url ?: "",
+            thumbnailMedium = item.snippet?.thumbnails?.medium?.url ?: "",
+            thumbnailLow = item.snippet?.thumbnails?.default?.url ?: "",
+            channelTitle = item.snippet?.channelTitle ?: "",
             tags = item.snippet?.tags?.toList(),
-            categoryId = item.snippet?.categoryId?: "",
-            liveBroadcastContent = item.snippet?.liveBroadcastContent?: "",
-            defaultLanguage = item.snippet?.defaultLanguage?: "",
-            localizedTitle = item.snippet?.localized?.title?: "",
-            localizedDescription = item.snippet?.localized?.description?: "",
-            defaultAudioLanguage = item.snippet?.defaultAudioLanguage?: "",
-            duration = item.contentDetails?.duration?: "",
-            dimension = item.contentDetails?.dimension?: "",
-            definition = item.contentDetails?.definition?: "",
-            caption = item.contentDetails?.caption?: "",
+            categoryId = item.snippet?.categoryId ?: "",
+            liveBroadcastContent = item.snippet?.liveBroadcastContent ?: "",
+            defaultLanguage = item.snippet?.defaultLanguage ?: "",
+            localizedTitle = item.snippet?.localized?.title ?: "",
+            localizedDescription = item.snippet?.localized?.description ?: "",
+            defaultAudioLanguage = item.snippet?.defaultAudioLanguage ?: "",
+            duration = item.contentDetails?.duration ?: "",
+            dimension = item.contentDetails?.dimension ?: "",
+            definition = item.contentDetails?.definition ?: "",
+            caption = item.contentDetails?.caption ?: "",
             licensedContent = item.contentDetails?.licensedContent,
-            projection = item.contentDetails?.projection?: "",
-            viewCount = item.statistics?.viewCount?: "",
-            likeCount = item.statistics?.likeCount?: "",
-            favoriteCount = item.statistics?.favoriteCount?: "",
-            commentCount = item.statistics?.commentCount?: "",
-            player = item.player?.embedHtml?: "",
+            projection = item.contentDetails?.projection ?: "",
+            viewCount = item.statistics?.viewCount ?: "",
+            likeCount = item.statistics?.likeCount ?: "",
+            favoriteCount = item.statistics?.favoriteCount ?: "",
+            commentCount = item.statistics?.commentCount ?: "",
+            player = item.player?.embedHtml ?: "",
             topicDetails = item.topicDetails?.topicCategories?.toList()
         )
     }
@@ -130,14 +150,17 @@ class ApiRepositoryImpl @Inject constructor(
             convertCommentEntity(replyItem).copy(parentId = item.id)
         } ?: emptyList()
 
-        return topLevelComment?.copy(replies = replies, totalReplyCount = item.snippet.totalReplyCount)
+        return topLevelComment?.copy(
+            replies = replies,
+            totalReplyCount = item.snippet.totalReplyCount
+        )
     }
 
     private fun convertCommentEntity(
         item: ItemResponse,
         parentId: String? = null
     ): CommentEntity = CommentEntity(
-        id = item.id?: "",
+        id = item.id ?: "",
         channelId = item.snippet?.channelId ?: "",
         videoId = item.snippet?.videoId ?: "",
         textDisplay = item.snippet?.textDisplay ?: "",

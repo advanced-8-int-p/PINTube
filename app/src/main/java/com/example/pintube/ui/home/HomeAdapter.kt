@@ -12,6 +12,7 @@ import com.example.pintube.R
 import com.example.pintube.databinding.HomeItemCategoryBinding
 import com.example.pintube.databinding.HomeItemPopularBinding
 import com.example.pintube.databinding.ItemHeaderBinding
+import com.example.pintube.databinding.ItemLoadingProgressBinding
 import com.example.pintube.databinding.VideoItemBinding
 
 class HomeAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -68,6 +69,9 @@ class HomeAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         }
     }
 
+    class LoadingHolder(private val binding: ItemLoadingProgressBinding):
+    RecyclerView.ViewHolder(binding.root)
+
     override fun getItemCount(): Int = sealedMultis.size
     override fun getItemViewType(position: Int): Int = sealedMultis[position].viewType
 
@@ -97,6 +101,12 @@ class HomeAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                         .inflate(LayoutInflater.from(parent.context), parent, false)
                 )
 
+            MULTI_LOADING ->
+                LoadingHolder(
+                    ItemLoadingProgressBinding
+                        .inflate(LayoutInflater.from(parent.context), parent, false)
+                )
+
             else -> error("jj-HomeAdapter.kt onCreateViewHolder viewType error")
         }
     }
@@ -117,6 +127,8 @@ class HomeAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             is SealedMulti.Header -> Unit
 
             is SealedMulti.Video -> (holder as MultiViewHolderVideo).onBind(item)
+
+            is SealedMulti.Loading -> Unit
         }
     }
 

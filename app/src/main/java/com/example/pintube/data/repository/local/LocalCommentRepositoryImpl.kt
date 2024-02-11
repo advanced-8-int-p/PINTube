@@ -13,9 +13,11 @@ class LocalCommentRepositoryImpl @Inject constructor(
 ) : LocalCommentRepository {
     override suspend fun saveComment(
         item: CommentEntity?,
-    ): LocalCommentEntity? = item?.convertToLocalCommentEntity().apply {
-        this?.let {
-            commentDAO.insert(it)
+    ){
+        item?.convertToLocalCommentEntity().apply {
+            this?.let {
+                commentDAO.insert(it)
+            }
         }
     }
 

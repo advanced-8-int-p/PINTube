@@ -18,8 +18,10 @@ class LocalSearchRepositoryImpl @Inject constructor(
     override suspend fun saveSearchResult(
         item: SearchEntity,
         query: String
-    ): LocalSearchEntity? = item.convertToLocalSearchEntity(query).apply {
-        this?.let { searchDAO.insert(it) }
+    ){
+        item.convertToLocalSearchEntity(query).apply {
+            this?.let { searchDAO.insert(it) }
+        }
     }
 
     override suspend fun findSearchRecord(

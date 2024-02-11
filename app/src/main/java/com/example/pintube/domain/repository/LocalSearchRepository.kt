@@ -5,6 +5,6 @@ import com.example.pintube.data.repository.local.VideoWithThumbnail
 import com.example.pintube.domain.entitiy.SearchEntity
 
 interface LocalSearchRepository {
-    suspend fun saveSearchResult(item: SearchEntity, query: String) : LocalSearchEntity?
+    suspend fun saveSearchResult(item: SearchEntity, query: String)
     suspend fun findSearchRecord(query: String): List<VideoWithThumbnail>?
 }
