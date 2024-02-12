@@ -34,7 +34,7 @@ class ShortsViewModel @Inject constructor(
     val comments: LiveData<List<CommentsItem.Comments>> get() = _comments
 
     fun getShortsVideos() = viewModelScope.launch(Dispatchers.IO) {
-        var result = localSearchRepository.findSearchRecord("#쇼츠")
+        var result = localSearchRepository.findSearchRecord("#쇼츠 #shorts")
 
         if (result.isNullOrEmpty()) {
             result = getShortsApiResponse()
@@ -64,7 +64,7 @@ class ShortsViewModel @Inject constructor(
         apiRepository.getRandomShorts()?.forEach { item ->
             item.id?.let { videoIds.add(it) }
             item.channelId?.let { channelIds.add(it) }
-            localSearchRepository.saveSearchResult(item, "#shorts")
+            localSearchRepository.saveSearchResult(item, "#쇼츠 #shorts")
         }
         apiRepository.getContentDetails(videoIds)?.forEach { item ->
             localVideoRepository.saveVideos(item)
@@ -73,7 +73,7 @@ class ShortsViewModel @Inject constructor(
             localChannelRepository.saveChannel(item)
         }
 
-        return localSearchRepository.findSearchRecord("#shorts")
+        return localSearchRepository.findSearchRecord("#쇼츠 #shorts")
     }
 
     private fun VideoWithThumbnail.convertShortsItem() = ShortsItem.Item(

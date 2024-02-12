@@ -98,7 +98,6 @@ class ShortsAdapter(
             layoutParams.width = width
             vvShortsVideo.layoutParams = layoutParams
             vvShortsVideo.setBackgroundColor(Color.parseColor("#000000"))
-
             vvShortsVideo.addYouTubePlayerListener(
                 object : AbstractYouTubePlayerListener() {
                     override fun onReady(youTubePlayer: YouTubePlayer) {
