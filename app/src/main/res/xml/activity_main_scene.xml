@@ -6,37 +6,23 @@
     <ConstraintSet android:id="@+id/start">
         <Constraint android:id="@+id/nav_host_fragment_activity_main" />
         <Constraint
-            android:id="@+id/main_fab_shorts"
+            android:id="@+id/main_fab_share"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:visibility="gone"
-            app:layout_constraintHorizontal_bias="0.36"
-            app:layout_constraintVertical_bias="0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/main_coordinator" />
+            app:layout_constraintStart_toStartOf="@+id/main_fab"
+            app:layout_constraintEnd_toEndOf="@+id/main_fab"
+            app:layout_constraintBottom_toBottomOf="@+id/main_fab"
+            app:layout_constraintTop_toTopOf="@+id/main_fab" />
         <Constraint
             android:id="@+id/main_fab_pin"
-            app:layout_constraintEnd_toEndOf="parent"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:visibility="gone"
-            app:layout_constraintTop_toTopOf="@+id/main_coordinator"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintVertical_bias="0"
-            app:layout_constraintHorizontal_bias="0.36" />
-        <Constraint
-            android:id="@+id/main_fab_search"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:visibility="gone"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintVertical_bias="0"
-            app:layout_constraintHorizontal_bias="0.36" />
+            app:layout_constraintStart_toStartOf="@+id/main_fab"
+            app:layout_constraintEnd_toEndOf="@+id/main_fab"
+            app:layout_constraintBottom_toBottomOf="@+id/main_fab"
+            app:layout_constraintTop_toTopOf="@+id/main_fab" />
         <Constraint
             android:id="@+id/main_fab"
             app:layout_constraintEnd_toEndOf="parent"
@@ -51,7 +37,7 @@
     <ConstraintSet android:id="@+id/end">
         <Constraint android:id="@id/nav_host_fragment_activity_main" />
         <Constraint
-            android:id="@+id/main_fab_shorts"
+            android:id="@+id/main_fab_share"
             app:layout_constraintEnd_toEndOf="parent"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -70,14 +56,6 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintVertical_bias="0"
             app:layout_constraintHorizontal_bias="0.64" />
-        <Constraint
-            android:id="@+id/main_fab_search"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            app:layout_constraintBottom_toTopOf="@+id/main_coordinator"
-            app:layout_constraintStart_toStartOf="parent" />
         <Constraint
             android:id="@+id/main_fab"
             app:layout_constraintEnd_toEndOf="parent"
