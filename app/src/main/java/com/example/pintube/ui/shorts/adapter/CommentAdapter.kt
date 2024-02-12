@@ -70,14 +70,14 @@ class CommentAdapter(
             if (item !is CommentsItem.Comments) {
                 return@with
             }
-            ivCommentUserprofile.load(item.userProfileImage)
+            ivCommentUserprofile.load(item.userProfileImage){
+                crossfade(true)
+            }
             tvCommentUsername.text = item.userName
             tvCommentDaysAgo.text = " · " + item.publishedAt
             tvCommentDesc.text = item.textOriginal
             tvCommentLikeCount.text = item.likeCount?.toString()?.convertViewCount()
-            if (item.likeCount == 0){
-                tvCommentLikeCount.isVisible = false
-            }
+            tvCommentLikeCount.isVisible = (item.likeCount ?: 0) > 0
 
             if (item.totalReplyCount!! > 0) {
                 tvCommentRepliesBtn.isVisible = true

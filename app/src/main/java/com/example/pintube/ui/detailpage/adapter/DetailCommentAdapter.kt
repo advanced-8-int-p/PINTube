@@ -70,7 +70,9 @@ class DetailCommentAdapter(
             if (item !is DetailCommentsItem.Comments) {
                 return@with
             }
-            ivCommentUserprofile.load(item.userProfileImage)
+            ivCommentUserprofile.load(item.userProfileImage){
+                crossfade(true)
+            }
             tvCommentUsername.text = item.userName
             tvCommentDaysAgo.text = " · " + item.publishedAt
             tvCommentDesc.text = item.textOriginal

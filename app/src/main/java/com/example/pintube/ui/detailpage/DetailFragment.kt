@@ -123,6 +123,7 @@ class DetailFragment : Fragment() {
 
     @SuppressLint("SetTextI18n")
     private fun initViewModel() = viewModel.also { viewModel1 ->
+        lateinit var count: String
         viewModel1.media.observe(viewLifecycleOwner, Observer {
             Log.d("viewModel", "init video data $it")
             playerSrc = it.player.toString()
@@ -138,7 +139,8 @@ class DetailFragment : Fragment() {
                 tvDetailTitle.text = it.title.toString()
                 tvDetailContent.text = it.publishedAt?.convertToDaysAgo()
                     .toString() + "\n\n\n" + it.description.toString()
-                tvDetailCommentCount.text = "댓글 " + it.commentCount?.convertViewCount()
+                count = it.commentCount?.convertViewCount()?: "0"
+                tvDetailCommentCount.text = "댓글 $count"
             }
         })
 
@@ -149,7 +151,7 @@ class DetailFragment : Fragment() {
                 tvDetailCommentFirst.text = item.first().textOriginal
                 tvDetailCommentFirstLikeCount.text = " " + item.first().likeCount.toString().convertViewCount()
                 clDetailComment.setOnClickListener {
-                    setCommentSheet(tvDetailCommentCount.text.toString())
+                    setCommentSheet(count)
                     bottomSheetDialog.show()
                 }
             }
