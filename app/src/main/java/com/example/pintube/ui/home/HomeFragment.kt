@@ -1,5 +1,6 @@
 package com.example.pintube.ui.home
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -14,6 +15,7 @@ import androidx.recyclerview.widget.GridLayoutManager.SpanSizeLookup
 import androidx.room.util.query
 import com.example.pintube.R
 import com.example.pintube.databinding.FragmentHomeBinding
+import com.example.pintube.ui.Search.SearchActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -36,8 +38,6 @@ class HomeFragment : Fragment() {
                 //args = null,
                 args = Bundle().apply {
                     putString("video_id", item.id)
-                    putString("channel_id", "bbb")
-                    putParcelable("videoItemData", item)
                 },
                 navOptions = NavOptions.Builder()
                     .setPopUpTo(R.id.navigation_home, true)
@@ -83,16 +83,20 @@ class HomeFragment : Fragment() {
         b.rvHomeMain.layoutManager = GridLayoutManager(requireContext(), 2).also { manager ->
             manager.spanSizeLookup = object : SpanSizeLookup() {
                 override fun getSpanSize(position: Int): Int {
-                    if (position < 3) return manager.spanCount
-                    return 1
+                    return when (homeAdapter.sealedMultis[position]) {
+                        is SealedMulti.Video -> 1
+                        else -> manager.spanCount
+                    }
                 }
             }
+        }
+
+        b.ivHomeSearch.setOnClickListener {
+            startActivity(Intent(requireContext(), SearchActivity::class.java))
         }
     }
 
     private fun initViewModel() = viewModel.also { vm ->
-        vm.updatePopulars()
-//        vm.searchCategory("요리")  //ddd
 
         vm.populars.observe(viewLifecycleOwner) {
             popularVideoAdapter.submitList(it)
@@ -106,8 +110,10 @@ class HomeFragment : Fragment() {
             homeAdapter.sealedMultis = homeAdapter.sealedMultis.subList(0, 3).apply {
                 addAll(it.map { v -> SealedMulti.Video(v) })
             }
+            if(it != null) {
+                homeAdapter.sealedMultis.add(SealedMulti.Loading)
+            }
             homeAdapter.notifyDataSetChanged()
         }
     }
-
 }

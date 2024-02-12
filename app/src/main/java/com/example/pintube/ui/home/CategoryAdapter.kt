@@ -21,10 +21,12 @@ class CategoryAdapter(
         oldItem == newItem
 }) {
     private var selectedItem: String? = null
+
     inner class CategoryViewHolder(private val binding: CategoryItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun onBind(item: String) = binding.also { b ->
 //            Log.d("jj-카테고리뷰홀더 onBind", model)  //ddd
+            if (selectedItem == null) selectedItem = item
             updateUI(item == selectedItem, binding)
             b.tvCategoryName.text = item
 

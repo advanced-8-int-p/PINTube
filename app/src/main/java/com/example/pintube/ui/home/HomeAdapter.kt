@@ -1,14 +1,18 @@
 package com.example.pintube.ui.home
 
+import android.graphics.Color
+import android.graphics.drawable.GradientDrawable
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import coil.load
+import com.example.pintube.R
 import com.example.pintube.databinding.HomeItemCategoryBinding
 import com.example.pintube.databinding.HomeItemPopularBinding
 import com.example.pintube.databinding.ItemHeaderBinding
+import com.example.pintube.databinding.ItemLoadingProgressBinding
 import com.example.pintube.databinding.VideoItemBinding
 
 class HomeAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -41,8 +45,17 @@ class HomeAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         RecyclerView.ViewHolder(binding.root) {
 
         fun onBind(item: SealedMulti.Video) = binding.also { b ->
-            item.videoItemData.videoThumbnailUri?.let { b.ivItemVideo.load(it) }
-            item.videoItemData.channelThumbnailUri?.let { b.ivItemChannel.load(it) }
+
+            item.videoItemData.videoThumbnailUri?.let {
+                b.ivItemVideo.load(it){
+                    crossfade(true)
+                }
+            }
+            item.videoItemData.channelThumbnailUri?.let {
+                b.ivItemChannel.load(it){
+                    crossfade(true)
+                }
+            }
             item.videoItemData.title?.let { b.tvItemTitle.text = it }
             item.videoItemData.channelName?.let { b.tvItemName.text = it }
             item.videoItemData.views?.let { b.tvItemViews.text = it }
@@ -55,6 +68,9 @@ class HomeAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 //            }
         }
     }
+
+    class LoadingHolder(private val binding: ItemLoadingProgressBinding):
+    RecyclerView.ViewHolder(binding.root)
 
     override fun getItemCount(): Int = sealedMultis.size
     override fun getItemViewType(position: Int): Int = sealedMultis[position].viewType
@@ -85,6 +101,12 @@ class HomeAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                         .inflate(LayoutInflater.from(parent.context), parent, false)
                 )
 
+            MULTI_LOADING ->
+                LoadingHolder(
+                    ItemLoadingProgressBinding
+                        .inflate(LayoutInflater.from(parent.context), parent, false)
+                )
+
             else -> error("jj-HomeAdapter.kt onCreateViewHolder viewType error")
         }
     }
@@ -105,6 +127,8 @@ class HomeAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             is SealedMulti.Header -> Unit
 
             is SealedMulti.Video -> (holder as MultiViewHolderVideo).onBind(item)
+
+            is SealedMulti.Loading -> Unit
         }
     }
 

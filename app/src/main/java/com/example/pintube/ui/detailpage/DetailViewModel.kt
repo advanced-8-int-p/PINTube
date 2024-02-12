@@ -3,14 +3,15 @@ package com.example.pintube.ui.detailpage
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.pintube.data.local.entity.FavoriteEntity
 import com.example.pintube.data.local.entity.LocalVideoEntity
 import com.example.pintube.domain.repository.ApiRepository
 import com.example.pintube.domain.repository.LocalChannelRepository
 import com.example.pintube.domain.repository.LocalCommentRepository
 import com.example.pintube.domain.repository.LocalVideoRepository
+import com.example.pintube.utill.convertDetailComment
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -18,6 +19,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class DetailViewModel @Inject constructor(
+    private val savedStateHandle: SavedStateHandle,
     private val repository: ApiRepository,
     private val localVideoRepository: LocalVideoRepository,
     private val localChannelRepository: LocalChannelRepository,
@@ -27,19 +29,42 @@ class DetailViewModel @Inject constructor(
     private var _media: MutableLiveData<DetailItemModel> = MutableLiveData()
     val media: LiveData<DetailItemModel> get() = _media
 
-    fun getData(id: String) = viewModelScope.launch(Dispatchers.IO) {
-        val result = localVideoRepository.findVideoDetail(id)
-        if (result == null) {
-            repository.getContentDetails(listOf(id))?.forEach {
-                localVideoRepository.saveVideos(it)
-            }
-        }
-        repository.getChannelDetails(listOf(result?.channelId!!))?.forEach {
-            localChannelRepository.saveChannel(it)
+    private var _comments: MutableLiveData<List<DetailCommentsItem.Comments>> = MutableLiveData()
+    val comments: LiveData<List<DetailCommentsItem.Comments>> get() = _comments
+
+    val videoId: String
+        get() = try{
+            savedStateHandle["video_id"]!!
+        } catch (error: Exception) {
+            Log.e("DetailViewModel", "Error Null ID: ${error.message}", error)
+            ""
         }
 
-        Log.d("viewModel", "get data $_media")
-        _media.postValue(result.convertToDetailItem())
+    init {
+        getData()
+    }
+
+    private fun getData() = viewModelScope.launch(Dispatchers.IO) {
+        val result = videoId.let { localVideoRepository.findVideoDetail(it) }
+        result?.let { getComment(id = it.id) }
+
+        _media.postValue(result?.convertToDetailItem())
+    }
+
+    fun getComment(id: String) = viewModelScope.launch(Dispatchers.IO) {
+        runCatching {
+            var results = localCommentRepository.findComment(id)
+
+            if (results.isNullOrEmpty()) {
+                repository.getComments(id)?.forEach {
+                    localCommentRepository.saveComment(it)
+                }
+                results = localCommentRepository.findComment(id)
+            }
+            _comments.postValue(results?.map { it.convertDetailComment() })
+        }.onFailure {
+            Log.e("DetailViewModel getComment", "Error fetching data: $it")
+        }
     }
 
     private suspend fun LocalVideoEntity.convertToDetailItem() = DetailItemModel(
@@ -53,7 +78,7 @@ class DetailViewModel @Inject constructor(
         likeCount = this.likeCount,
         commentCount = this.commentCount,
         player = this.player,
-        channelProfile = repository.getChannelDetails(listOf(this.channelId!!))?.get(0)?.thumbnailMedium,
+        channelProfile = this.channelId?.let { localChannelRepository.findChannel(it)?.thumbnailMedium },
         isPinned = isPinned()
     )
 

@@ -1,4 +1,4 @@
-package com.example.pintube.data.repository
+package com.example.pintube.data.repository.local
 
 import com.example.pintube.data.local.dao.ChannelDAO
 import com.example.pintube.data.local.entity.LocalChannelEntity
@@ -14,8 +14,10 @@ class LocalChannelRepositoryImpl @Inject constructor(
 
     override suspend fun saveChannel(
         item: ChannelEntity,
-    ): LocalChannelEntity? = item.convertToLocalChannelEntity().apply {
-        channelDAO.insert(this?: return@apply)
+    ){
+        item.convertToLocalChannelEntity().apply {
+            channelDAO.insert(this?: return@apply)
+        }
     }
 
     override suspend fun findChannel(

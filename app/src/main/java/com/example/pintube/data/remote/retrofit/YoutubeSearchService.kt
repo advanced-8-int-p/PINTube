@@ -1,7 +1,8 @@
-package com.example.pintube.data.remote.api.retrofit
+package com.example.pintube.data.remote.retrofit
 
-import com.example.pintube.data.remote.dto.ApiResponse
-import com.example.pintube.data.remote.dto.SearchApiResponse
+import com.example.pintube.data.remote.dto.GenericApiResponse
+import com.example.pintube.data.remote.dto.ItemResponse
+import com.example.pintube.data.remote.dto.SearchItemResponse
 import retrofit2.http.GET
 import retrofit2.http.Query
 
@@ -17,13 +18,14 @@ interface YoutubeSearchService {
         @Query("part") part: String = "snippet",
         @Query("order") order: String = "relevance", //date – 리소스를 만든 날짜를 기준, rating – 높은 평가부터 낮은 평가순, relevance – 검색어와의 관련성을 기준, title – 제목알파벳순, viewCount – 리소스가 조회수가 높은 순
         @Query("regionCode") regionCode: String = "kr", // 국가에서 볼 수 있는 동영상
+        @Query("pageToken") pageToken: String? = null,
         @Query("relevanceLanguage") relevanceLanguage: String = "ko", // 언어랑 관련성 높은 영상
         @Query("q") query: String = "react", // 검색어
         @Query("videoDuration") videoDuration: String = "any", // long – 20분보다 긴 동영상, medium – 4분에서 20분 사이의 동영상, short – 4분 미만의 동영상
         @Query("type") type: String = "video", // channel, playlist, video
         @Query("videoType") videoType: String = "any", // any – 모든 동영상을 반환합니다, episode - 프로그램의 에피소드만 검색합니다., movie - 영화만 검색합니다
         @Query("videoSyndicated") videoSyndicated: String = "true", // any – 배급 여부에 관계 없이 모든 동영상을 반환합니다.,true – 배급된 동영상만 검색합니다. 외부에서 재생할 수 있는 동영상
-    ) : SearchApiResponse
+    ) : GenericApiResponse<SearchItemResponse>
 
     @GET("videos")
     suspend fun getPopularVideo (
@@ -32,7 +34,7 @@ interface YoutubeSearchService {
         @Query("h1") h1: String = "ko",
         @Query("maxResults") maxResult: Int = 50,
         @Query("regionCode") regionCode: String = "kr",
-    ) : ApiResponse
+    ) : GenericApiResponse<ItemResponse>
 
     @GET("videos")
     suspend fun getContentDetails (
@@ -41,14 +43,14 @@ interface YoutubeSearchService {
         @Query("h1") h1: String = "ko",
         @Query("maxResults") maxResult: Int? = 50,
         @Query("regionCode") regionCode: String = "kr",
-    ) : ApiResponse
+    ) : GenericApiResponse<ItemResponse>
 
     @GET("channels")
     suspend fun getChannelDetails(
         @Query("part") part: String = "snippet,statistics,brandingSettings,contentDetails,localizations,topicDetails",
         @Query("id") id: List<String>,
         @Query("maxResults") maxResult: Int? = 50,
-    ) : ApiResponse
+    ) : GenericApiResponse<ItemResponse>
 
 
     @GET("commentThreads")
@@ -56,5 +58,5 @@ interface YoutubeSearchService {
         @Query("part") part: String = "snippet,id,replies",
         @Query("videoId") videoId: String,
         @Query("maxResults") maxResult: Int? = 100,
-    ) : ApiResponse
+    ) : GenericApiResponse<ItemResponse>
 }

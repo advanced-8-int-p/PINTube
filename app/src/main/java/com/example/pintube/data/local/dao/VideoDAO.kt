@@ -10,7 +10,7 @@ import com.example.pintube.data.local.entity.LocalVideoEntity
 
 @Dao
 interface VideoDAO {
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(item: LocalVideoEntity)
 
     @Update
@@ -26,3 +26,7 @@ interface VideoDAO {
     @Query("SELECT * FROM video_info WHERE isPopular = 1 AND saveDate >= :date")
     fun findPopularVideos(date: String): List<LocalVideoEntity>?
 }
+
+//fk pk
+//레디시 캐시, 캐시 sql
+//배포 환경, 오토스케일

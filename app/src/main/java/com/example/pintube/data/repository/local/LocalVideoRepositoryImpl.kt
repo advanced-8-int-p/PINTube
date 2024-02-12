@@ -1,4 +1,4 @@
-package com.example.pintube.data.repository
+package com.example.pintube.data.repository.local
 
 import com.example.pintube.data.local.dao.ChannelDAO
 import com.example.pintube.data.local.dao.ChannelThumbnail
@@ -17,9 +17,11 @@ class LocalVideoRepositoryImpl @Inject constructor(
     override suspend fun saveVideos(
         item: VideoEntity,
         isPopular: Boolean?,
-    ): LocalVideoEntity? = item.convertToLocalVideoEntity(isPopular).apply {
-        this?.let {
-            videoDAO.insert(it)
+    ) {
+        item.convertToLocalVideoEntity(isPopular).apply {
+            this?.let {
+                videoDAO.insert(it)
+            }
         }
     }
 

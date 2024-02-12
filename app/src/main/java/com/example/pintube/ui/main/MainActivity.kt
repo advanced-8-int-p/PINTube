@@ -9,6 +9,7 @@ import androidx.navigation.ui.setupWithNavController
 import com.example.pintube.R
 import com.example.pintube.databinding.ActivityMainBinding
 import com.example.pintube.ui.shorts.ShortsActivity
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -42,28 +43,33 @@ class MainActivity : AppCompatActivity() {
         navView.setupWithNavController(navController)
         navView.background = null
 
-        var currentFragment = (R.id.navigation_home)
+        var lastFragment = (R.id.navigation_home)
+        var currentFragment = R.id.navigation_home
 
         mainFab.setOnClickListener {
-            if (mainMotion.currentState == mainMotion.startState) {
-                mainMotion.transitionToEnd()
+            if (currentFragment == R.id.navigation_detail) {
+                if (mainMotion.currentState == mainMotion.startState) {
+                    mainMotion.transitionToEnd()
+                } else {
+                    mainMotion.transitionToStart()
+                }
             } else {
-                mainMotion.transitionToStart()
+                startActivity(
+                    Intent(
+                        this@MainActivity,
+                        ShortsActivity::class.java
+                    )
+                )
             }
         }
 
-        mainFabShorts.setOnClickListener {
-            startActivity(
-                Intent(
-                    this@MainActivity,
-                    ShortsActivity::class.java
-                )
-            )
+        mainFabShare.setOnClickListener {
+            mainMotion.transitionToStart()
         }
 
         mainFabPin.setOnClickListener {
             val navOptions = NavOptions.Builder()
-                .setPopUpTo(currentFragment, true)
+                .setPopUpTo(lastFragment, true)
                 .build()
             navController.navigate(
                 R.id.navigation_detail,
@@ -75,10 +81,13 @@ class MainActivity : AppCompatActivity() {
 
 
         navController.addOnDestinationChangedListener { _, destination, _ ->
-
+            currentFragment = destination.id
             when (destination.id) {
-                R.id.navigation_home -> currentFragment = destination.id
-                R.id.navigation_mypage -> currentFragment = destination.id
+                R.id.navigation_home, R.id.navigation_mypage -> lastFragment = destination.id
+            }
+            when (destination.id) {
+                R.id.navigation_detail -> mainFab.setImageResource(R.drawable.ic_main_fab_plus)
+                else -> mainFab.setImageResource(R.drawable.ic_nav_fab_shorts)
             }
         }
     }

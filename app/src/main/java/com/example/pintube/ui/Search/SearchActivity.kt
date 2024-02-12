@@ -1,18 +1,15 @@
 package com.example.pintube.ui.Search
 
-import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 import androidx.lifecycle.lifecycleScope
 import com.example.pintube.R
-import com.example.pintube.data.remote.api.retrofit.YouTubeApi
-import com.example.pintube.data.repository.ApiRepositoryImpl
+import com.example.pintube.data.remote.retrofit.YouTubeApi
+import com.example.pintube.data.repository.sever.ApiRepositoryImpl
 import com.example.pintube.databinding.ActivitySearchBinding
-import com.example.pintube.domain.entitiy.SearchEntity
 import com.example.pintube.domain.repository.ApiRepository
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
 
