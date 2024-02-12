@@ -11,6 +11,7 @@ import com.example.pintube.domain.repository.ApiRepository
 import com.example.pintube.domain.repository.LocalChannelRepository
 import com.example.pintube.domain.repository.LocalCommentRepository
 import com.example.pintube.domain.repository.LocalVideoRepository
+import com.example.pintube.domain.usecase.GetCommentsUseCase
 import com.example.pintube.utill.convertDetailComment
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -20,10 +21,9 @@ import javax.inject.Inject
 @HiltViewModel
 class DetailViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
-    private val repository: ApiRepository,
     private val localVideoRepository: LocalVideoRepository,
     private val localChannelRepository: LocalChannelRepository,
-    private val localCommentRepository: LocalCommentRepository
+    private val getCommentsUseCase: GetCommentsUseCase,
 ) : ViewModel() {
 
     private var _media: MutableLiveData<DetailItemModel> = MutableLiveData()
@@ -51,16 +51,9 @@ class DetailViewModel @Inject constructor(
         _media.postValue(result?.convertToDetailItem())
     }
 
-    fun getComment(id: String) = viewModelScope.launch(Dispatchers.IO) {
+    private fun getComment(id: String) = viewModelScope.launch(Dispatchers.IO) {
         runCatching {
-            var results = localCommentRepository.findComment(id)
-
-            if (results.isNullOrEmpty()) {
-                repository.getComments(id)?.forEach {
-                    localCommentRepository.saveComment(it)
-                }
-                results = localCommentRepository.findComment(id)
-            }
+            val results = getCommentsUseCase(id)
             _comments.postValue(results?.map { it.convertDetailComment() })
         }.onFailure {
             Log.e("DetailViewModel getComment", "Error fetching data: $it")
