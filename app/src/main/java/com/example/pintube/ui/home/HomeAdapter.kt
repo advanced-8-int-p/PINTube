@@ -1,23 +1,23 @@
 package com.example.pintube.ui.home
 
-import android.graphics.Color
-import android.graphics.drawable.GradientDrawable
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import coil.load
-import com.example.pintube.R
 import com.example.pintube.databinding.HomeItemCategoryBinding
 import com.example.pintube.databinding.HomeItemPopularBinding
 import com.example.pintube.databinding.ItemHeaderBinding
 import com.example.pintube.databinding.ItemLoadingProgressBinding
 import com.example.pintube.databinding.VideoItemBinding
 
-class HomeAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class HomeAdapter(val onCategorySettingClick: () -> Unit) :
+    RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     var sealedMultis = mutableListOf<SealedMulti>()
+    var tvCategoryEmptyText: TextView? = null
 
     class HeaderHolder(private val binding: ItemHeaderBinding) :
         RecyclerView.ViewHolder(binding.root)
@@ -25,7 +25,7 @@ class HomeAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     inner class MultiViewHolderPopular(private val binding: HomeItemPopularBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun onBind(item: SealedMulti.Popular) = with(binding){
+        fun onBind(item: SealedMulti.Popular) = with(binding) {
             Log.d("jj-홈어댑터 popular onBind", item.toString())  //ddd
 
             rvPopularVideos.adapter = item.videoAdapter
@@ -35,6 +35,11 @@ class HomeAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     inner class MultiViewHolderCategory(private val binding: HomeItemCategoryBinding) :
         RecyclerView.ViewHolder(binding.root) {
+
+        init {
+            binding.btnFlCategorySetting.setOnClickListener { onCategorySettingClick() }
+            tvCategoryEmptyText = binding.tvCategoryEmptyText
+        }
 
         fun onBind(item: SealedMulti.Category) = binding.also { b ->
             b.rvCategoryCategories.adapter = item.categoryAdapter
@@ -47,12 +52,12 @@ class HomeAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         fun onBind(item: SealedMulti.Video) = binding.also { b ->
 
             item.videoItemData.videoThumbnailUri?.let {
-                b.ivItemVideo.load(it){
+                b.ivItemVideo.load(it) {
                     crossfade(true)
                 }
             }
             item.videoItemData.channelThumbnailUri?.let {
-                b.ivItemChannel.load(it){
+                b.ivItemChannel.load(it) {
                     crossfade(true)
                 }
             }
@@ -69,8 +74,8 @@ class HomeAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         }
     }
 
-    class LoadingHolder(private val binding: ItemLoadingProgressBinding):
-    RecyclerView.ViewHolder(binding.root)
+    class LoadingHolder(private val binding: ItemLoadingProgressBinding) :
+        RecyclerView.ViewHolder(binding.root)
 
     override fun getItemCount(): Int = sealedMultis.size
     override fun getItemViewType(position: Int): Int = sealedMultis[position].viewType
