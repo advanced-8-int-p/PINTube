@@ -5,14 +5,14 @@ import android.content.res.ColorStateList
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import androidx.navigation.NavOptions
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.example.pintube.R
 import com.example.pintube.databinding.ActivityMainBinding
 import com.example.pintube.ui.detailpage.DetailFragment
 import com.example.pintube.ui.shorts.ShortsActivity
-import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.example.pintube.utill.ShareLink
+import com.example.pintube.utill.VideoDataInterface
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -66,7 +66,12 @@ class MainActivity : AppCompatActivity() {
         }
 
         mainFabShare.setOnClickListener {
-            mainMotion.transitionToStart()
+            val currentFragmentInstance =
+                supportFragmentManager
+                    .findFragmentById(R.id.nav_host_fragment_activity_main)?.childFragmentManager?.fragments?.first() as VideoDataInterface
+
+            val videoUrl = currentFragmentInstance.getVideoUrl()
+            ShareLink(this@MainActivity, videoUrl)
         }
 
         mainFabPin.setOnClickListener {

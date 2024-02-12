@@ -56,6 +56,7 @@ class ShortsViewModel @Inject constructor(
         channelThumbnail = this.thumbnail?.thumbnailMedium,
         title = this.video?.title,
         commentCount = this.video?.commentCount?.convertViewCount(),
+        player = this.video?.player
     )
 
 }

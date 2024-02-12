@@ -17,14 +17,16 @@ import com.example.pintube.databinding.ItemShortsBinding
 import com.example.pintube.databinding.UnknownItemBinding
 import com.example.pintube.ui.shorts.model.ShortsViewType
 import com.example.pintube.ui.shorts.model.ShortsItem
+import com.example.pintube.utill.ShareLink
 import com.example.pintube.utill.dpToPx
+import com.example.pintube.utill.getUrlFromSrc
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.PlayerConstants
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
 
 class ShortsAdapter(
     private val onBookmarkChecked: (ShortsItem) -> Unit,
-    private val onSharedChecked: (ShortsItem) -> Unit,
+    private val onSharedChecked: (String) -> Unit,
     private val onCommentChecked: (ShortsItem.Item) -> Unit,
     private val playerReady: (Boolean) -> Unit
 ) : ListAdapter<ShortsItem, ShortsAdapter.ShortsViewHolder>(
@@ -81,7 +83,7 @@ class ShortsAdapter(
     class ShortsItemViewHolder (
         private val binding: ItemShortsBinding,
         private val onBookmarkChecked: (ShortsItem) -> Unit,
-        private val onSharedChecked: (ShortsItem) -> Unit,
+        private val onSharedChecked: (String) -> Unit,
         private val onCommentChecked: (ShortsItem.Item) -> Unit,
         private val playerReady: (Boolean) -> Unit
     ) : ShortsViewHolder(binding.root) {
@@ -97,6 +99,9 @@ class ShortsAdapter(
             ivShortsImage.load(item.channelThumbnail)
             ivShortsComments.setOnClickListener {
                 onCommentChecked(item)
+            }
+            ivShortsShare.setOnClickListener {
+                item.player?.let { player -> onSharedChecked(player) }
             }
 
             vvShortsVideo.clearAnimation()

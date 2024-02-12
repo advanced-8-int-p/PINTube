@@ -19,6 +19,8 @@ import com.example.pintube.ui.shorts.adapter.ShortsAdapter
 import com.example.pintube.ui.shorts.model.CommentsItem
 import com.example.pintube.ui.shorts.model.ShortsItem
 import com.example.pintube.ui.shorts.model.ShortsViewModel
+import com.example.pintube.utill.ShareLink
+import com.example.pintube.utill.getUrlFromSrc
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -37,7 +39,7 @@ class ShortsActivity : AppCompatActivity() {
                 item
             },
             onSharedChecked = { item ->
-                item
+                ShareLink(this, item.getUrlFromSrc())
             },
             onCommentChecked = this::onCommentChecked,
             playerReady = { if (it) adapter.currentViewHolder?.playVideo() }
