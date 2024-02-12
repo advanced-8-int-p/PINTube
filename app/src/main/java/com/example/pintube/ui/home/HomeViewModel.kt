@@ -138,5 +138,6 @@ class HomeViewModel @Inject constructor(
         date = this.video?.publishedAt?.convertToDaysAgo(),
         length = this.video?.duration?.convertDurationTime(),
         id = this.video?.id,
+        channelId = this.video?.channelId,
     )
 }

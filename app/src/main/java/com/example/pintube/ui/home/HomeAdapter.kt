@@ -14,7 +14,10 @@ import com.example.pintube.databinding.ItemHeaderBinding
 import com.example.pintube.databinding.ItemLoadingProgressBinding
 import com.example.pintube.databinding.VideoItemBinding
 
-class HomeAdapter(val onCategorySettingClick: () -> Unit) :
+class HomeAdapter(
+    private val onCategorySettingClick: () -> Unit,
+    private val onVideoClick: (item: VideoItemData) -> Unit
+) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     var sealedMultis = mutableListOf<SealedMulti>()
@@ -69,10 +72,10 @@ class HomeAdapter(val onCategorySettingClick: () -> Unit) :
             item.videoItemData.date?.let { b.tvItemDate.text = it }
             item.videoItemData.length?.let { b.tvPopularItemLength.text = it }
 
-//            b.root.setOnClickListener {
-//                Log.d("jj-홈 아이템(비디오) 클릭", "$layoutPosition: ${getItem(layoutPosition)}")
-//                onItemClick(it, layoutPosition)
-//            }
+            b.root.setOnClickListener {
+                Log.d("jj-홈 아이템(비디오) 클릭", "$layoutPosition: $item")
+                onVideoClick(item.videoItemData)
+            }
         }
     }
 

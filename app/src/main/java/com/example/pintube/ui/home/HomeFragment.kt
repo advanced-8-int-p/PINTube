@@ -33,26 +33,31 @@ class HomeFragment : Fragment() {
 
     private val viewModel: HomeViewModel by viewModels()
 
+    private val onVideoClick = { item: VideoItemData ->
+        findNavController().navigate(
+            resId = R.id.navigation_detail,
+            //args = null,
+            args = Bundle().apply {
+                putString("video_id", item.id)
+            },
+            navOptions = NavOptions.Builder()
+                .setPopUpTo(R.id.navigation_home, true)
+                .build(),
+        )
+//            mainMotion.transitionToStart()
+    }
+
     private val categoryEditDialogAdapter = CategoryEditDialogAdapter { category ->
         viewModel.removeFromCategories(category)
     }
-    private val homeAdapter = HomeAdapter {
-        binding.clHomeDialogCategoryBackground.isVisible = true
-    }
+    private val homeAdapter = HomeAdapter(
+        onCategorySettingClick = {
+            binding.clHomeDialogCategoryBackground.isVisible = true
+        },
+        onVideoClick = onVideoClick
+    )
     private val popularVideoAdapter = PopularVideoAdapter(
-        onItemClick = { item ->
-            findNavController().navigate(
-                resId = R.id.navigation_detail,
-                //args = null,
-                args = Bundle().apply {
-                    putString("video_id", item.id)
-                },
-                navOptions = NavOptions.Builder()
-                    .setPopUpTo(R.id.navigation_home, true)
-                    .build(),
-            )
-//            mainMotion.transitionToStart()
-        }
+        onItemClick = onVideoClick
     )
     private val categoryAdapter = CategoryAdapter(
         onItemClick = { query -> viewModel.searchCategory(query) }
