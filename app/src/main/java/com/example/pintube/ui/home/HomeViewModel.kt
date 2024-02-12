@@ -12,6 +12,8 @@ import com.example.pintube.domain.repository.LocalSearchRepository
 import com.example.pintube.domain.repository.LocalVideoRepository
 import com.example.pintube.domain.repository.CategoryPrefRepository
 import com.example.pintube.domain.repository.PageTokenPrefRepository
+import com.example.pintube.domain.usecase.GetPopularVideosUseCase
+import com.example.pintube.domain.usecase.GetSearchVideosUseCase
 import com.example.pintube.utill.convertDurationTime
 import com.example.pintube.utill.convertToDaysAgo
 import com.example.pintube.utill.convertViewCount
@@ -22,12 +24,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val repository: ApiRepository,
-    private val localSearchRepository: LocalSearchRepository,
-    private val localVideoRepository: LocalVideoRepository,
-    private val localChannelRepository: LocalChannelRepository,
-    private val categoryPrefRepository: CategoryPrefRepository,
-    private val pageTokenPrefRepository: PageTokenPrefRepository,
+    private val getPopularVideosUseCase: GetPopularVideosUseCase,
+    private val getCategoryVideos: GetSearchVideosUseCase,
 ) : ViewModel() {
 
     private var _populars: MutableLiveData<List<VideoItemData>> =
@@ -52,7 +50,7 @@ class HomeViewModel @Inject constructor(
 
     private fun updatePopulars() = viewModelScope.launch(Dispatchers.IO) {
         try {
-            val result = getPopularVideos()
+            val result = getPopularVideosUseCase()
             _populars.postValue(
                 result.map {
                     it.convertVideoItemData()
@@ -74,49 +72,6 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    private suspend fun getPopularVideos(): List<VideoWithThumbnail> {
-        var result = localVideoRepository.findPopularVideos()
-        if (result.isNullOrEmpty()) {
-            val channelIds = repository.getPopularVideo()?.mapNotNull { video ->
-                localVideoRepository.saveVideos(video, true)
-                video.channelId
-            }.orEmpty()
-            repository.getChannelDetails(channelIds)?.forEach { localChannelRepository.saveChannel(it) }
-            result = localVideoRepository.findPopularVideos()
-        }
-        return result ?: emptyList()
-    }
-
-    private suspend fun getCategoryVideos(query: String): List<VideoWithThumbnail> {
-        val page = (_categoryVideos.value?.size?.div(50)?: 0).toString()
-        var searchResult = localSearchRepository.findSearchRecord(query)
-        if (searchResult.isNullOrEmpty()) {
-            val videoIds = mutableListOf<String>()
-            val channelIds = mutableListOf<String>()
-            val token = pageTokenPrefRepository.getPageToken(query,page)
-
-            repository.searchResult(query = query, pageToken = token)?.forEach { item ->
-                localSearchRepository.saveSearchResult(item, query)
-                item.id?.let { videoIds.add(it) }
-                item.channelId?.let { channelIds.add(it) }
-            }
-
-            repository.getContentDetails(videoIds)?.forEach {
-                localVideoRepository.saveVideos(it)
-            }
-            repository.getChannelDetails(channelIds)?.forEach {
-                localChannelRepository.saveChannel(it)
-            }
-            pageTokenPrefRepository.saveNextPageToken(
-                query = query,
-                page = page,
-                token = repository.getNextPageToken()
-            )
-
-            searchResult = localSearchRepository.findSearchRecord(query)
-        }
-        return searchResult ?: emptyList()
-    }
 
 //    fun addAllToCategories(elements: Collection<String>) {
 //        _categories.value = _categories.value!!.toMutableList().apply { addAll(elements) }
