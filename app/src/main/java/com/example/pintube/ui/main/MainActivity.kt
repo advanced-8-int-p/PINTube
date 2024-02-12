@@ -43,18 +43,17 @@ class MainActivity : AppCompatActivity() {
         navView.setupWithNavController(navController)
         navView.background = null
 
-        var currentFragment = (R.id.navigation_home)
+        var lastFragment = (R.id.navigation_home)
+        var currentFragment = R.id.navigation_home
 
         mainFab.setOnClickListener {
             if (currentFragment == R.id.navigation_detail) {
-                mainFab.setImageResource(R.drawable.ic_main_fab_plus)
                 if (mainMotion.currentState == mainMotion.startState) {
                     mainMotion.transitionToEnd()
                 } else {
                     mainMotion.transitionToStart()
                 }
             } else {
-                mainFab.setImageResource(R.drawable.ic_nav_fab_shorts)
                 startActivity(
                     Intent(
                         this@MainActivity,
@@ -64,18 +63,13 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        mainFabShorts.setOnClickListener {
-            startActivity(
-                Intent(
-                    this@MainActivity,
-                    ShortsActivity::class.java
-                )
-            )
+        mainFabShare.setOnClickListener {
+            mainMotion.transitionToStart()
         }
 
         mainFabPin.setOnClickListener {
             val navOptions = NavOptions.Builder()
-                .setPopUpTo(currentFragment, true)
+                .setPopUpTo(lastFragment, true)
                 .build()
             navController.navigate(
                 R.id.navigation_detail,
@@ -87,10 +81,13 @@ class MainActivity : AppCompatActivity() {
 
 
         navController.addOnDestinationChangedListener { _, destination, _ ->
-
+            currentFragment = destination.id
             when (destination.id) {
-                R.id.navigation_home -> currentFragment = destination.id
-                R.id.navigation_mypage -> currentFragment = destination.id
+                R.id.navigation_home, R.id.navigation_mypage -> lastFragment = destination.id
+            }
+            when (destination.id) {
+                R.id.navigation_detail -> mainFab.setImageResource(R.drawable.ic_main_fab_plus)
+                else -> mainFab.setImageResource(R.drawable.ic_nav_fab_shorts)
             }
         }
     }
