@@ -209,4 +209,5 @@ class DetailFragment : Fragment() {
         }
     }
     private fun onRepliesClick(comments: List<DetailCommentsItem.Comments?>?) = Unit
+
 }

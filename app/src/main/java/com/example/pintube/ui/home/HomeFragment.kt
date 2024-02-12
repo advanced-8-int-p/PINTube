@@ -34,14 +34,11 @@ class HomeFragment : Fragment() {
     private val popularVideoAdapter = PopularVideoAdapter(
         onItemClick = { item ->
             findNavController().navigate(
-                resId = R.id.navigation_detail,
+                resId = R.id.action_navigation_home_to_navigation_detail,
                 //args = null,
                 args = Bundle().apply {
                     putString("video_id", item.id)
-                },
-                navOptions = NavOptions.Builder()
-                    .setPopUpTo(R.id.navigation_home, true)
-                    .build(),
+                }
             )
 //            mainMotion.transitionToStart()
         }

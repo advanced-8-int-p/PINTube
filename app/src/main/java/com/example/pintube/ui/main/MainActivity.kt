@@ -1,13 +1,16 @@
 package com.example.pintube.ui.main
 
 import android.content.Intent
+import android.content.res.ColorStateList
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.example.pintube.R
 import com.example.pintube.databinding.ActivityMainBinding
+import com.example.pintube.ui.detailpage.DetailFragment
 import com.example.pintube.ui.shorts.ShortsActivity
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import dagger.hilt.android.AndroidEntryPoint
@@ -43,7 +46,6 @@ class MainActivity : AppCompatActivity() {
         navView.setupWithNavController(navController)
         navView.background = null
 
-        var lastFragment = (R.id.navigation_home)
         var currentFragment = R.id.navigation_home
 
         mainFab.setOnClickListener {
@@ -68,13 +70,13 @@ class MainActivity : AppCompatActivity() {
         }
 
         mainFabPin.setOnClickListener {
-            val navOptions = NavOptions.Builder()
-                .setPopUpTo(lastFragment, true)
-                .build()
             navController.navigate(
-                R.id.navigation_detail,
+                when(currentFragment) {
+                    R.id.navigation_home -> R.id.action_navigation_home_to_navigation_detail
+                    R.id.navigation_mypage -> R.id.action_navigation_mypage_to_navigation_detail
+                    else -> R.id.action_navigation_home_to_navigation_detail
+                },
                 args = null,
-                navOptions = navOptions,
             )
             mainMotion.transitionToStart()
         }
@@ -83,12 +85,30 @@ class MainActivity : AppCompatActivity() {
         navController.addOnDestinationChangedListener { _, destination, _ ->
             currentFragment = destination.id
             when (destination.id) {
-                R.id.navigation_home, R.id.navigation_mypage -> lastFragment = destination.id
+                R.id.navigation_home, R.id.navigation_mypage -> currentFragment = destination.id
             }
             when (destination.id) {
-                R.id.navigation_detail -> mainFab.setImageResource(R.drawable.ic_main_fab_plus)
-                else -> mainFab.setImageResource(R.drawable.ic_nav_fab_shorts)
+                R.id.navigation_detail -> with(mainFab){
+                    setImageResource(R.drawable.ic_main_fab_plus)
+                    backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(context, R.color.main_color))
+                }
+                else -> with(mainFab){
+                    setImageResource(R.drawable.ic_nav_fab_shorts)
+                    backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(context, R.color.white))
+                }
             }
+        }
+    }
+
+    override fun onBackPressed() {
+        val currentFragment = navHostFragment.childFragmentManager.fragments[0]
+
+        if (currentFragment is DetailFragment) {
+            navController.navigate(
+                resId = R.id.action_navigation_detail_to_navigation_home,
+            )
+        } else {
+            super.onBackPressed()
         }
     }
 
