@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
+import coil.request.CachePolicy
 import com.example.pintube.databinding.PopularItemBinding
 
 class PopularVideoAdapter(
@@ -26,10 +27,16 @@ class PopularVideoAdapter(
             item.videoThumbnailUri?.let {
                 b.ivPopularItemVideo.load(it){
                     crossfade(true)
+                    allowHardware(true)
+                    if (position < 5) diskCachePolicy(CachePolicy.ENABLED)
+                    else memoryCachePolicy(CachePolicy.ENABLED)
                 } }
             item.channelThumbnailUri?.let {
                 b.ivPopularItemChannel.load(it){
                 crossfade(true)
+                    allowHardware(true)
+                    if (position < 5) diskCachePolicy(CachePolicy.ENABLED)
+                    else memoryCachePolicy(CachePolicy.ENABLED)
             } }
             item.title?.let { b.tvPopularItemTitle.text = it }
             item.channelName?.let { b.tvPopularItemName.text = it }
