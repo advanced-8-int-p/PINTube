@@ -47,6 +47,7 @@ class HomeViewModel @Inject constructor(
 
     init {
         updatePopulars()
+        categories.value?.let { searchCategory(it.first()) }
     }
 
     private fun updatePopulars() = viewModelScope.launch(Dispatchers.IO) {
