@@ -11,6 +11,7 @@
         android:id="@+id/tv_category_dialog_item_name"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/roboto_regular"
         android:text=" category name"
         android:textSize="15sp"
         app:layout_constraintBottom_toBottomOf="parent"

@@ -109,6 +109,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="24dp"
                 android:layout_marginTop="8dp"
+                android:fontFamily="@font/roboto_regular"
                 android:text="카테고리를 추가해주세요."
                 android:visibility="gone"
                 app:layout_constraintStart_toStartOf="@id/rv_dialog_category_edit_list"

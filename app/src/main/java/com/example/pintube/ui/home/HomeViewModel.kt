@@ -41,13 +41,15 @@ class HomeViewModel @Inject constructor(
     val categories: LiveData<List<String>> get() = _categories
 
     private var _categoryVideos: MutableLiveData<List<VideoItemData>> =
-        //MutableLiveData(emptyList())
-        MutableLiveData(List(10) { VideoItemData() })  //ddd
+        MutableLiveData(emptyList())
+
+    //        MutableLiveData(List(10) { VideoItemData() })  //ddd
     val categoryVideos: LiveData<List<VideoItemData>> get() = _categoryVideos
 
     init {
         updatePopulars()
-        categories.value?.let { searchCategory(it.first()) }
+        if (categories.value!!.isEmpty().not())
+            categories.value?.let { searchCategory(it.first()) }
     }
 
     private fun updatePopulars() = viewModelScope.launch(Dispatchers.IO) {

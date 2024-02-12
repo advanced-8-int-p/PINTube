@@ -4,6 +4,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import coil.load
@@ -43,6 +44,7 @@ class HomeAdapter(val onCategorySettingClick: () -> Unit) :
 
         fun onBind(item: SealedMulti.Category) = binding.also { b ->
             b.rvCategoryCategories.adapter = item.categoryAdapter
+            b.tvCategoryEmptyText.isVisible = item.categoryAdapter.itemCount == 0
         }
     }
 
@@ -74,8 +76,13 @@ class HomeAdapter(val onCategorySettingClick: () -> Unit) :
         }
     }
 
-    class LoadingHolder(private val binding: ItemLoadingProgressBinding) :
-        RecyclerView.ViewHolder(binding.root)
+    inner class LoadingHolder(private val binding: ItemLoadingProgressBinding) :
+        RecyclerView.ViewHolder(binding.root) {
+        fun onBind() {
+            Log.d("jj-LoadingHolder onBind", "${binding.root}")
+            binding.root.isVisible = sealedMultis.size > 4
+        }
+    }
 
     override fun getItemCount(): Int = sealedMultis.size
     override fun getItemViewType(position: Int): Int = sealedMultis[position].viewType
@@ -133,7 +140,7 @@ class HomeAdapter(val onCategorySettingClick: () -> Unit) :
 
             is SealedMulti.Video -> (holder as MultiViewHolderVideo).onBind(item)
 
-            is SealedMulti.Loading -> Unit
+            is SealedMulti.Loading -> (holder as LoadingHolder).onBind()
         }
     }
 
