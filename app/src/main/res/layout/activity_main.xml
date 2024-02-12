@@ -97,7 +97,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/ic_nav_fab_shorts"
-        app:tint = "@color/main_color"
         app:backgroundTint="@color/white"
         app:fabCustomSize="60dp"
         app:maxImageSize="28.67dp"
