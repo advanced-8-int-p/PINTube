@@ -26,6 +26,7 @@ class ShortsAdapter(
     private val onBookmarkChecked: (ShortsItem) -> Unit,
     private val onSharedChecked: (ShortsItem) -> Unit,
     private val onCommentChecked: (ShortsItem.Item) -> Unit,
+    private val playerReady: (Boolean) -> Unit
 ) : ListAdapter<ShortsItem, ShortsAdapter.ShortsViewHolder>(
 
     object : DiffUtil.ItemCallback<ShortsItem>() {
@@ -57,6 +58,8 @@ class ShortsAdapter(
                 onBookmarkChecked = onBookmarkChecked,
                 onSharedChecked = onSharedChecked,
                 onCommentChecked = onCommentChecked,
+                playerReady = playerReady,
+
             )
 
             else -> ShortsUnknownViewHolder(
@@ -68,12 +71,22 @@ class ShortsAdapter(
         holder.onBind(getItem(position))
     }
 
+    override fun onViewRecycled(holder: ShortsViewHolder) {
+        super.onViewRecycled(holder)
+        if (holder is ShortsItemViewHolder) {
+            holder.youTubePlayer = null
+        }
+    }
+
     class ShortsItemViewHolder (
         private val binding: ItemShortsBinding,
         private val onBookmarkChecked: (ShortsItem) -> Unit,
         private val onSharedChecked: (ShortsItem) -> Unit,
         private val onCommentChecked: (ShortsItem.Item) -> Unit,
+        private val playerReady: (Boolean) -> Unit
     ) : ShortsViewHolder(binding.root) {
+
+        var youTubePlayer: YouTubePlayer? = null
         override fun onBind(item: ShortsItem) = with(binding) {
             if (item !is ShortsItem.Item) {
                 return@with
@@ -85,6 +98,8 @@ class ShortsAdapter(
             ivShortsComments.setOnClickListener {
                 onCommentChecked(item)
             }
+
+            vvShortsVideo.clearAnimation()
 
             val windowManager = itemView.context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
             val displayMetrics = DisplayMetrics()
@@ -101,7 +116,9 @@ class ShortsAdapter(
             vvShortsVideo.addYouTubePlayerListener(
                 object : AbstractYouTubePlayerListener() {
                     override fun onReady(youTubePlayer: YouTubePlayer) {
-                        item.id?.let { youTubePlayer.loadVideo(it, 0f) }
+                        item.id?.let { youTubePlayer.cueVideo(it, 0f) }
+                        this@ShortsItemViewHolder.youTubePlayer = youTubePlayer
+                        playerReady(true)
                     }
 
                     override fun onStateChange(
@@ -113,16 +130,35 @@ class ShortsAdapter(
                             youTubePlayer.play()
                         }
                     }
-                }
-            )
+                })
         }
 
+        fun playVideo() {
+            youTubePlayer?.play()
+        }
     }
 
     class ShortsUnknownViewHolder(
         private val binding: UnknownItemBinding,
     ): ShortsViewHolder(binding.root) {
         override fun onBind(item: ShortsItem) = Unit
+    }
+
+    var currentViewHolder: ShortsItemViewHolder? = null
+    override fun onViewAttachedToWindow(holder: ShortsViewHolder) {
+        super.onViewAttachedToWindow(holder)
+        if (holder is ShortsItemViewHolder) {
+            currentViewHolder = holder
+        }
+    }
+
+    override fun getItemViewType(position: Int): Int {
+        val item = getItem(position)
+        return if (item is ShortsItem.Item) {
+            ShortsViewType.ITEM.ordinal
+        } else {
+            ShortsViewType.UNKNOWN.ordinal
+        }
     }
 
 }
