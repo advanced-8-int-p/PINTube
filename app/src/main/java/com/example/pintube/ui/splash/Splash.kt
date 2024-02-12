@@ -26,11 +26,12 @@ class Splash : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
-
+        init()
     }
 
     private fun init() {
         initViewModel()
+        setMotion()
     }
 
     private fun initViewModel() = with(viewModel){
@@ -38,26 +39,42 @@ class Splash : AppCompatActivity() {
         }
     }
 
-    override fun onResume() {
-        super.onResume()
-        binding.mlSplashLayout.post {
-            setMotion()
-        }
-    }
     private fun setMotion() = with(binding.mlSplashLayout) {
-        setTransitionListener(object : MotionLayout.TransitionListener {
-            override fun onTransitionChange(motionLayout: MotionLayout, startId: Int, endId: Int, progress: Float) {}
-            override fun onTransitionStarted(motionLayout: MotionLayout, startId: Int, endId: Int) {}
-            override fun onTransitionTrigger(motionLayout: MotionLayout, triggerId: Int, positive: Boolean, progress: Float) {}
-            override fun onTransitionCompleted(motionLayout: MotionLayout, currentId: Int) {
-                when (currentId) {
-                    R.id.end -> setTransitionAction(R.id.end, R.id.statusbar, 600)
-                    R.id.statusbar -> setTransitionAction(R.id.statusbar, R.id.loading, 700)
-                    R.id.loading -> navigateToMain()
+        post {
+            setTransitionListener(object : MotionLayout.TransitionListener {
+                override fun onTransitionChange(
+                    motionLayout: MotionLayout,
+                    startId: Int,
+                    endId: Int,
+                    progress: Float
+                ) {
                 }
-            }
-        })
-        setTransitionAction(R.id.start, R.id.end, 600)
+
+                override fun onTransitionStarted(
+                    motionLayout: MotionLayout,
+                    startId: Int,
+                    endId: Int
+                ) {
+                }
+
+                override fun onTransitionTrigger(
+                    motionLayout: MotionLayout,
+                    triggerId: Int,
+                    positive: Boolean,
+                    progress: Float
+                ) {
+                }
+
+                override fun onTransitionCompleted(motionLayout: MotionLayout, currentId: Int) {
+                    when (currentId) {
+                        R.id.end -> setTransitionAction(R.id.end, R.id.statusbar, 600)
+                        R.id.statusbar -> setTransitionAction(R.id.statusbar, R.id.loading, 500)
+                        R.id.loading -> navigateToMain()
+                    }
+                }
+            })
+            setTransitionAction(R.id.start, R.id.end, 600)
+        }
     }
 
     private fun setTransitionAction(startId: Int, endId: Int, duration: Int) = with(binding.mlSplashLayout) {

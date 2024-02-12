@@ -68,7 +68,7 @@
             android:id="@+id/iv_splash_status_loading"
             app:layout_constraintWidth_percent="0.55"
             android:layout_width="0dp"
-            android:layout_height="14dp"
+            android:layout_height="4dp"
             app:layout_constraintBottom_toBottomOf="@+id/iv_splash_status"
             android:visibility="gone"
             app:layout_constraintTop_toTopOf="@+id/iv_splash_status"
@@ -101,7 +101,7 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:rotation="-90"
-            app:layout_constraintHorizontal_bias="0.2"
+            app:layout_constraintHorizontal_bias="0.16"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintHeight_percent="0.1"
             app:layout_constraintTop_toTopOf="parent"
@@ -112,7 +112,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.6"
             android:layout_width="0dp"
-            android:layout_height="14dp"
+            android:layout_height="4dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
@@ -120,7 +120,7 @@
             android:id="@+id/iv_splash_status_loading"
             app:layout_constraintWidth_percent="0.01"
             android:layout_width="0dp"
-            android:layout_height="14dp"
+            android:layout_height="4dp"
             app:layout_constraintBottom_toBottomOf="@+id/iv_splash_status"
             app:layout_constraintTop_toTopOf="@+id/iv_splash_status"
             app:layout_constraintStart_toStartOf="@+id/iv_splash_status" />
@@ -150,18 +150,18 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:rotation="-90"
-            app:layout_constraintHorizontal_bias="0.2"
+            app:layout_constraintHorizontal_bias="0.22"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintHeight_percent="0.1"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
         <Constraint
             android:id="@+id/iv_splash_status"
-            app:layout_constraintWidth_percent="0.45"
+            app:layout_constraintWidth_percent="0.40"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.6"
             android:layout_width="0dp"
-            android:layout_height="14dp"
+            android:layout_height="4dp"
             android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -170,7 +170,7 @@
             android:id="@+id/iv_splash_status_loading"
             app:layout_constraintWidth_percent="1"
             android:layout_width="0dp"
-            android:layout_height="14dp"
+            android:layout_height="4dp"
             app:layout_constraintEnd_toEndOf="@+id/iv_splash_status"
             app:layout_constraintBottom_toBottomOf="@+id/iv_splash_status"
             app:layout_constraintTop_toTopOf="@+id/iv_splash_status"
@@ -179,5 +179,5 @@
     <Transition
         app:constraintSetStart="@+id/statusbar"
         app:constraintSetEnd="@+id/loading"
-        app:duration="700"/>
+        app:duration="500"/>
 </MotionScene>
