@@ -1,5 +1,6 @@
 package com.example.pintube.domain.usecase
 
+import android.util.Log
 import com.example.pintube.data.repository.local.VideoWithThumbnail
 import com.example.pintube.domain.repository.ApiRepository
 import com.example.pintube.domain.repository.LocalChannelRepository
@@ -16,14 +17,19 @@ class GetSearchVideosUseCase @Inject constructor(
     private val pageTokenPrefRepository: PageTokenPrefRepository,
 ) {
     suspend operator fun invoke(query: String, page: String = "0"): List<VideoWithThumbnail> {
-        var searchResult = localSearchRepository.findSearchRecord(query)
+        var searchResult = localSearchRepository.findSearchRecord("$query$page")
+        Log.d(
+            "jj-검색유즈 invoke",
+            "$query$page 첫제목: ${searchResult?.firstOrNull()?.video?.title}"
+        )
         if (searchResult.isNullOrEmpty()) {
             val videoIds = mutableListOf<String>()
             val channelIds = mutableListOf<String>()
             val token = pageTokenPrefRepository.getPageToken(query, page)
+            Log.d("jj-검색유즈 invoke", "$query$page getPageToken: $token")
 
             apiRepository.searchResult(query = query, pageToken = token)?.forEach { item ->
-                localSearchRepository.saveSearchResult(item, query)
+                localSearchRepository.saveSearchResult(item, "$query$page")
                 item.id?.let { videoIds.add(it) }
                 item.channelId?.let { channelIds.add(it) }
             }
@@ -36,11 +42,15 @@ class GetSearchVideosUseCase @Inject constructor(
             }
             pageTokenPrefRepository.saveNextPageToken(
                 query = query,
-                page = page,
+                page = (page.toInt() + 1).toString(),
                 token = apiRepository.getNextPageToken()
             )
+            Log.d(
+                "jj-검색유즈 invoke",
+                "apiRepository.getNextPageToken: ${apiRepository.getNextPageToken()}"
+            )
 
-            searchResult = localSearchRepository.findSearchRecord(query)
+            searchResult = localSearchRepository.findSearchRecord("$query$page")
         }
         return searchResult ?: emptyList()
     }
