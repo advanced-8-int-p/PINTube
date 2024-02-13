@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
-import android.view.View.OnClickListener
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
@@ -17,6 +16,7 @@ import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.GridLayoutManager.SpanSizeLookup
+import androidx.room.util.query
 import com.example.pintube.R
 import com.example.pintube.databinding.FragmentHomeBinding
 import com.example.pintube.ui.Search.SearchActivity
@@ -33,27 +33,6 @@ class HomeFragment : Fragment() {
 
     private val viewModel: HomeViewModel by viewModels()
 
-    //ddd
-    private val homeAdapter by lazy { HomeAdapter() }
-    private val popularVideoAdapter = PopularVideoAdapter(
-        onItemClick = { item ->
-            findNavController().navigate(
-                resId = R.id.action_navigation_home_to_navigation_detail,
-                //args = null,
-                args = Bundle().apply {
-                    putString("video_id", item.id)
-                }
-            )
-//            mainMotion.transitionToStart()
-        },
-        onBookmarkClick = { item ->
-            if (item.isSaved.not()){
-                viewModel.addBookmark(item)
-            } else {
-                viewModel.removeBookmark(item)
-            }
-        }
-
     private val onVideoClick = { item: VideoItemData ->
         findNavController().navigate(
             resId = R.id.navigation_detail,
@@ -67,19 +46,25 @@ class HomeFragment : Fragment() {
         )
 //            mainMotion.transitionToStart()
     }
-
+    //ddd
     private val categoryEditDialogAdapter = CategoryEditDialogAdapter { category ->
         viewModel.removeFromCategories(category)
     }
-    private val homeAdapter = HomeAdapter(
+    private val homeAdapter by lazy {  HomeAdapter(
         onCategorySettingClick = {
             binding.clHomeDialogCategoryBackground.isVisible = true
         },
         onVideoClick = onVideoClick
-    )
+    )}
     private val popularVideoAdapter = PopularVideoAdapter(
-        onItemClick = onVideoClick
-
+        onItemClick = onVideoClick,
+        onBookmarkClick = { item ->
+            if (item.isSaved.not()){
+                viewModel.addBookmark(item)
+            } else {
+                viewModel.removeBookmark(item)
+            }
+        }
     )
     private val categoryAdapter = CategoryAdapter(
         onItemClick = { query -> viewModel.searchCategory(query) }
@@ -101,11 +86,6 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        binding.ivHomeSearch.setOnClickListener {
-            val intent = Intent(requireContext(), SearchActivity::class.java)
-            startActivity(intent)
-        }
 
         initView()
         initViewModel()
@@ -130,6 +110,7 @@ class HomeFragment : Fragment() {
                 }
             }
         }
+
         b.rvDialogCategoryEditList.adapter = categoryEditDialogAdapter
 
         b.ivHomeSearch.setOnClickListener {
@@ -162,7 +143,7 @@ class HomeFragment : Fragment() {
             b.clHomeDialogCategoryEdit.isVisible = true
         }
 
-        val onClickListenerOfBtnTvDialogCategoryAddOk = OnClickListener {
+        val onClickListenerOfBtnTvDialogCategoryAddOk = View.OnClickListener {
             imm.hideSoftInputFromWindow(it.windowToken, 0)
 
             b.clHomeDialogCategoryEdit.isVisible = true
@@ -189,6 +170,7 @@ class HomeFragment : Fragment() {
 
         vm.populars.observe(viewLifecycleOwner) {
             popularVideoAdapter.submitList(it)
+            Log.d("pop", "$it")  //ddd
         }
         vm.categories.observe(viewLifecycleOwner) {
             categoryAdapter.submitList(it)

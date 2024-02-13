@@ -3,6 +3,7 @@ package com.example.pintube.ui.main
 import android.content.Intent
 import android.content.res.ColorStateList
 import android.os.Bundle
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.navigation.fragment.NavHostFragment
@@ -28,6 +29,7 @@ class MainActivity : AppCompatActivity() {
         navHostFragment.navController
     }
 
+    private val viewModel: MainViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -72,17 +74,16 @@ class MainActivity : AppCompatActivity() {
 
             val videoUrl = currentFragmentInstance.getVideoUrl()
             ShareLink(this@MainActivity, videoUrl)
+            mainMotion.transitionToStart()
         }
 
         mainFabPin.setOnClickListener {
-            navController.navigate(
-                when(currentFragment) {
-                    R.id.navigation_home -> R.id.action_navigation_home_to_navigation_detail
-                    R.id.navigation_mypage -> R.id.action_navigation_mypage_to_navigation_detail
-                    else -> R.id.action_navigation_home_to_navigation_detail
-                },
-                args = null,
-            )
+            val currentFragmentInstance =
+                supportFragmentManager
+                    .findFragmentById(R.id.nav_host_fragment_activity_main)?.childFragmentManager?.fragments?.first() as VideoDataInterface
+
+            val videoId = currentFragmentInstance.getVideoId()
+            viewModel.onClickBookmark(videoId)
             mainMotion.transitionToStart()
         }
 

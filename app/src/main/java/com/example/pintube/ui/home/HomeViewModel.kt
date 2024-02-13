@@ -7,11 +7,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.pintube.data.repository.local.VideoWithThumbnail
 import com.example.pintube.domain.repository.ApiRepository
-import com.example.pintube.domain.repository.CategoryPrefRepository
 import com.example.pintube.domain.repository.LocalChannelRepository
 import com.example.pintube.domain.repository.LocalSearchRepository
 import com.example.pintube.domain.repository.LocalVideoRepository
-
 import com.example.pintube.domain.repository.CategoryPrefRepository
 import com.example.pintube.domain.repository.LocalFavoriteRepository
 import com.example.pintube.domain.repository.PageTokenPrefRepository
@@ -44,15 +42,13 @@ class HomeViewModel @Inject constructor(
     val categories: LiveData<List<String>> get() = _categories
 
     private var _categoryVideos: MutableLiveData<List<VideoItemData>> =
-        MutableLiveData(emptyList())
-
-    //        MutableLiveData(List(10) { VideoItemData() })  //ddd
+        //MutableLiveData(emptyList())
+        MutableLiveData(List(10) { VideoItemData() })  //ddd
     val categoryVideos: LiveData<List<VideoItemData>> get() = _categoryVideos
 
     init {
         updatePopulars()
-        if (categories.value!!.isEmpty().not())
-            categories.value?.let { searchCategory(it.first()) }
+        categories.value?.let { searchCategory(it.first()) }
     }
 
     private fun updatePopulars() = viewModelScope.launch(Dispatchers.IO) {
@@ -82,7 +78,6 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-
     fun addBookmark(item: VideoItemData) = viewModelScope.launch(Dispatchers.IO) {
         item.id?.let { localFavoriteRepository.addBookmark(it) }
         _populars.postValue(populars.value?.map {
@@ -97,53 +92,10 @@ class HomeViewModel @Inject constructor(
         _populars.postValue(populars.value?.map {
             it.copy(
                 isSaved = localFavoriteRepository.checkIsBookmark(it.id ?: "")
-    private suspend fun getPopularVideos(): List<VideoWithThumbnail> {
-        var result = localVideoRepository.findPopularVideos()
-        if (result.isNullOrEmpty()) {
-            val channelIds = repository.getPopularVideo()?.mapNotNull { video ->
-                localVideoRepository.saveVideos(video, true)
-                video.channelId
-            }.orEmpty()
-            repository.getChannelDetails(channelIds)
-                ?.forEach { localChannelRepository.saveChannel(it) }
-            result = localVideoRepository.findPopularVideos()
-        }
-        return result ?: emptyList()
-    }
-
-    private suspend fun getCategoryVideos(query: String): List<VideoWithThumbnail> {
-        val page = (_categoryVideos.value?.size?.div(50) ?: 0).toString()
-        var searchResult = localSearchRepository.findSearchRecord(query)
-        if (searchResult.isNullOrEmpty()) {
-            val videoIds = mutableListOf<String>()
-            val channelIds = mutableListOf<String>()
-            val token = pageTokenPrefRepository.getPageToken(query, page)
-
-            repository.searchResult(query = query, pageToken = token)?.forEach { item ->
-                localSearchRepository.saveSearchResult(item, query)
-                item.id?.let { videoIds.add(it) }
-                item.channelId?.let { channelIds.add(it) }
-            }
-
-            repository.getContentDetails(videoIds)?.forEach {
-                localVideoRepository.saveVideos(it)
-            }
-            repository.getChannelDetails(channelIds)?.forEach {
-                localChannelRepository.saveChannel(it)
-            }
-            pageTokenPrefRepository.saveNextPageToken(
-                query = query,
-                page = page,
-                token = repository.getNextPageToken()
             )
         })
     }
 
-
-
-//    fun addAllToCategories(elements: Collection<String>) {
-//        _categories.value = _categories.value!!.toMutableList().apply { addAll(elements) }
-//    }
     fun addToCategories(category: String) {
         _categories.value = _categories.value!!.toMutableList().apply { add(category) }
     }
@@ -151,6 +103,11 @@ class HomeViewModel @Inject constructor(
     fun removeFromCategories(category: String) {
         _categories.value = _categories.value!!.toMutableList().apply { remove(category) }
     }
+
+
+//    fun addAllToCategories(elements: Collection<String>) {
+//        _categories.value = _categories.value!!.toMutableList().apply { addAll(elements) }
+//    }
 
     private fun VideoWithThumbnail.convertVideoItemData() = VideoItemData(
         videoThumbnailUri = this.video?.thumbnailHigh,
@@ -161,6 +118,5 @@ class HomeViewModel @Inject constructor(
         date = this.video?.publishedAt?.convertToDaysAgo(),
         length = this.video?.duration?.convertDurationTime(),
         id = this.video?.id,
-        channelId = this.video?.channelId,
     )
 }
