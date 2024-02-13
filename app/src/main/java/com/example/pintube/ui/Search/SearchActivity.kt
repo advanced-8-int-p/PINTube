@@ -35,13 +35,12 @@ class SearchActivity : AppCompatActivity() {
 
     private val apiRepository: ApiRepository = ApiRepositoryImpl(YouTubeApi.youtubeNetwork)
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
         binding = ActivitySearchBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        showXButton()
 
         val recyclerView = binding.rvSearchList
         recyclerView.layoutManager = LinearLayoutManager(this)
@@ -75,6 +74,7 @@ class SearchActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
+            //
             AlertDialog.Builder(this)
                 .setIcon(R.drawable.pintube_logo)
                 .setTitle("검색기록 전체삭제")
@@ -87,6 +87,8 @@ class SearchActivity : AppCompatActivity() {
                     dialog.dismiss()
                 }
                 .show()
+
+            SharedPrefManager.clearSearchHistory(this)
 
         }
 
@@ -117,7 +119,7 @@ class SearchActivity : AppCompatActivity() {
                 searchVideo(query)
                 binding.etSearchFragmentBar.setText("$query")
 
-                Toast.makeText(this@SearchActivity, "클릭", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@SearchActivity, "$query 클릭", Toast.LENGTH_SHORT).show()
 
             }
             override fun onRemoveClick(position: Int) {
@@ -127,7 +129,6 @@ class SearchActivity : AppCompatActivity() {
                 adapter.notifyDataSetChanged()
             }
         }
-
     }
 
     //검색창에 텍스트 입력되면 x버튼 나옴. 지워지면 없어짐.
@@ -147,7 +148,6 @@ class SearchActivity : AppCompatActivity() {
             setFragment(searchResultFragment)
         }
     }
-
 
     private fun setFragment(frag: Fragment) {
         supportFragmentManager.commit {

@@ -34,6 +34,7 @@ class SearchResultFragment : Fragment() {
     private val binding get() = _binding!!
     private var searchAdapter: SearchResultAdapter? = null
     private val items = ArrayList<SearchEntity>()
+    private val cItems = ArrayList<VideoEntity>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -48,6 +49,7 @@ class SearchResultFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val searchResults = arguments?.getParcelableArrayList<SearchEntity>("searchResults")
+        val contentResult = arguments?.getParcelableArrayList<VideoEntity>("contentResults")
 
         var viewSelect = resources.getStringArray(R.array.view)
         var viewAdapter = ArrayAdapter<String>(requireContext(), android.R.layout.simple_spinner_dropdown_item, viewSelect)

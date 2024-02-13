@@ -25,14 +25,13 @@ class SearchResultAdapter( private val items : MutableList<SearchEntity>) : Recy
 
     override fun onBindViewHolder(holder: SearchResultViewHolder, position: Int) {
         val item = items[position]
-//        val vCount = countItem[position]
+
+
 
         holder.mainTitle.text = item.title?.replace("&#39;", "'")
         holder.chTitle.text = item.channelTitle
         holder.uploadDate.text = item.publishedAt?.convertToDaysAgo()
-//        holder.viewCount.text = vCount.viewCount?.convertViewCount()
         holder.mainImage.load(items[position].thumbnailHigh)
-
 
 
     }
