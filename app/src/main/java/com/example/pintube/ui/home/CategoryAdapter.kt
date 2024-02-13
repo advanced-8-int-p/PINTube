@@ -21,18 +21,19 @@ class CategoryAdapter(
     override fun areContentsTheSame(oldItem: String, newItem: String): Boolean =
         oldItem == newItem
 }) {
-    private var selectedItem: String? = null
+    private var _selectedItem: String? = null
+    val selectedItem get() = _selectedItem  // 무한스크롤 현재 카테고리 체크를 위해
 
     inner class CategoryViewHolder(private val binding: CategoryItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun onBind(item: String) = binding.also { b ->
 //            Log.d("jj-카테고리뷰홀더 onBind", model)  //ddd
-            if (selectedItem == null) selectedItem = item
-            updateUI(item == selectedItem, binding)
+            if (_selectedItem == null) _selectedItem = item
+            updateUI(item == _selectedItem, binding)
             b.tvCategoryName.text = item
 
             b.root.setOnClickListener {
-                selectedItem = item
+                _selectedItem = item
                 Log.d("jj-카테고리어댑터 아이템 클릭", "$layoutPosition: $item")
                 onItemClick(item)
                 notifyDataSetChanged()  // 모든 항목을 다시 바인딩하여 선택 상태를 업데이트합니다.
