@@ -44,6 +44,8 @@ class DetailFragment : Fragment(), VideoDataInterface {
 
     private lateinit var videoUrl: String
 
+    private lateinit var videoId: String
+
     private var isPlaying = false
 
     private lateinit var viewModel: DetailViewModel
@@ -128,6 +130,7 @@ class DetailFragment : Fragment(), VideoDataInterface {
             Log.d("viewModel", "init video data $it")
             playerSrc = it.player.toString()
             videoUrl = playerSrc.getUrlFromSrc()
+            videoId = it.id.toString()
             Log.d("viewModel", "player af $videoUrl")
             initPlayer()
             with(binding) {
@@ -194,5 +197,7 @@ class DetailFragment : Fragment(), VideoDataInterface {
     override fun getVideoUrl(): String {
         return videoUrl
     }
+
+    override fun getVideoId(): String = videoId
 
 }
