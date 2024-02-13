@@ -37,7 +37,6 @@ class DetailFragment : Fragment(), VideoDataInterface {
 
     private val binding get() = _binding!!
 
-    //    private lateinit var mediaItemData: DetailItemModel
     private lateinit var mContext: Context
 
     private lateinit var playerSrc: String
