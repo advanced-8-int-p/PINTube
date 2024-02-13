@@ -33,16 +33,13 @@ class HomeFragment : Fragment() {
 
     private val viewModel: HomeViewModel by viewModels()
 
-    private val onVideoClick = { item: VideoItemData ->
+    private val onVideoClick = { item ->
         findNavController().navigate(
-            resId = R.id.navigation_detail,
+            resId = R.id.action_navigation_home_to_navigation_detail,
             //args = null,
             args = Bundle().apply {
                 putString("video_id", item.id)
-            },
-            navOptions = NavOptions.Builder()
-                .setPopUpTo(R.id.navigation_home, true)
-                .build(),
+            }
         )
 //            mainMotion.transitionToStart()
     }
@@ -57,7 +54,14 @@ class HomeFragment : Fragment() {
         onVideoClick = onVideoClick
     )
     private val popularVideoAdapter = PopularVideoAdapter(
-        onItemClick = onVideoClick
+        onItemClick = onVideoClick,
+        onBookmarkClick = { item ->
+            if (item.isSaved.not()){
+                viewModel.addBookmark(item)
+            } else {
+                viewModel.removeBookmark(item)
+            }
+        }
     )
     private val categoryAdapter = CategoryAdapter(
         onItemClick = { query -> viewModel.searchCategory(query) }

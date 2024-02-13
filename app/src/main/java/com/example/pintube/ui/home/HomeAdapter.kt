@@ -1,5 +1,7 @@
 package com.example.pintube.ui.home
 
+import android.graphics.Color
+import android.graphics.drawable.GradientDrawable
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -8,6 +10,8 @@ import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import coil.load
+import coil.request.CachePolicy
+import com.example.pintube.R
 import com.example.pintube.databinding.HomeItemCategoryBinding
 import com.example.pintube.databinding.HomeItemPopularBinding
 import com.example.pintube.databinding.ItemHeaderBinding
@@ -59,11 +63,15 @@ class HomeAdapter(
             item.videoItemData.videoThumbnailUri?.let {
                 b.ivItemVideo.load(it) {
                     crossfade(true)
+                    allowHardware(true)
+                    if (position < 5) diskCachePolicy(CachePolicy.ENABLED)
+                    else memoryCachePolicy(CachePolicy.ENABLED)
                 }
             }
             item.videoItemData.channelThumbnailUri?.let {
                 b.ivItemChannel.load(it) {
                     crossfade(true)
+                    allowHardware(true)
                 }
             }
             item.videoItemData.title?.let { b.tvItemTitle.text = it }

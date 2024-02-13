@@ -10,6 +10,7 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
+import androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback
 import com.example.pintube.R
 import com.example.pintube.databinding.ActivityShortsBinding
 import com.example.pintube.ui.Search.SearchActivity
@@ -18,6 +19,8 @@ import com.example.pintube.ui.shorts.adapter.ShortsAdapter
 import com.example.pintube.ui.shorts.model.CommentsItem
 import com.example.pintube.ui.shorts.model.ShortsItem
 import com.example.pintube.ui.shorts.model.ShortsViewModel
+import com.example.pintube.utill.ShareLink
+import com.example.pintube.utill.getUrlFromSrc
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -36,9 +39,10 @@ class ShortsActivity : AppCompatActivity() {
                 item
             },
             onSharedChecked = { item ->
-                item
+                ShareLink(this, item.getUrlFromSrc())
             },
-            onCommentChecked = this::onCommentChecked
+            onCommentChecked = this::onCommentChecked,
+            playerReady = { if (it) adapter.currentViewHolder?.playVideo() }
         )
     }
 
@@ -104,6 +108,8 @@ class ShortsActivity : AppCompatActivity() {
     private fun setPlayer() = with(binding) {
         vpShortsViewpager.adapter = adapter
         vpShortsViewpager.orientation = ViewPager2.ORIENTATION_VERTICAL
+
+        vpShortsViewpager.offscreenPageLimit = 2
     }
 
     private fun setCommentSheet() = with(binding){
@@ -128,7 +134,7 @@ class ShortsActivity : AppCompatActivity() {
     /*
     * Todo 대댓글 클릭시 화면 전환후 보여주기
     * */
-    private fun onRepliesClick(comments: List<CommentsItem.Comments?>?) = Unit
+    private fun onRepliesClick(parentId: String?) = Unit
 
     override fun onPause() {
         window.statusBarColor = ContextCompat.getColor(this, R.color.main_color)
