@@ -35,9 +35,8 @@ class HomeViewModel @Inject constructor(
     val categories: LiveData<List<String>> get() = _categories
 
     private var _categoryVideos: MutableLiveData<List<VideoItemData>> =
-        MutableLiveData(emptyList())
-    //    MutableLiveData(List(10) { VideoItemData() })  //ddd
-
+        //MutableLiveData(emptyList())
+        MutableLiveData(List(10) { VideoItemData() })  //ddd
     val categoryVideos: LiveData<List<VideoItemData>> get() = _categoryVideos
 
     init {
@@ -75,7 +74,7 @@ class HomeViewModel @Inject constructor(
 
     fun addBookmark(item: VideoItemData) = viewModelScope.launch(Dispatchers.IO) {
         item.id?.let { localFavoriteRepository.addBookmark(it) }
-        _categoryVideos.postValue(categoryVideos.value?.map {
+        _populars.postValue(populars.value?.map {
             it.copy(
                 isSaved = localFavoriteRepository.checkIsBookmark(it.id ?: "")
             )
@@ -84,7 +83,7 @@ class HomeViewModel @Inject constructor(
 
     fun removeBookmark(item: VideoItemData) = viewModelScope.launch(Dispatchers.IO) {
         item.id?.let { localFavoriteRepository.deleteBookmark(it) }
-        _categoryVideos.postValue(categoryVideos.value?.map {
+        _populars.postValue(populars.value?.map {
             it.copy(
                 isSaved = localFavoriteRepository.checkIsBookmark(it.id ?: "")
             )
