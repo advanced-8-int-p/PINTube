@@ -1,5 +1,9 @@
 package com.example.pintube.domain.entitiy
 
+import android.os.Parcelable
+import kotlinx.android.parcel.Parcelize
+
+@Parcelize
 data class VideoEntity(
     val id: String?,
     val publishedAt: String?,
@@ -29,4 +33,4 @@ data class VideoEntity(
     val commentCount: String?,
     val player: String?,
     val topicDetails: List<String>?,
-)
+) : Parcelable

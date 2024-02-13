@@ -1,15 +1,24 @@
 package com.example.pintube.ui.Search
 
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import androidx.fragment.app.FragmentResultListener
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.example.pintube.R
 import com.example.pintube.data.local.entity.LocalSearchEntity
+import com.example.pintube.databinding.FragmentDetailBinding
 import com.example.pintube.databinding.FragmentSearchResultBinding
 import com.example.pintube.domain.entitiy.SearchEntity
+import com.example.pintube.domain.entitiy.VideoEntity
+import com.example.pintube.ui.detailpage.DetailFragment
 
 
 class SearchResultFragment : Fragment() {
@@ -28,6 +37,7 @@ class SearchResultFragment : Fragment() {
     private val binding get() = _binding!!
     private var searchAdapter: SearchResultAdapter? = null
     private val items = ArrayList<SearchEntity>()
+    private val cItems = ArrayList<VideoEntity>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -42,13 +52,44 @@ class SearchResultFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val searchResults = arguments?.getParcelableArrayList<SearchEntity>("searchResults")
+        val contentResult = arguments?.getParcelableArrayList<VideoEntity>("contentResults")
+
+        var viewSelect = resources.getStringArray(R.array.view)
+        var viewAdapter = ArrayAdapter<String>(requireContext(), android.R.layout.simple_spinner_dropdown_item, viewSelect)
+        binding.searchResultSppiner.adapter = viewAdapter
+        binding.searchResultSppiner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                val selectedItem = viewSelect[position]
+
+                when (position) {
+                    //
+                    0 -> {
+                    }
+                    //조회수 순
+                    1 -> {
+
+                    }
+                    //최근 업로드 순
+                    2 -> {
+                        searchAdapter?.sortByDescending()
+                    }
+                    //오래된 순
+                    3 -> {
+                        searchAdapter?.sortByAscending()
+                    }
+                }
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+
+            }
+        }
 
         if (searchResults != null) {
             items.addAll(searchResults)
             searchAdapter?.notifyDataSetChanged() // Notify adapter that data set has changed
         }
-
-        searchAdapter = SearchResultAdapter(requireContext(), items)
+        searchAdapter = SearchResultAdapter(items)
         binding.rvResult.layoutManager = LinearLayoutManager(requireContext())
         binding.rvResult.adapter = searchAdapter
     }
