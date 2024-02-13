@@ -80,7 +80,7 @@ class HomeViewModel @Inject constructor(
 
     fun addBookmark(item: VideoItemData) = viewModelScope.launch(Dispatchers.IO) {
         item.id?.let { localFavoriteRepository.addBookmark(it) }
-        _categoryVideos.postValue(categoryVideos.value?.map {
+        _populars.postValue(populars.value?.map {
             it.copy(
                 isSaved = localFavoriteRepository.checkIsBookmark(it.id ?: "")
             )
@@ -89,7 +89,7 @@ class HomeViewModel @Inject constructor(
 
     fun removeBookmark(item: VideoItemData) = viewModelScope.launch(Dispatchers.IO) {
         item.id?.let { localFavoriteRepository.deleteBookmark(it) }
-        _categoryVideos.postValue(categoryVideos.value?.map {
+        _populars.postValue(populars.value?.map {
             it.copy(
                 isSaved = localFavoriteRepository.checkIsBookmark(it.id ?: "")
             )

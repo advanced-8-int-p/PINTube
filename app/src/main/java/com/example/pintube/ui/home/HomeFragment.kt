@@ -104,7 +104,6 @@ class HomeFragment : Fragment() {
 
         vm.populars.observe(viewLifecycleOwner) {
             popularVideoAdapter.submitList(it)
-            Log.d("pop", "$it")  //ddd
         }
         vm.categories.observe(viewLifecycleOwner) {
             categoryAdapter.submitList(it)
