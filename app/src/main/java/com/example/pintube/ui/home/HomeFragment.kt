@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
-import android.view.View.OnClickListener
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
@@ -16,6 +15,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.GridLayoutManager.SpanSizeLookup
+import androidx.room.util.query
 import com.example.pintube.R
 import com.example.pintube.databinding.FragmentHomeBinding
 import com.example.pintube.ui.Search.SearchActivity
@@ -42,16 +42,16 @@ class HomeFragment : Fragment() {
         )
 //            mainMotion.transitionToStart()
     }
-
+    //ddd
     private val categoryEditDialogAdapter = CategoryEditDialogAdapter { category ->
         viewModel.removeFromCategories(category)
     }
-    private val homeAdapter = HomeAdapter(
+    private val homeAdapter by lazy {  HomeAdapter(
         onCategorySettingClick = {
             binding.clHomeDialogCategoryBackground.isVisible = true
         },
         onVideoClick = onVideoClick
-    )
+    )}
     private val popularVideoAdapter = PopularVideoAdapter(
         onItemClick = onVideoClick,
         onBookmarkClick = { item ->
@@ -83,11 +83,6 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.ivHomeSearch.setOnClickListener {
-            val intent = Intent(requireContext(), SearchActivity::class.java)
-            startActivity(intent)
-        }
-
         initView()
         initViewModel()
     }
@@ -111,6 +106,7 @@ class HomeFragment : Fragment() {
                 }
             }
         }
+
         b.rvDialogCategoryEditList.adapter = categoryEditDialogAdapter
 
         b.ivHomeSearch.setOnClickListener {
@@ -143,7 +139,7 @@ class HomeFragment : Fragment() {
             b.clHomeDialogCategoryEdit.isVisible = true
         }
 
-        val onClickListenerOfBtnTvDialogCategoryAddOk = OnClickListener {
+        val onClickListenerOfBtnTvDialogCategoryAddOk = View.OnClickListener {
             imm.hideSoftInputFromWindow(it.windowToken, 0)
 
             b.clHomeDialogCategoryEdit.isVisible = true
