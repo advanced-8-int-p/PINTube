@@ -18,9 +18,8 @@ import androidx.room.util.query
 import com.example.pintube.R
 import com.example.pintube.data.local.dao.SearchDAO
 import com.example.pintube.data.local.database.YoutubeDatabase
-import com.example.pintube.data.remote.api.retrofit.YouTubeApi
-import com.example.pintube.data.repository.ApiRepositoryImpl
-import com.example.pintube.data.repository.LocalSearchRepositoryImpl
+import com.example.pintube.data.remote.retrofit.YouTubeApi
+import com.example.pintube.data.repository.sever.ApiRepositoryImpl
 import com.example.pintube.databinding.ActivitySearchBinding
 import com.example.pintube.domain.entitiy.SearchEntity
 import com.example.pintube.domain.repository.ApiRepository

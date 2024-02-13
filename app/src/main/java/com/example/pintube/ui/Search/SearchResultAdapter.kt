@@ -2,6 +2,7 @@ package com.example.pintube.ui.Search
 
 import android.content.Context
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
@@ -16,7 +17,10 @@ import java.time.LocalDateTime
 
 class SearchResultAdapter( private val items : MutableList<SearchEntity>) : RecyclerView.Adapter<SearchResultAdapter.SearchResultViewHolder>(){
 
-
+    interface ItemClick {
+        fun onClick(position: Int)
+    }
+    var itemClick : ItemClick? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SearchResultViewHolder {
         val binding = RecyclerviewResultBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -24,9 +28,11 @@ class SearchResultAdapter( private val items : MutableList<SearchEntity>) : Recy
     }
 
     override fun onBindViewHolder(holder: SearchResultViewHolder, position: Int) {
+        holder.itemView.setOnClickListener{
+            itemClick?.onClick(position)
+        }
+
         val item = items[position]
-
-
 
         holder.mainTitle.text = item.title?.replace("&#39;", "'")
         holder.chTitle.text = item.channelTitle
