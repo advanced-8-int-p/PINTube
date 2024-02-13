@@ -2,8 +2,10 @@ package com.example.pintube.di
 
 import android.content.Context
 import androidx.room.Room
+import com.example.pintube.data.local.dao.CategoryDAO
 import com.example.pintube.data.local.dao.ChannelDAO
 import com.example.pintube.data.local.dao.CommentDAO
+import com.example.pintube.data.local.dao.FavoriteDAO
 import com.example.pintube.data.local.dao.SearchDAO
 import com.example.pintube.data.local.dao.VideoDAO
 import com.example.pintube.data.local.database.YoutubeDatabase
@@ -35,6 +37,14 @@ object DatabaseModule {
     @Singleton
     @Provides
     fun provideCommentDao(database: YoutubeDatabase): CommentDAO = database.commentDao()
+
+    @Singleton
+    @Provides
+    fun provideFavoriteDao(database: YoutubeDatabase): FavoriteDAO = database.favoriteDao()
+
+    @Singleton
+    @Provides
+    fun provideCategoryDao(database: YoutubeDatabase): CategoryDAO = database.categoryDao()
 
     @Singleton
     @Provides

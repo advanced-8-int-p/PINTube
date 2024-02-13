@@ -9,5 +9,6 @@ sealed interface ShortsItem {
         val title: String?,
         val commentCount: String?,
         val isBookmark: Boolean? = false,
+        val player: String?,
     ) : ShortsItem
 }

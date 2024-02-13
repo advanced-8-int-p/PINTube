@@ -17,7 +17,7 @@ import com.example.pintube.ui.shorts.model.CommentsViewType
 import com.example.pintube.utill.convertViewCount
 
 class CommentAdapter(
-    private val onRepliesClick: (replies: List<CommentsItem.Comments?>?) -> Unit,
+    private val onRepliesClick: (parentId: String?) -> Unit,
 ) : ListAdapter<CommentsItem, CommentAdapter.CommentsViewHolder>(
 
     object : DiffUtil.ItemCallback<CommentsItem>() {
@@ -41,6 +41,9 @@ class CommentAdapter(
         abstract fun onBind(item: CommentsItem)
     }
 
+    override fun onViewRecycled(holder: CommentsViewHolder) {
+        super.onViewRecycled(holder)
+    }
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CommentsViewHolder = when(CommentsViewType.from(viewType)) {
             CommentsViewType.ITEM -> CommentsItemViewHolder(
                 binding = ItemCommentBinding.inflate(LayoutInflater.from(parent.context),parent,false),
@@ -63,7 +66,7 @@ class CommentAdapter(
 
     class CommentsItemViewHolder (
         private val binding: ItemCommentBinding,
-        private val onRepliesClick: (replies: List<CommentsItem.Comments?>?) -> Unit,
+        private val onRepliesClick: (parentId: String?) -> Unit,
     ) : CommentsViewHolder(binding.root) {
         @SuppressLint("SetTextI18n")
         override fun onBind(item: CommentsItem) = with(binding){
@@ -84,7 +87,7 @@ class CommentAdapter(
                 tvCommentReplies.text = "답글 " + item.totalReplyCount + " 개"
             }
             tvCommentRepliesBtn.setOnClickListener {
-                onRepliesClick(item.replies)
+                onRepliesClick(item.id)
             }
         }
     }
