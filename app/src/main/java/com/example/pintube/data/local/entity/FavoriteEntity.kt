@@ -4,17 +4,22 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-@Entity
-data class FavoriteEntity (
-    val thumbnail: String?,
-    val title: String?,
-    val description: String?,
-    @ColumnInfo(name = "channel_title")
-    val channelTitle: String?,
-    @ColumnInfo(name = "channel_subscript")
-    val channelSubscript: String?,
-    @ColumnInfo(name = "published_date")
-    val publishedDate: String?
-){
-    @PrimaryKey(autoGenerate = true) var key:Int = 0
-}
+@Entity(tableName = "categories")
+data class CategoryEntity(
+    @PrimaryKey(autoGenerate = true) val categoryId: Long = 0,
+    val name: String
+)
+
+@Entity(tableName = "favorite_category_cross",
+    primaryKeys = ["videoId", "categoryId"])
+data class FavoriteCategoryCross(
+    val videoId: String,
+    val categoryId: Long
+)
+
+@Entity(tableName = "favorite_info")
+data class FavoriteEntity(
+    @ColumnInfo("video_id")
+    @PrimaryKey val videoId: String,
+    @ColumnInfo("is_bookmark") val isBookmark: Boolean = true
+)

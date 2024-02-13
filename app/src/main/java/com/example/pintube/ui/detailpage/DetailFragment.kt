@@ -22,15 +22,16 @@ import coil.load
 import com.example.pintube.R
 import com.example.pintube.databinding.FragmentDetailBinding
 import com.example.pintube.ui.detailpage.adapter.DetailCommentAdapter
-import com.example.pintube.ui.shorts.model.ShortsItem
+import com.example.pintube.utill.VideoDataInterface
 import com.example.pintube.utill.convertToDaysAgo
 import com.example.pintube.utill.convertViewCount
+import com.example.pintube.utill.getUrlFromSrc
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 
-class DetailFragment : Fragment() {
+class DetailFragment : Fragment(), VideoDataInterface {
 
     private var _binding: FragmentDetailBinding? = null
 
@@ -99,7 +100,6 @@ class DetailFragment : Fragment() {
             findNavController().navigateUp()
         }
         binding.ivDetailShare.setOnClickListener {
-            shareLink()
         }
         binding.ivDetailPin.setOnClickListener {
             //보관함 저장
@@ -127,7 +127,7 @@ class DetailFragment : Fragment() {
         viewModel1.media.observe(viewLifecycleOwner, Observer {
             Log.d("viewModel", "init video data $it")
             playerSrc = it.player.toString()
-            videoUrl = getUrlFromSrc(playerSrc)
+            videoUrl = playerSrc.getUrlFromSrc()
             Log.d("viewModel", "player af $videoUrl")
             initPlayer()
             with(binding) {
@@ -178,24 +178,6 @@ class DetailFragment : Fragment() {
 
     }
 
-    private fun getUrlFromSrc(src: String): String {
-        val urlRegex = """src="//([^"]*)"""".toRegex()
-
-        val matchResult = urlRegex.find(src)
-
-        return matchResult?.groups?.get(1)?.value.toString()
-    }
-
-    private fun shareLink() {
-        val intent = Intent().apply {
-            action = Intent.ACTION_SEND
-            putExtra(Intent.EXTRA_TEXT, "https:$videoUrl")
-            type = "text/plain"
-        }
-        val shareChooser = Intent.createChooser(intent, null)
-        startActivity(shareChooser)
-    }
-
     private fun setCommentSheet() = with(binding){
         bottomSheetDialog.setContentView(commentSheetView)
         commentRecyclerView.adapter = commentAdapter
@@ -209,4 +191,8 @@ class DetailFragment : Fragment() {
         }
     }
     private fun onRepliesClick(comments: List<DetailCommentsItem.Comments?>?) = Unit
+    override fun getVideoUrl(): String {
+        return videoUrl
+    }
+
 }

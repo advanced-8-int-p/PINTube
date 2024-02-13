@@ -11,23 +11,26 @@ import com.example.pintube.domain.repository.CategoryPrefRepository
 import com.example.pintube.domain.repository.LocalChannelRepository
 import com.example.pintube.domain.repository.LocalSearchRepository
 import com.example.pintube.domain.repository.LocalVideoRepository
+
+import com.example.pintube.domain.repository.CategoryPrefRepository
+import com.example.pintube.domain.repository.LocalFavoriteRepository
 import com.example.pintube.domain.repository.PageTokenPrefRepository
+import com.example.pintube.domain.usecase.GetPopularVideosUseCase
+import com.example.pintube.domain.usecase.GetSearchVideosUseCase
 import com.example.pintube.utill.convertDurationTime
 import com.example.pintube.utill.convertToDaysAgo
 import com.example.pintube.utill.convertViewCount
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val repository: ApiRepository,
-    private val localSearchRepository: LocalSearchRepository,
-    private val localVideoRepository: LocalVideoRepository,
-    private val localChannelRepository: LocalChannelRepository,
-    private val categoryPrefRepository: CategoryPrefRepository,
-    private val pageTokenPrefRepository: PageTokenPrefRepository,
+    private val getPopularVideosUseCase: GetPopularVideosUseCase,
+    private val getCategoryVideos: GetSearchVideosUseCase,
+    private val localFavoriteRepository: LocalFavoriteRepository,
 ) : ViewModel() {
 
     private var _populars: MutableLiveData<List<VideoItemData>> =
@@ -54,10 +57,11 @@ class HomeViewModel @Inject constructor(
 
     private fun updatePopulars() = viewModelScope.launch(Dispatchers.IO) {
         try {
-            val result = getPopularVideos()
+            val result = getPopularVideosUseCase()
             _populars.postValue(
                 result.map {
                     it.convertVideoItemData()
+                        .copy(isSaved = localFavoriteRepository.checkIsBookmark(it.video?.id ?: ""))
                 })
         } catch (error: Exception) {
             Log.e("HomeViewModel", "Error popular videos: ${error.message}", error)
@@ -69,13 +73,30 @@ class HomeViewModel @Inject constructor(
             val searchResult = getCategoryVideos(query)
             _categoryVideos.postValue(
                 searchResult.map {
+                    Log.d("Local Fa", "${it.video?.id}")
                     it.convertVideoItemData()
+                        .copy(isSaved = localFavoriteRepository.checkIsBookmark(it.video?.id ?: ""))
                 })
         } catch (error: Exception) {
             Log.e("HomeViewModel", "Error searching category: $query, ${error.message}", error)
         }
     }
 
+
+    fun addBookmark(item: VideoItemData) = viewModelScope.launch(Dispatchers.IO) {
+        item.id?.let { localFavoriteRepository.addBookmark(it) }
+        _categoryVideos.postValue(categoryVideos.value?.map {
+            it.copy(
+                isSaved = localFavoriteRepository.checkIsBookmark(it.id ?: "")
+            )
+        })
+    }
+
+    fun removeBookmark(item: VideoItemData) = viewModelScope.launch(Dispatchers.IO) {
+        item.id?.let { localFavoriteRepository.deleteBookmark(it) }
+        _categoryVideos.postValue(categoryVideos.value?.map {
+            it.copy(
+                isSaved = localFavoriteRepository.checkIsBookmark(it.id ?: "")
     private suspend fun getPopularVideos(): List<VideoWithThumbnail> {
         var result = localVideoRepository.findPopularVideos()
         if (result.isNullOrEmpty()) {
@@ -115,12 +136,14 @@ class HomeViewModel @Inject constructor(
                 page = page,
                 token = repository.getNextPageToken()
             )
-
-            searchResult = localSearchRepository.findSearchRecord(query)
-        }
-        return searchResult ?: emptyList()
+        })
     }
 
+
+
+//    fun addAllToCategories(elements: Collection<String>) {
+//        _categories.value = _categories.value!!.toMutableList().apply { addAll(elements) }
+//    }
     fun addToCategories(category: String) {
         _categories.value = _categories.value!!.toMutableList().apply { add(category) }
     }

@@ -58,5 +58,6 @@ interface YoutubeSearchService {
         @Query("part") part: String = "snippet,id,replies",
         @Query("videoId") videoId: String,
         @Query("maxResults") maxResult: Int? = 100,
+        @Query("order") order: String? = "relevance"
     ) : GenericApiResponse<ItemResponse>
 }
