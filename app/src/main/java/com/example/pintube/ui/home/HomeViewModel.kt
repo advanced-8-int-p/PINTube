@@ -6,14 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.pintube.data.repository.local.VideoWithThumbnail
-import com.example.pintube.domain.repository.ApiRepository
-import com.example.pintube.domain.repository.CategoryPrefRepository
-import com.example.pintube.domain.repository.LocalChannelRepository
-import com.example.pintube.domain.repository.LocalSearchRepository
-import com.example.pintube.domain.repository.LocalVideoRepository
-import com.example.pintube.domain.repository.CategoryPrefRepository
 import com.example.pintube.domain.repository.LocalFavoriteRepository
-import com.example.pintube.domain.repository.PageTokenPrefRepository
 import com.example.pintube.domain.usecase.GetPopularVideosUseCase
 import com.example.pintube.domain.usecase.GetSearchVideosUseCase
 import com.example.pintube.utill.convertDurationTime
@@ -22,7 +15,6 @@ import com.example.pintube.utill.convertViewCount
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
@@ -44,7 +36,8 @@ class HomeViewModel @Inject constructor(
 
     private var _categoryVideos: MutableLiveData<List<VideoItemData>> =
         MutableLiveData(emptyList())
-        //MutableLiveData(List(10) { VideoItemData() })  //ddd
+    //    MutableLiveData(List(10) { VideoItemData() })  //ddd
+
     val categoryVideos: LiveData<List<VideoItemData>> get() = _categoryVideos
 
     init {
