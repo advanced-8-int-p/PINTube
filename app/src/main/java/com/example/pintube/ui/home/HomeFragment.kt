@@ -41,6 +41,13 @@ class HomeFragment : Fragment() {
                 }
             )
 //            mainMotion.transitionToStart()
+        },
+        onBookmarkClick = { item ->
+            if (item.isSaved.not()){
+                viewModel.addBookmark(item)
+            } else {
+                viewModel.removeBookmark(item)
+            }
         }
     )
     private val categoryAdapter = CategoryAdapter(

@@ -1,17 +1,22 @@
 package com.example.pintube.ui.home
 
+import android.content.res.ColorStateList
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import coil.request.CachePolicy
+import com.example.pintube.R
 import com.example.pintube.databinding.PopularItemBinding
+import org.jsoup.helper.RequestAuthenticator.Context
 
 class PopularVideoAdapter(
-    private val onItemClick: (item: VideoItemData) -> Unit
+    private val onItemClick: (item: VideoItemData) -> Unit,
+    private val onBookmarkClick: (item: VideoItemData) -> Unit,
 ) : ListAdapter<VideoItemData, PopularVideoAdapter.PopularViewHolder>(object :
     DiffUtil.ItemCallback<VideoItemData>() {
     override fun areItemsTheSame(oldItem: VideoItemData, newItem: VideoItemData): Boolean =
@@ -21,7 +26,9 @@ class PopularVideoAdapter(
         oldItem == newItem
 }) {
 
-    inner class PopularViewHolder(private val binding: PopularItemBinding) :
+    inner class PopularViewHolder(
+        private val binding: PopularItemBinding
+    ) :
         RecyclerView.ViewHolder(binding.root) {
         fun onBind(item: VideoItemData) = binding.also { b ->
             item.videoThumbnailUri?.let {
@@ -43,6 +50,26 @@ class PopularVideoAdapter(
             item.date?.let { b.tvPopularItemDate.text = it }
             item.views?.let { b.tvPopularItemViews.text = it }
             item.length?.let { b.tvPopularItemLength.text = it }
+
+            if (item.isSaved) {
+                b.ivPopularItemPin.imageTintList = ColorStateList.valueOf(
+                    ContextCompat.getColor(
+                        binding.root.context,
+                        R.color.selected_color
+                    )
+                )
+            }
+            else {
+                b.ivPopularItemPin.imageTintList = ColorStateList.valueOf(
+                    ContextCompat.getColor(
+                        binding.root.context,
+                        R.color.white
+                    )
+                )
+            }
+            b.btnFlPopularItemPinBack.setOnClickListener {
+                onBookmarkClick(item)
+            }
 
             b.root.setOnClickListener {
                 Log.d("jj-Popular 아이템 클릭", "$layoutPosition: ${getItem(layoutPosition)}")

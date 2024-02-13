@@ -3,6 +3,7 @@ package com.example.pintube.ui.shorts.adapter
 import android.content.Context
 import android.graphics.Color
 import android.util.DisplayMetrics
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -54,15 +55,19 @@ class ShortsAdapter(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ShortsViewHolder =
-        when(ShortsViewType.from(viewType)) {
+        when (ShortsViewType.from(viewType)) {
             ShortsViewType.ITEM -> ShortsItemViewHolder(
-                binding = ItemShortsBinding.inflate(LayoutInflater.from(parent.context), parent, false),
+                binding = ItemShortsBinding.inflate(
+                    LayoutInflater.from(parent.context),
+                    parent,
+                    false
+                ),
                 onBookmarkChecked = onBookmarkChecked,
                 onSharedChecked = onSharedChecked,
                 onCommentChecked = onCommentChecked,
                 playerReady = playerReady,
 
-            )
+                )
 
             else -> ShortsUnknownViewHolder(
                 UnknownItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -80,7 +85,7 @@ class ShortsAdapter(
         }
     }
 
-    class ShortsItemViewHolder (
+    class ShortsItemViewHolder(
         private val binding: ItemShortsBinding,
         private val onBookmarkChecked: (ShortsItem) -> Unit,
         private val onSharedChecked: (String) -> Unit,
@@ -93,6 +98,27 @@ class ShortsAdapter(
             if (item !is ShortsItem.Item) {
                 return@with
             }
+            vvShortsVideo.enableAutomaticInitialization = false
+            vvShortsVideo.initialize(object : AbstractYouTubePlayerListener() {
+                override fun onReady(youTubePlayer: YouTubePlayer) {
+                    item.id?.let {
+                        youTubePlayer.cueVideo(it, 0f)
+                        this@ShortsItemViewHolder.youTubePlayer = youTubePlayer
+                        playerReady(true)
+                    }
+
+                }
+
+                override fun onStateChange(
+                    youTubePlayer: YouTubePlayer,
+                    state: PlayerConstants.PlayerState
+                ) {
+                    if (state == PlayerConstants.PlayerState.ENDED) {
+                        youTubePlayer.seekTo(0f)
+                        youTubePlayer.play()
+                    }
+                }
+            })
             tvShortsCommentCount.text = item.commentCount
             tvShortsTitle.text = item.title
             tvShortsUser.text = item.channelTitle
@@ -104,9 +130,9 @@ class ShortsAdapter(
                 item.player?.let { player -> onSharedChecked(player) }
             }
 
-            vvShortsVideo.clearAnimation()
 
-            val windowManager = itemView.context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
+            val windowManager =
+                itemView.context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
             val displayMetrics = DisplayMetrics()
             windowManager.defaultDisplay.getMetrics(displayMetrics)
             val height = displayMetrics.heightPixels
@@ -118,24 +144,7 @@ class ShortsAdapter(
             layoutParams.width = width
             vvShortsVideo.layoutParams = layoutParams
             vvShortsVideo.setBackgroundColor(Color.parseColor("#000000"))
-            vvShortsVideo.addYouTubePlayerListener(
-                object : AbstractYouTubePlayerListener() {
-                    override fun onReady(youTubePlayer: YouTubePlayer) {
-                        item.id?.let { youTubePlayer.cueVideo(it, 0f) }
-                        this@ShortsItemViewHolder.youTubePlayer = youTubePlayer
-                        playerReady(true)
-                    }
 
-                    override fun onStateChange(
-                        youTubePlayer: YouTubePlayer,
-                        state: PlayerConstants.PlayerState
-                    ) {
-                        if (state == PlayerConstants.PlayerState.ENDED) {
-                            youTubePlayer.seekTo(0f)
-                            youTubePlayer.play()
-                        }
-                    }
-                })
         }
 
         fun playVideo() {
@@ -145,7 +154,7 @@ class ShortsAdapter(
 
     class ShortsUnknownViewHolder(
         private val binding: UnknownItemBinding,
-    ): ShortsViewHolder(binding.root) {
+    ) : ShortsViewHolder(binding.root) {
         override fun onBind(item: ShortsItem) = Unit
     }
 
