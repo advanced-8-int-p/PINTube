@@ -7,11 +7,10 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.pintube.data.local.entity.LocalVideoEntity
-import com.example.pintube.domain.repository.ApiRepository
 import com.example.pintube.domain.repository.LocalChannelRepository
-import com.example.pintube.domain.repository.LocalCommentRepository
+import com.example.pintube.domain.repository.LocalFavoriteRepository
 import com.example.pintube.domain.repository.LocalVideoRepository
-import com.example.pintube.ui.main.MainActivity
+import com.example.pintube.domain.repository.RecentViewRepository
 import com.example.pintube.domain.usecase.GetCommentsUseCase
 import com.example.pintube.utill.convertDetailComment
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -24,7 +23,9 @@ class DetailViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
     private val localVideoRepository: LocalVideoRepository,
     private val localChannelRepository: LocalChannelRepository,
+    private val recentViewRepository: RecentViewRepository,
     private val getCommentsUseCase: GetCommentsUseCase,
+    private val localFavoriteRepository: LocalFavoriteRepository,
 ) : ViewModel() {
 
     private var _media: MutableLiveData<DetailItemData> = MutableLiveData()
@@ -43,6 +44,9 @@ class DetailViewModel @Inject constructor(
 
     init {
         getData()
+        viewModelScope.launch(Dispatchers.IO) {
+            recentViewRepository.addRecentView(videoId)
+        }
     }
 
     private fun getData() = viewModelScope.launch(Dispatchers.IO) {
@@ -73,7 +77,7 @@ class DetailViewModel @Inject constructor(
         commentCount = this.commentCount,
         player = this.player,
         channelProfile = this.channelId?.let { localChannelRepository.findChannel(it)?.thumbnailMedium },
-        isPinned = isPinned()
+        isPinned = localFavoriteRepository.checkIsBookmark(this.id ?: "")
     )
 
     private fun isPinned():Boolean {
