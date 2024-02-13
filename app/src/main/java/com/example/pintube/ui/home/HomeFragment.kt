@@ -35,16 +35,10 @@ class HomeFragment : Fragment() {
 
     private val onVideoClick = { item: VideoItemData ->
         findNavController().navigate(
-            resId = R.id.navigation_detail,
-            //args = null,
+            resId = R.id.action_navigation_home_to_navigation_detail,
             args = Bundle().apply {
                 putString("video_id", item.id)
-            },
-            navOptions = NavOptions.Builder()
-                .setPopUpTo(R.id.navigation_home, true)
-                .build(),
-        )
-//            mainMotion.transitionToStart()
+            })
     }
     //ddd
     private val categoryEditDialogAdapter = CategoryEditDialogAdapter { category ->
@@ -86,6 +80,10 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        binding.ivHomeSearch.setOnClickListener {
+            startActivity(Intent(requireContext(),SearchActivity::class.java))
+        }
 
         initView()
         initViewModel()
