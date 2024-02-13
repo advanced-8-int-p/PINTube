@@ -92,5 +92,8 @@ android {
 
         // jsoup html데이터 파싱
         implementation("org.jsoup:jsoup:1.17.2")
+
+        //google account login
+        implementation("com.google.android.gms:play-services-auth:20.7.0")
     }
 }

@@ -5,11 +5,11 @@ import com.example.pintube.ui.home.VideoItemData
 
 sealed class MypageViewType {
 
-    data class Profile(val userId: String): MypageViewType()
+    data class Profile(val userProfile: String, val userName: String, val userId: String, val userSubscriber: Int, val userVideoCount: Int, val userDescription: String): MypageViewType()
 
-    data class Header(val title: String): MypageViewType()
+    data class Header(val title: String, val isRecent: Boolean): MypageViewType()
 
-    data class RecentItems(val data: VideoItemData): MypageViewType()
+    data class RecentItems(val ids: MutableList<String>): MypageViewType()
 
-    data class PinItems(val data: VideoItemData): MypageViewType()
+    data class PinItems(val data: VideoItemData, val pinTag: String): MypageViewType()
 }
