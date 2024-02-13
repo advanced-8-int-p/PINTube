@@ -10,6 +10,7 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.example.pintube.R
 import com.example.pintube.databinding.ActivityMainBinding
+import com.example.pintube.ui.mypage.MypageViewType
 import com.example.pintube.ui.detailpage.DetailFragment
 import com.example.pintube.ui.shorts.ShortsActivity
 import com.example.pintube.utill.ShareLink
@@ -29,7 +30,10 @@ class MainActivity : AppCompatActivity() {
         navHostFragment.navController
     }
 
+    var recentItemsList = mutableListOf<String>()
+
     private val viewModel: MainViewModel by viewModels()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 

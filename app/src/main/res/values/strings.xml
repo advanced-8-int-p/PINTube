@@ -19,6 +19,8 @@
     <string name="convert_viewCount_uck">%1%.1f억 회</string>
     <string name="comment_empty_comment">아직 댓글이 없습니다.</string>
     <string name="comment_empty_description">말을 걸어 대화를 시작하세요</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 
 

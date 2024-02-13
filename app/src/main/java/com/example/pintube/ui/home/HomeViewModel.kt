@@ -6,13 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.pintube.data.repository.local.VideoWithThumbnail
-import com.example.pintube.domain.repository.ApiRepository
-import com.example.pintube.domain.repository.LocalChannelRepository
-import com.example.pintube.domain.repository.LocalSearchRepository
-import com.example.pintube.domain.repository.LocalVideoRepository
-import com.example.pintube.domain.repository.CategoryPrefRepository
 import com.example.pintube.domain.repository.LocalFavoriteRepository
-import com.example.pintube.domain.repository.PageTokenPrefRepository
 import com.example.pintube.domain.usecase.GetPopularVideosUseCase
 import com.example.pintube.domain.usecase.GetSearchVideosUseCase
 import com.example.pintube.utill.convertDurationTime
@@ -21,7 +15,6 @@ import com.example.pintube.utill.convertViewCount
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
@@ -46,9 +39,13 @@ class HomeViewModel @Inject constructor(
         MutableLiveData(List(10) { VideoItemData() })  //ddd
     val categoryVideos: LiveData<List<VideoItemData>> get() = _categoryVideos
 
+    private var _currentWord: String? = null
+    private var _currentPage: Int = -1
+
     init {
         updatePopulars()
-        categories.value?.let { searchCategory(it.first()) }
+        if (categories.value!!.isEmpty().not())
+            categories.value?.let { searchCategory(it.first()) }
     }
 
     private fun updatePopulars() = viewModelScope.launch(Dispatchers.IO) {
@@ -78,6 +75,33 @@ class HomeViewModel @Inject constructor(
         }
     }
 
+    fun categoryNextSearch(query: String) = viewModelScope.launch(Dispatchers.IO) {
+        try {
+            if (query != _currentWord) {
+                _currentWord = query
+                _currentPage = 0
+            }
+            Log.d(
+                "jj-홈뷰모델 categoryNextSearch",
+                "currentWord: $_currentWord, currentPage: $_currentPage"
+                        + '\n' +
+                        "categoryVideos.value!!.size: ${categoryVideos.value!!.size}"
+            )
+            val searchResult = getCategoryVideos.invoke(query, (++_currentPage).toString())
+            Log.d(
+                "jj-홈뷰모델 categoryNextSearch",
+                "첫제목: ${searchResult.firstOrNull()?.video?.title}"
+            )
+            _categoryVideos.postValue(
+                _categoryVideos.value!!.toMutableList()
+                    .apply { addAll(searchResult.map { it.convertVideoItemData() }) }
+            )
+
+        } catch (error: Exception) {
+            Log.e("HomeViewModel", "Error searching category: $query, ${error.message}", error)
+        }
+    }
+
     fun addBookmark(item: VideoItemData) = viewModelScope.launch(Dispatchers.IO) {
         item.id?.let { localFavoriteRepository.addBookmark(it) }
         _populars.postValue(populars.value?.map {
@@ -96,6 +120,7 @@ class HomeViewModel @Inject constructor(
         })
     }
 
+
     fun addToCategories(category: String) {
         _categories.value = _categories.value!!.toMutableList().apply { add(category) }
     }
@@ -103,11 +128,6 @@ class HomeViewModel @Inject constructor(
     fun removeFromCategories(category: String) {
         _categories.value = _categories.value!!.toMutableList().apply { remove(category) }
     }
-
-
-//    fun addAllToCategories(elements: Collection<String>) {
-//        _categories.value = _categories.value!!.toMutableList().apply { addAll(elements) }
-//    }
 
     private fun VideoWithThumbnail.convertVideoItemData() = VideoItemData(
         videoThumbnailUri = this.video?.thumbnailHigh,
@@ -118,5 +138,6 @@ class HomeViewModel @Inject constructor(
         date = this.video?.publishedAt?.convertToDaysAgo(),
         length = this.video?.duration?.convertDurationTime(),
         id = this.video?.id,
+        channelId = this.video?.channelId,
     )
 }
