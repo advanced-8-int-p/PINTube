@@ -55,7 +55,7 @@ class PopularVideoAdapter(
                 b.ivPopularItemPin.imageTintList = ColorStateList.valueOf(
                     ContextCompat.getColor(
                         binding.root.context,
-                        R.color.selected_color
+                        R.color.main_color
                     )
                 )
             }
@@ -63,7 +63,7 @@ class PopularVideoAdapter(
                 b.ivPopularItemPin.imageTintList = ColorStateList.valueOf(
                     ContextCompat.getColor(
                         binding.root.context,
-                        R.color.white
+                        R.color.selected_color
                     )
                 )
             }

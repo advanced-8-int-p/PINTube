@@ -42,8 +42,8 @@
 
         <ImageView
             android:id="@+id/remove_query"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
             android:src="@drawable/ic_close_x"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"

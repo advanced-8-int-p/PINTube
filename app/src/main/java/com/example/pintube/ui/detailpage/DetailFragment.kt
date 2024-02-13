@@ -141,8 +141,10 @@ class DetailFragment : Fragment(), VideoDataInterface {
                 tvDetailTitle.text = it.title.toString()
                 tvDetailContent.text = it.publishedAt?.convertToDaysAgo()
                     .toString() + "\n\n\n" + it.description.toString()
-                count = it.commentCount?.convertViewCount()?: "0"
+                count = it.commentCount?.convertViewCount() ?: "0"
                 tvDetailCommentCount.text = "댓글 $count"
+                ivPopularItemPin.isVisible = it.isPinned
+
             }
         })
 
@@ -151,7 +153,8 @@ class DetailFragment : Fragment(), VideoDataInterface {
                 ivDetailCommentFirstProfilePic.load(item.first().userProfileImage)
                 tvDetailCommentFirstName.text = item.first().userName
                 tvDetailCommentFirst.text = item.first().textOriginal
-                tvDetailCommentFirstLikeCount.text = " " + item.first().likeCount.toString().convertViewCount()
+                tvDetailCommentFirstLikeCount.text =
+                    " " + item.first().likeCount.toString().convertViewCount()
                 clDetailComment.setOnClickListener {
                     setCommentSheet(count)
                     bottomSheetDialog.show()
@@ -180,7 +183,7 @@ class DetailFragment : Fragment(), VideoDataInterface {
 
     }
 
-    private fun setCommentSheet() = with(binding){
+    private fun setCommentSheet() = with(binding) {
         bottomSheetDialog.setContentView(commentSheetView)
         commentRecyclerView.adapter = commentAdapter
         commentRecyclerView.layoutManager = LinearLayoutManager(requireContext())
@@ -192,6 +195,7 @@ class DetailFragment : Fragment(), VideoDataInterface {
             bottomSheetDialog.hide()
         }
     }
+
     private fun onRepliesClick(comments: List<DetailCommentsItem.Comments?>?) = Unit
     override fun getVideoUrl(): String {
         return videoUrl

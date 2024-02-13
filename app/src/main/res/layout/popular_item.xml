@@ -36,7 +36,7 @@
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:background="@drawable/round_left_top_corner_16dp"
-        android:backgroundTint="#8083FF"
+        android:backgroundTint="@color/white"
         app:layout_constraintBottom_toBottomOf="@id/iv_popular_item_video"
         app:layout_constraintEnd_toEndOf="@id/iv_popular_item_video">
 

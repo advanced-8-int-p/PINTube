@@ -167,6 +167,9 @@
 
 
 
+
+
+
     <ScrollView
         android:id="@+id/sv_detail_info"
         android:layout_width="match_parent"
@@ -332,4 +335,30 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_detail_bookmark"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/cl_detail_comment"
+        app:layout_constraintEnd_toEndOf="@+id/sv_detail_info"
+        app:layout_constraintStart_toStartOf="@+id/sv_detail_info"
+        app:layout_constraintTop_toTopOf="@+id/sv_detail_info">
+
+        <FrameLayout
+            android:id="@+id/btn_fl_popular_item_pin_back"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <ImageView
+                android:id="@+id/iv_popular_item_pin"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="2dp"
+                app:srcCompat="@drawable/push_pin"
+                app:tint="@color/main_color" />
+        </FrameLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
