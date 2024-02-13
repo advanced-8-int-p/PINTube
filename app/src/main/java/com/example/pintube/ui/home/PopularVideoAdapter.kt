@@ -23,8 +23,14 @@ class PopularVideoAdapter(
     inner class PopularViewHolder(private val binding: PopularItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun onBind(item: VideoItemData) = binding.also { b ->
-            item.videoThumbnailUri?.let { b.ivPopularItemVideo.load(it) }
-            item.channelThumbnailUri?.let { b.ivPopularItemChannel.load(it) }
+            item.videoThumbnailUri?.let {
+                b.ivPopularItemVideo.load(it){
+                    crossfade(true)
+                } }
+            item.channelThumbnailUri?.let {
+                b.ivPopularItemChannel.load(it){
+                crossfade(true)
+            } }
             item.title?.let { b.tvPopularItemTitle.text = it }
             item.channelName?.let { b.tvPopularItemName.text = it }
             item.date?.let { b.tvPopularItemDate.text = it }

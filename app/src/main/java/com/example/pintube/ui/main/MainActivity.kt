@@ -1,5 +1,6 @@
-package com.example.pintube.ui
+package com.example.pintube.ui.main
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavOptions
@@ -7,6 +8,8 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.example.pintube.R
 import com.example.pintube.databinding.ActivityMainBinding
+import com.example.pintube.ui.shorts.ShortsActivity
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -31,54 +34,60 @@ class MainActivity : AppCompatActivity() {
 
         initView()
     }
+
     private fun initView() {
         initBottomNav()
     }
 
-    private fun initBottomNav() = with(binding){
+    private fun initBottomNav() = with(binding) {
         navView.setupWithNavController(navController)
         navView.background = null
 
-        var currentFragment = (R.id.navigation_home)
+        var lastFragment = (R.id.navigation_home)
+        var currentFragment = R.id.navigation_home
 
         mainFab.setOnClickListener {
-            if (mainMotion.currentState == mainMotion.startState) {
-                mainMotion.transitionToEnd()
+            if (currentFragment == R.id.navigation_detail) {
+                if (mainMotion.currentState == mainMotion.startState) {
+                    mainMotion.transitionToEnd()
+                } else {
+                    mainMotion.transitionToStart()
+                }
             } else {
-                mainMotion.transitionToStart()
+                startActivity(
+                    Intent(
+                        this@MainActivity,
+                        ShortsActivity::class.java
+                    )
+                )
             }
         }
 
-        mainFabShorts.setOnClickListener {
-            val navOptions = NavOptions.Builder()
-                .setPopUpTo(currentFragment, true)
-                .build()
-            navController.navigate(
-                resId = R.id.navigation_shorts,
-                args = null,
-                navOptions = navOptions,
-                )
+        mainFabShare.setOnClickListener {
             mainMotion.transitionToStart()
         }
 
         mainFabPin.setOnClickListener {
             val navOptions = NavOptions.Builder()
-                .setPopUpTo(currentFragment, true)
+                .setPopUpTo(lastFragment, true)
                 .build()
             navController.navigate(
                 R.id.navigation_detail,
-                    args = null,
+                args = null,
                 navOptions = navOptions,
             )
             mainMotion.transitionToStart()
         }
 
 
-        navController.addOnDestinationChangedListener { _, destination,_ ->
-
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            currentFragment = destination.id
             when (destination.id) {
-                R.id.navigation_home -> currentFragment = destination.id
-                R.id.navigation_mypage -> currentFragment = destination.id
+                R.id.navigation_home, R.id.navigation_mypage -> lastFragment = destination.id
+            }
+            when (destination.id) {
+                R.id.navigation_detail -> mainFab.setImageResource(R.drawable.ic_main_fab_plus)
+                else -> mainFab.setImageResource(R.drawable.ic_nav_fab_shorts)
             }
         }
     }

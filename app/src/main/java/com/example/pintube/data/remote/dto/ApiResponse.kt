@@ -1,20 +1,12 @@
 package com.example.pintube.data.remote.dto
 
-data class SearchApiResponse(
+data class GenericApiResponse<T>(
     val etag: String?,
-    val items: List<SearchItemResponse>?,
+    val items: List<T>?,
     val kind: String?,
     val regionCode: String?,
     val nextPageToken: String?,
-    val pageInfo: PageInfo?
-)
-
-data class ApiResponse(
-    val etag: String?,
-    val items: List<ItemResponse>?,
-    val kind: String?,
-    val regionCode: String?,
-    val nextPageToken: String?,
+    val prevPageToken: String?,
     val pageInfo: PageInfo?
 )
 data class PageInfo(

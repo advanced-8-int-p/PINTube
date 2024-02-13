@@ -1,4 +1,4 @@
-package com.example.pintube.data.repository
+package com.example.pintube.data.repository.local
 
 import com.example.pintube.data.local.dao.ChannelDAO
 import com.example.pintube.data.local.dao.ChannelThumbnail
@@ -17,8 +17,12 @@ class LocalVideoRepositoryImpl @Inject constructor(
     override suspend fun saveVideos(
         item: VideoEntity,
         isPopular: Boolean?,
-    ): LocalVideoEntity? = item.convertToLocalVideoEntity(isPopular).apply {
-        this?.let { videoDAO.insert(it) }
+    ) {
+        item.convertToLocalVideoEntity(isPopular).apply {
+            this?.let {
+                videoDAO.insert(it)
+            }
+        }
     }
 
     override suspend fun findVideoDetail(
@@ -26,12 +30,15 @@ class LocalVideoRepositoryImpl @Inject constructor(
     ): LocalVideoEntity? = videoDAO.findVideo(videoId)
 
     override suspend fun findPopularVideos()
-            : List<VideoWithThumbnail>? = videoDAO.findPopularVideos()?.map { video ->
-        VideoWithThumbnail(
-            video = video,
-            thumbnail = channelDAO.getChannelThumbnail(video.channelId)
-        )
-    }
+            : List<VideoWithThumbnail>? =
+        videoDAO.findPopularVideos(
+            LocalDateTime.now().minusHours(12).convertLocalDateTime()
+        )?.map { video ->
+            VideoWithThumbnail(
+                video = video,
+                thumbnail = channelDAO.getChannelThumbnail(video.channelId)
+            )
+        }
 
     private fun VideoEntity.convertToLocalVideoEntity(popular: Boolean?): LocalVideoEntity? {
         if (this.id != null) {
@@ -67,7 +74,7 @@ class LocalVideoRepositoryImpl @Inject constructor(
                 saveDate = LocalDateTime.now().convertLocalDateTime(),
                 isPopular = popular
             )
-        }else return null
+        } else return null
     }
 }
 

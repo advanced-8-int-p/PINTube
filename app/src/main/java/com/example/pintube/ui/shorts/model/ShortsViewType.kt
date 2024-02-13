@@ -1,4 +1,4 @@
-package com.example.pintube.ui.shorts
+package com.example.pintube.ui.shorts.model
 
 enum class ShortsViewType {
     ITEM,

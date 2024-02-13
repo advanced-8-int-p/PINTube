@@ -4,17 +4,36 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.shorts.ShortsFragment">
+    android:background="@color/black"
+    tools:context=".ui.shorts.ShortsActivity">
 
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/vp_shorts_viewpager"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:orientation="vertical"
-        android:layout_marginTop="30dp"
-        android:layout_marginBottom="60dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+
+    <ImageView
+        android:id="@+id/iv_shorts_back"
+        android:src="@drawable/ic_back"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_margin="24dp"
+        app:tint = "@color/white"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"/>
+    <ImageView
+        android:id="@+id/iv_shorts_search"
+        android:src="@drawable/ic_nav_fab_search"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_margin="24dp"
+        app:tint="@color/white"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

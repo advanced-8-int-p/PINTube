@@ -17,6 +17,8 @@
     <string name="convert_viewCount_thousands">%1%.1f천 회</string>
     <string name="convert_viewCount_man">%1%.1f만 회</string>
     <string name="convert_viewCount_uck">%1%.1f억 회</string>
+    <string name="comment_empty_comment">아직 댓글이 없습니다.</string>
+    <string name="comment_empty_description">말을 걸어 대화를 시작하세요</string>
 
 
 

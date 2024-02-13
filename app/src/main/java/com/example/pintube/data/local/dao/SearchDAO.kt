@@ -11,7 +11,7 @@ import com.example.pintube.data.local.entity.LocalVideoEntity
 
 @Dao
 interface SearchDAO {
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(item: LocalSearchEntity)
 
     @Update
@@ -20,6 +20,6 @@ interface SearchDAO {
     @Delete
     fun delete(item: LocalSearchEntity)
 
-    @Query("Select * From search_info Where `query` = :query AND date(saveDate) >= date('now', '-1 day')")
-    fun findSearchRecord(query: String): List<LocalSearchEntity>?
+    @Query("Select * From search_info Where `query` = :query AND saveDate >= :date")
+    fun findSearchRecord(query: String, date: String): List<LocalSearchEntity>?
 }

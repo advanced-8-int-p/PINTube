@@ -1,4 +1,4 @@
-package com.example.pintube.data.repository
+package com.example.pintube.data.repository.local
 
 import com.example.pintube.data.local.dao.ChannelDAO
 import com.example.pintube.data.local.dao.SearchDAO
@@ -18,13 +18,18 @@ class LocalSearchRepositoryImpl @Inject constructor(
     override suspend fun saveSearchResult(
         item: SearchEntity,
         query: String
-    ): LocalSearchEntity? = item.convertToLocalSearchEntity(query).apply {
-        this?.let { searchDAO.insert(it) }
+    ){
+        item.convertToLocalSearchEntity(query).apply {
+            this?.let { searchDAO.insert(it) }
+        }
     }
 
     override suspend fun findSearchRecord(
         query: String,
-    ): List<VideoWithThumbnail>? = searchDAO.findSearchRecord(query)?.map {
+    ): List<VideoWithThumbnail>? = searchDAO.findSearchRecord(
+        query,
+        LocalDateTime.now().minusHours(12).convertLocalDateTime()
+        )?.map {
         VideoWithThumbnail(
             video = videoDAO.findVideo(it.id),
             thumbnail = channelDAO.getChannelThumbnail(it.channelId)

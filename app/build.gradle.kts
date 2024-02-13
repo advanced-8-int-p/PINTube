@@ -84,12 +84,16 @@ android {
         implementation("com.google.dagger:hilt-android:2.50")
         ksp("com.google.dagger:hilt-android-compiler:2.50")
 
-        //video player
-        implementation("com.google.android.exoplayer:exoplayer:2.19.1")
+        // 더보기
+        implementation("kr.co.prnd:readmore-textview:1.0.0")
 
-        implementation("androidx.media3:media3-session:1.2.1")
-        implementation("androidx.media3:media3-exoplayer:1.2.1")
-        implementation("androidx.media3:media3-exoplayer-dash:1.2.1")
-        implementation("androidx.media3:media3-ui:1.2.1")
+        // youtube player
+        implementation("com.pierfrancescosoffritti.androidyoutubeplayer:core:12.1.0")
+
+        // jsoup html데이터 파싱
+        implementation("org.jsoup:jsoup:1.17.2")
+
+        //lottie
+        implementation("com.airbnb.android:lottie:6.3.0")
     }
 }

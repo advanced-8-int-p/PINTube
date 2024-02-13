@@ -12,6 +12,8 @@ const val MULTI_VIDEO = 3
 
 const val MULTI_HEADER = 0
 
+const val MULTI_LOADING = -1
+
 sealed interface SealedMulti {
 
     val viewType: Int
@@ -40,6 +42,11 @@ sealed interface SealedMulti {
         val videoItemData: VideoItemData,
     ) : SealedMulti {
         override val viewType: Int = MULTI_VIDEO
+    }
+
+    data object Loading: SealedMulti {
+        override val viewType: Int
+            get() = MULTI_LOADING
     }
 
 }
