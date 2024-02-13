@@ -12,7 +12,6 @@ import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.GridLayoutManager.SpanSizeLookup
@@ -35,14 +34,11 @@ class HomeFragment : Fragment() {
 
     private val onVideoClick = { item: VideoItemData ->
         findNavController().navigate(
-            resId = R.id.navigation_detail,
+            resId = R.id.action_navigation_home_to_navigation_detail,
             //args = null,
             args = Bundle().apply {
                 putString("video_id", item.id)
-            },
-            navOptions = NavOptions.Builder()
-                .setPopUpTo(R.id.navigation_home, true)
-                .build(),
+            }
         )
 //            mainMotion.transitionToStart()
     }
@@ -59,7 +55,7 @@ class HomeFragment : Fragment() {
     private val popularVideoAdapter = PopularVideoAdapter(
         onItemClick = onVideoClick,
         onBookmarkClick = { item ->
-            if (item.isSaved.not()){
+            if (item.isSaved.not()) {
                 viewModel.addBookmark(item)
             } else {
                 viewModel.removeBookmark(item)
