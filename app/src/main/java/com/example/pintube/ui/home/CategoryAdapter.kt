@@ -4,7 +4,6 @@ import android.graphics.drawable.GradientDrawable
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.annotation.DrawableRes
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -16,15 +15,19 @@ class CategoryAdapter(
     private val onItemClick: (query: String) -> Unit
 ) : ListAdapter<String, CategoryAdapter.CategoryViewHolder>(object :
     DiffUtil.ItemCallback<String>() {
-    override fun areItemsTheSame(oldItem: String, newItem: String): Boolean = true
+    override fun areItemsTheSame(oldItem: String, newItem: String): Boolean =
+        oldItem == newItem
+
     override fun areContentsTheSame(oldItem: String, newItem: String): Boolean =
         oldItem == newItem
 }) {
     private var selectedItem: String? = null
+
     inner class CategoryViewHolder(private val binding: CategoryItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun onBind(item: String) = binding.also { b ->
 //            Log.d("jj-카테고리뷰홀더 onBind", model)  //ddd
+            if (selectedItem == null) selectedItem = item
             updateUI(item == selectedItem, binding)
             b.tvCategoryName.text = item
 
@@ -39,7 +42,7 @@ class CategoryAdapter(
         private fun updateUI(
             isSelected: Boolean,
             binding: CategoryItemBinding
-        ) = with(binding){
+        ) = with(binding) {
             val context = binding.root.context
             val drawable = GradientDrawable()
             drawable.shape = GradientDrawable.RECTANGLE

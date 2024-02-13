@@ -14,6 +14,7 @@ data class VideoItemData(
     var length: String? = null,
     var isSaved: Boolean? = null,
     val id: String? = null,
+    val channelId: String? = null,
 ) : Parcelable
 
 /*

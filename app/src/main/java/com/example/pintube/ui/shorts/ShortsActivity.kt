@@ -6,6 +6,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
@@ -62,6 +63,7 @@ class ShortsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
+        window.statusBarColor = ContextCompat.getColor(this, R.color.black)
 
         initView()
         initViewModel()
@@ -91,7 +93,11 @@ class ShortsActivity : AppCompatActivity() {
         }
 
         viewModel.comments.observe(this) {
-            commentAdapter.submitList(it)
+            if (it.isEmpty().not()) {
+                commentAdapter.submitList(it)
+            } else {
+                commentAdapter.submitList(listOf(CommentsItem.NoComments))
+            }
         }
     }
 
@@ -123,4 +129,9 @@ class ShortsActivity : AppCompatActivity() {
     * Todo 대댓글 클릭시 화면 전환후 보여주기
     * */
     private fun onRepliesClick(comments: List<CommentsItem.Comments?>?) = Unit
+
+    override fun onPause() {
+        window.statusBarColor = ContextCompat.getColor(this, R.color.main_color)
+        super.onPause()
+    }
 }

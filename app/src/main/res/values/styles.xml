@@ -20,9 +20,7 @@
         <item name="contentInsetStartWithNavigation">0dp</item>
     </style>
 
-    <style name="customDialogBackground" parent="">
-        <item name="background">@drawable/subtract</item>
+    <style name="SplashTheme" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:windowBackground">@drawable/ic_splash_pintube</item>
     </style>
-
-
 </resources>

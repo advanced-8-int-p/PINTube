@@ -80,16 +80,25 @@
         app:layout_constraintTop_toTopOf="@+id/iv_comment_like"
         app:layout_constraintVertical_bias="1.0" />
 
-    <TextView
-        android:id="@+id/tv_comment_replies"
+    <LinearLayout
+        android:id="@+id/tv_comment_replies_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:text="답글 57개"
-        android:textSize="12sp"
-        android:textColor="@color/ios_color"
+        android:paddingVertical="8dp"
+        android:orientation="vertical"
         android:visibility="gone"
+        android:background="@drawable/custom_ripple_effect"
         app:layout_constraintTop_toBottomOf="@+id/tv_comment_like_count"
-        app:layout_constraintStart_toStartOf="@id/tv_comment_username"/>
+        app:layout_constraintStart_toStartOf="@id/tv_comment_username">
+
+        <TextView
+            android:id="@+id/tv_comment_replies"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="답글 57개"
+            android:textSize="12sp"
+            android:textColor="@color/ios_color"/>
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

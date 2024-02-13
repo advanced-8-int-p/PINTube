@@ -1,10 +1,10 @@
 package com.example.pintube.di
 
-import com.example.pintube.data.repository.ApiRepositoryImpl
-import com.example.pintube.data.repository.LocalChannelRepositoryImpl
-import com.example.pintube.data.repository.LocalCommentRepositoryImpl
-import com.example.pintube.data.repository.LocalSearchRepositoryImpl
-import com.example.pintube.data.repository.LocalVideoRepositoryImpl
+import com.example.pintube.data.repository.sever.ApiRepositoryImpl
+import com.example.pintube.data.repository.local.LocalChannelRepositoryImpl
+import com.example.pintube.data.repository.local.LocalCommentRepositoryImpl
+import com.example.pintube.data.repository.local.LocalSearchRepositoryImpl
+import com.example.pintube.data.repository.local.LocalVideoRepositoryImpl
 import com.example.pintube.domain.repository.ApiRepository
 import com.example.pintube.domain.repository.LocalChannelRepository
 import com.example.pintube.domain.repository.LocalCommentRepository

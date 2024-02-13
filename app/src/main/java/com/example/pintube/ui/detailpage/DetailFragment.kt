@@ -9,28 +9,34 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.webkit.WebChromeClient
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import coil.load
+import com.example.pintube.R
 import com.example.pintube.databinding.FragmentDetailBinding
+import com.example.pintube.ui.detailpage.adapter.DetailCommentAdapter
+import com.example.pintube.ui.shorts.model.ShortsItem
 import com.example.pintube.utill.convertToDaysAgo
 import com.example.pintube.utill.convertViewCount
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 
 class DetailFragment : Fragment() {
 
-    private var _binding : FragmentDetailBinding? = null
+    private var _binding: FragmentDetailBinding? = null
 
     private val binding get() = _binding!!
 
     private lateinit var mContext: Context
-
-    private var tempMediaId: String = "rkuE-ygaSgQ"
 
     private lateinit var playerSrc: String
 
@@ -39,6 +45,24 @@ class DetailFragment : Fragment() {
     private var isPlaying = false
 
     private lateinit var viewModel: DetailViewModel
+
+    private val commentAdapter: DetailCommentAdapter by lazy {
+        DetailCommentAdapter(
+            onRepliesClick = this::onRepliesClick
+        )
+    }
+
+    private val commentSheetView by lazy {
+        layoutInflater.inflate(R.layout.comments_bottom_sheet, null)
+    }
+
+    private val commentRecyclerView by lazy {
+        commentSheetView.findViewById<RecyclerView>(R.id.rv_bottom_comment)
+    }
+
+    private val bottomSheetDialog by lazy {
+        BottomSheetDialog(requireContext())
+    }
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -61,7 +85,7 @@ class DetailFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         videoUrl = "youtube.com"
-
+        initView()
         initViewModel()
 
 //        Log.d("viewModel", "player bf $videoUrl")
@@ -86,14 +110,6 @@ class DetailFragment : Fragment() {
 
     }
 
-    override fun onStart() {
-        super.onStart()
-    }
-
-    override fun onStop() {
-        super.onStop()
-    }
-
     override fun onDestroy() {
         super.onDestroy()
         _binding = null
@@ -101,25 +117,45 @@ class DetailFragment : Fragment() {
 
     private fun initView() {
         //뷰 초기화, 받아온 정보 배치
+        setCommentSheet()
     }
 
     @SuppressLint("SetTextI18n")
     private fun initViewModel() = viewModel.also { viewModel1 ->
-        viewModel1.getData(id = tempMediaId)
+        lateinit var count: String
         viewModel1.media.observe(viewLifecycleOwner, Observer {
             Log.d("viewModel", "init video data $it")
             playerSrc = it.player.toString()
             videoUrl = getUrlFromSrc(playerSrc)
             Log.d("viewModel", "player af $videoUrl")
             initPlayer()
-            binding.ivDetailProfilePic.load(it.channelProfile)
-            binding.tvDetailChannelName.text = it.channelTitle.toString()
-            binding.tvDetailViewCount.text = it.viewCount?.convertViewCount().toString() + " views"
-            binding.tvDetailFavCount.text = it.likeCount?.convertViewCount().toString()
-            binding.tvDetailTitle.text = it.title.toString()
-            binding.tvDetailContent.text = it.publishedAt?.convertToDaysAgo().toString() + "\n\n\n" + it.description.toString()
-            binding.tvDetailCommentCount.text = "댓글 " + it.commentCount.toString()
+            with(binding) {
+                ivDetailProfilePic.load(it.channelProfile)
+                tvDetailChannelName.text = it.channelTitle.toString()
+                tvDetailViewCount.text =
+                    it.viewCount?.convertViewCount().toString() + " views"
+                tvDetailFavCount.text = it.likeCount?.convertViewCount().toString()
+                tvDetailTitle.text = it.title.toString()
+                tvDetailContent.text = it.publishedAt?.convertToDaysAgo()
+                    .toString() + "\n\n\n" + it.description.toString()
+                count = it.commentCount?.convertViewCount()?: "0"
+                tvDetailCommentCount.text = "댓글 $count"
+            }
         })
+
+        viewModel1.comments.observe(viewLifecycleOwner) { item ->
+            with(binding) {
+                ivDetailCommentFirstProfilePic.load(item.first().userProfileImage)
+                tvDetailCommentFirstName.text = item.first().userName
+                tvDetailCommentFirst.text = item.first().textOriginal
+                tvDetailCommentFirstLikeCount.text = " " + item.first().likeCount.toString().convertViewCount()
+                clDetailComment.setOnClickListener {
+                    setCommentSheet(count)
+                    bottomSheetDialog.show()
+                }
+            }
+            commentAdapter.submitList(item)
+        }
     }
 
     @SuppressLint("SetJavaScriptEnabled")
@@ -149,8 +185,6 @@ class DetailFragment : Fragment() {
         return matchResult?.groups?.get(1)?.value.toString()
     }
 
-
-
     private fun shareLink() {
         val intent = Intent().apply {
             action = Intent.ACTION_SEND
@@ -161,4 +195,17 @@ class DetailFragment : Fragment() {
         startActivity(shareChooser)
     }
 
+    private fun setCommentSheet() = with(binding){
+        bottomSheetDialog.setContentView(commentSheetView)
+        commentRecyclerView.adapter = commentAdapter
+        commentRecyclerView.layoutManager = LinearLayoutManager(requireContext())
+    }
+
+    private fun setCommentSheet(count: String) = with(commentSheetView) {
+        findViewById<TextView>(R.id.tv_comment_count).text = count
+        findViewById<ImageView>(R.id.iv_comment_close).setOnClickListener {
+            bottomSheetDialog.hide()
+        }
+    }
+    private fun onRepliesClick(comments: List<DetailCommentsItem.Comments?>?) = Unit
 }

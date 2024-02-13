@@ -4,16 +4,14 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.pintube.data.local.entity.LocalCommentEntity
-import com.example.pintube.data.repository.VideoWithThumbnail
+import com.example.pintube.data.repository.local.VideoWithThumbnail
 import com.example.pintube.domain.repository.ApiRepository
 import com.example.pintube.domain.repository.LocalChannelRepository
 import com.example.pintube.domain.repository.LocalCommentRepository
 import com.example.pintube.domain.repository.LocalSearchRepository
 import com.example.pintube.domain.repository.LocalVideoRepository
-import com.example.pintube.utill.convertToDaysAgo
+import com.example.pintube.utill.convertComment
 import com.example.pintube.utill.convertViewCount
-import com.google.android.exoplayer2.util.Log
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -36,9 +34,9 @@ class ShortsViewModel @Inject constructor(
     val comments: LiveData<List<CommentsItem.Comments>> get() = _comments
 
     fun getShortsVideos() = viewModelScope.launch(Dispatchers.IO) {
-        var result = localSearchRepository.findSearchRecord("#shorts")
+        var result = localSearchRepository.findSearchRecord("#쇼츠 #shorts")
 
-        if (result?.size == 0) {
+        if (result.isNullOrEmpty()) {
             result = getShortsApiResponse()
         }
         _videos.postValue(result?.map {
@@ -49,7 +47,7 @@ class ShortsViewModel @Inject constructor(
     fun getComments(id: String) = viewModelScope.launch(Dispatchers.IO) {
         var comments = localCommentRepository.findComment(id)
 
-        if (comments?.isEmpty() == true) {
+        if (comments.isNullOrEmpty()) {
             apiRepository.getComments(id)?.forEach { item ->
                     localCommentRepository.saveComment(item)
             }
@@ -66,7 +64,7 @@ class ShortsViewModel @Inject constructor(
         apiRepository.getRandomShorts()?.forEach { item ->
             item.id?.let { videoIds.add(it) }
             item.channelId?.let { channelIds.add(it) }
-            localSearchRepository.saveSearchResult(item, "#shorts")
+            localSearchRepository.saveSearchResult(item, "#쇼츠 #shorts")
         }
         apiRepository.getContentDetails(videoIds)?.forEach { item ->
             localVideoRepository.saveVideos(item)
@@ -75,7 +73,7 @@ class ShortsViewModel @Inject constructor(
             localChannelRepository.saveChannel(item)
         }
 
-        return localSearchRepository.findSearchRecord("#shorts")
+        return localSearchRepository.findSearchRecord("#쇼츠 #shorts")
     }
 
     private fun VideoWithThumbnail.convertShortsItem() = ShortsItem.Item(
@@ -87,19 +85,5 @@ class ShortsViewModel @Inject constructor(
         commentCount = this.video?.commentCount?.convertViewCount(),
     )
 
-    private fun LocalCommentEntity.convertComment() : CommentsItem.Comments {
-        return CommentsItem.Comments(
-            id = this.id,
-            textDisplay = this.textDisplay,
-            textOriginal = this.textOriginal,
-            userName = this.authorDisplayName,
-            userProfileImage = this.authorProfileImageUrl,
-            likeCount = this.likeCount,
-            publishedAt = this.publishedAt?.convertToDaysAgo(),
-            isUpdate = (this.updatedAt != this.publishedAt),
-            totalReplyCount = this.totalReplyCount,
-            replies = null,
-        )
-    }
 }
 

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.motion.widget.MotionLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/ml_splash_layout"
+    android:background="@color/white"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.splash.Splash"
+    app:layoutDescription="@xml/activity_splash_scene">
+
+
+    <ImageView
+        android:id="@+id/iv_splash_play"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:src="@drawable/ic_splash_play"
+        app:layout_constraintWidth_percent="0.13"
+        app:layout_constraintHeight_percent="0.15"
+        app:layout_constraintVertical_bias="0.3"
+        app:layout_constraintHorizontal_bias="0.54"
+        app:layout_constraintTop_toTopOf="@+id/iv_splash_pin"
+        app:layout_constraintStart_toStartOf="@+id/iv_splash_pin"
+        app:layout_constraintEnd_toEndOf="@+id/iv_splash_pin"
+        app:layout_constraintBottom_toBottomOf="@+id/iv_splash_pin"
+        app:tint="@color/main_color"/>
+    <ImageView
+        android:id="@+id/iv_splash_pin"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:src="@drawable/ic_splash_pin"
+        app:layout_constraintWidth_percent="0.4"
+        app:layout_constraintHeight_percent="0.4"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:tint="@color/main_color"/>
+
+    <ImageView
+        android:id="@+id/iv_splash_status"
+        android:layout_width="0dp"
+        android:layout_height="14dp"
+        android:src="@drawable/ic_status_bar"
+        android:scaleType="fitXY"
+        android:visibility="gone"
+        app:layout_constraintWidth_percent="0.55"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+    <ImageView
+        android:id="@+id/iv_splash_status_loading"
+        android:layout_width="0dp"
+        android:layout_height="14dp"
+        android:src="@drawable/ic_status_bar"
+        android:scaleType="fitXY"
+        android:visibility="gone"
+        app:layout_constraintWidth_percent="0.55"
+        app:layout_constraintTop_toTopOf="@+id/iv_splash_status"
+        app:layout_constraintStart_toStartOf="@+id/iv_splash_status"
+        app:layout_constraintBottom_toBottomOf="@+id/iv_splash_status"
+        app:tint="@color/main_color" />
+
+</androidx.constraintlayout.motion.widget.MotionLayout>
