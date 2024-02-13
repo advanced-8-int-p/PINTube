@@ -7,10 +7,10 @@
     android:padding="8dp">
 
     <ImageView
-        android:layout_width="170dp"
-        android:layout_height="158dp"
+        android:layout_width="160dp"
+        android:layout_height="148dp"
         android:background="@drawable/round_corner"
-        android:backgroundTint="@color/black"
+        android:backgroundTint="#CB2B2A2A"
         android:elevation="0dp"
 
         app:layout_constraintStart_toStartOf="@+id/iv_pin_group_thumbnail"
@@ -21,8 +21,8 @@
 
     <ImageView
         android:id="@+id/iv_pin_group_thumbnail"
-        android:layout_width="200dp"
-        android:layout_height="150dp"
+        android:layout_width="180dp"
+        android:layout_height="140dp"
         android:scaleType="centerCrop"
         android:background="@drawable/round_corner"
         android:clipToOutline="true"

@@ -1,28 +1,32 @@
 package com.example.pintube.ui.mypage
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.net.toUri
+import androidx.core.view.isVisible
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.example.pintube.databinding.ItemChannelProfileBinding
 import com.example.pintube.databinding.ItemMypageHeaderBinding
-import com.example.pintube.databinding.ItemMypagePinGroupBinding
 import com.example.pintube.databinding.RecyclerviewPinnedGroupBinding
 import com.example.pintube.databinding.RecyclerviewRecentVideosBinding
-import com.example.pintube.databinding.VideoItemBinding
+import com.example.pintube.utill.Constants
+import com.example.pintube.utill.convertViewCount
 
-class MypageAdapter(private val mContext: Context): RecyclerView.Adapter<ViewHolder>() {
+class MypageAdapter(private val mContext: Context, private val multiViewType: MutableList<MypageViewType>): RecyclerView.Adapter<ViewHolder>() {
 
-    var multiViewType = mutableListOf<MypageViewType>()
+//    var multiViewType = mutableListOf<MypageViewType>()
 
     companion object {
-        private const val VIEW_TYPE_PROFILE = 1
-        private const val VIEW_TYPE_TITLE = 2
-        private const val VIEW_TYPE_RECENT = 3
-        private const val VIEW_TYPE_PINNED = 4
+        private const val VIEW_TYPE_PROFILE = 0
+        private const val VIEW_TYPE_TITLE = 1
+        private const val VIEW_TYPE_RECENT = 2
+        private const val VIEW_TYPE_PINNED = 3
     }
 
     interface ItemClick {
@@ -53,22 +57,30 @@ class MypageAdapter(private val mContext: Context): RecyclerView.Adapter<ViewHol
         }
     }
 
+
+    @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         when (val items = multiViewType[position]) {
             is MypageViewType.Profile -> {
-                (holder as MypageProfileViewHolder).userProfile.setImageURI(items.userProfile.toUri())
-                holder.userName.text = items.userName
-                holder.userId.text = items.userId
-                holder.userInfo.text = "구독자" + items.userSubscriber.toString() + "명" + "  " + "영상"
+                (holder as MypageProfileViewHolder).userProfile.setImageURI(items.myProfile.myAccountProfileUri.toString().toUri())
+                holder.userName.text = items.myProfile.myAccountName.toString()
+                holder.userId.text = items.myProfile.myAccountId.toString()
+                holder.userInfo.text = "구독자" + items.myProfile.myAccountSubscriber.toString().convertViewCount() + "명" + "  " + "동영상" + items.myProfile.myAccountVideoCount.toString().convertViewCount() + "개"
+                holder.userDescription.text = items.myProfile.myAccountDescription.toString()
             }
             is MypageViewType.Header -> {
-
+                (holder as MypageHeaderViewHolder).title.text = items.title
+                holder.btn.isVisible = items.isRecent
             }
             is MypageViewType.RecentItems -> {
-
+                val adapter = RecyclerviewRecentVideoAdapter(mContext, Constants.recentItemsList)
+                (holder as MypageRecentItemViewHolder).recyclerView.adapter = adapter
+                holder.recyclerView.layoutManager = LinearLayoutManager(mContext)
             }
-            else -> {
-
+            is MypageViewType.PinItems -> {
+                val adapter = RecyclerviewPinnedGroupAdapter(mContext, items.items)
+                (holder as MypagePinItemViewHolder).recyclerView.adapter = adapter
+                holder.recyclerView.layoutManager = GridLayoutManager(mContext, 2)
             }
         }
     }
@@ -77,10 +89,15 @@ class MypageAdapter(private val mContext: Context): RecyclerView.Adapter<ViewHol
         return multiViewType.size
     }
 
-//    override fun getItemViewType(position: Int): Int {
-//        return
-//
-//    }
+    override fun getItemViewType(position: Int): Int {
+        return when(multiViewType[position]) {
+            is MypageViewType.Profile -> VIEW_TYPE_PROFILE
+            is MypageViewType.Header -> VIEW_TYPE_TITLE
+            is MypageViewType.RecentItems -> VIEW_TYPE_RECENT
+            is MypageViewType.PinItems -> VIEW_TYPE_PINNED
+        }
+
+    }
 
     inner class MypageProfileViewHolder(binding: ItemChannelProfileBinding): RecyclerView.ViewHolder(binding.root) {
         val userProfile = binding.ivMypageProfile
@@ -97,24 +114,13 @@ class MypageAdapter(private val mContext: Context): RecyclerView.Adapter<ViewHol
     }
 
     inner class MypageRecentItemViewHolder(binding: RecyclerviewRecentVideosBinding): RecyclerView.ViewHolder(binding.root) {
-        val recyclerView = binding.rvRecyclerviewRecent.adapter
-        val adapter = RecyclerviewRecentVideoAdapter(mContext)
-//        val thumbnail = binding.ivItemVideo
-//        val length = binding.tvPopularItemLength
-//        val videoTitle = binding.tvItemTitle
-//        val channelImg = binding.ivItemChannel
-//        val channelName = binding.tvItemName
-//        val videoViews = binding.tvItemViews
-//        val uploadDate = binding.tvItemDate
-        //새로 adapter binding recyclerview
+        val recyclerView = binding.rvRecyclerviewRecent
+
     }
 
     inner class MypagePinItemViewHolder(binding: RecyclerviewPinnedGroupBinding): RecyclerView.ViewHolder(binding.root) {
         val recyclerView = binding.rvRecyclerviewPinned
-        val adapter = RecyclerviewPinnedGroupAdapter()
-//        val groupThumbnail = binding.ivPinGroupThumbnail
-//        val groupVideoCount = binding.tvPinGroupCount
-//        val groupName = binding.tvPinGroupName
+
     }
 
 }

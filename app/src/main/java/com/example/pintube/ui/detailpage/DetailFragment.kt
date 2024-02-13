@@ -87,7 +87,6 @@ class DetailFragment : Fragment(), VideoDataInterface {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        videoUrl = "youtube.com"
         initView()
         initViewModel()
 
@@ -164,7 +163,6 @@ class DetailFragment : Fragment(), VideoDataInterface {
     @SuppressLint("SetJavaScriptEnabled")
     private fun initPlayer() {
 
-        //왜안되지...........으악
 
         val webView = binding.playerDetail
 

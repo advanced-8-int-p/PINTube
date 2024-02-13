@@ -13,8 +13,10 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.pintube.databinding.FragmentMypageBinding
+import com.example.pintube.ui.Search.SearchActivity
 import com.example.pintube.ui.main.MainActivity
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
@@ -30,14 +32,14 @@ class MypageFragment : Fragment() {
 
     private var _binding: FragmentMypageBinding? = null
 
-    // This property is only valid between onCreateView and
-    // onDestroyView.
     private val binding get() = _binding!!
 
     lateinit var mGoogleSignInClient: GoogleSignInClient
     lateinit var resultLauncher: ActivityResultLauncher<Intent>
 
     private lateinit var adapter: MypageAdapter
+
+//    private var pinGroup: MutableList<String> = mutableListOf()
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -64,6 +66,16 @@ class MypageFragment : Fragment() {
 //            textView.text = it
 //        }
 
+
+        return root
+    }
+
+
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        initView()
+        setupListeners()
         setResultSignUp()
 
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -72,14 +84,6 @@ class MypageFragment : Fragment() {
             .build()
 
         mGoogleSignInClient = GoogleSignIn.getClient(requireContext(), gso)
-
-
-        return root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
     }
 
     override fun onDestroyView() {
@@ -88,9 +92,20 @@ class MypageFragment : Fragment() {
     }
 
     private fun initView() {
-        adapter = MypageAdapter(mContext)
+        val mItems = mutableListOf<MypageViewType>()
+        adapter = MypageAdapter(mContext, mItems)
         binding.rvMypageList.adapter = adapter
         binding.rvMypageList.layoutManager = LinearLayoutManager(mContext)
+    }
+
+    private fun setupListeners() {
+        binding.ivMypageBack.setOnClickListener {
+            findNavController().popBackStack()
+        }
+        binding.ivMypageSearch.setOnClickListener {
+            val intent = Intent(requireContext(), SearchActivity::class.java)
+            startActivity(intent)
+        }
     }
 
     private fun setResultSignUp() {

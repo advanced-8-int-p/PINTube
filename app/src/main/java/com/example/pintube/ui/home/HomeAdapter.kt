@@ -150,6 +150,7 @@ class HomeAdapter(
             is SealedMulti.Video -> (holder as MultiViewHolderVideo).onBind(item)
 
             is SealedMulti.Loading -> (holder as LoadingHolder).onBind()
+            else -> Unit
         }
     }
 

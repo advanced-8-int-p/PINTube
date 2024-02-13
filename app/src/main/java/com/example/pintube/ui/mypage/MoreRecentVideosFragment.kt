@@ -1,15 +1,16 @@
-package com.example.pintube
+package com.example.pintube.ui.mypage
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.example.pintube.R
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
+private const val ARG_PARAM3 = "param1"
+private const val ARG_PARAM4 = "param2"
 
 /**
  * A simple [Fragment] subclass.
@@ -24,8 +25,8 @@ class MoreRecentVideosFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+            param1 = it.getString(ARG_PARAM3)
+            param2 = it.getString(ARG_PARAM4)
         }
     }
 
@@ -51,8 +52,8 @@ class MoreRecentVideosFragment : Fragment() {
         fun newInstance(param1: String, param2: String) =
             MoreRecentVideosFragment().apply {
                 arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+                    putString(ARG_PARAM3, param1)
+                    putString(ARG_PARAM4, param2)
                 }
             }
     }
