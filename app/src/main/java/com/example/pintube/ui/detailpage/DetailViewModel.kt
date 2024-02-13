@@ -5,12 +5,12 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.pintube.data.local.entity.FavoriteEntity
 import com.example.pintube.data.local.entity.LocalVideoEntity
 import com.example.pintube.domain.repository.ApiRepository
 import com.example.pintube.domain.repository.LocalChannelRepository
 import com.example.pintube.domain.repository.LocalCommentRepository
 import com.example.pintube.domain.repository.LocalVideoRepository
+import com.example.pintube.ui.main.MainActivity
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -24,10 +24,12 @@ class DetailViewModel @Inject constructor(
     private val localCommentRepository: LocalCommentRepository
 ) : ViewModel() {
 
-    private var _media: MutableLiveData<DetailItemModel> = MutableLiveData()
-    val media: LiveData<DetailItemModel> get() = _media
+    private var _media: MutableLiveData<DetailItemData> = MutableLiveData()
+    val media: LiveData<DetailItemData> get() = _media
 
     fun getData(id: String) = viewModelScope.launch(Dispatchers.IO) {
+        MainActivity().recentItemsList.add(id)
+
         val result = localVideoRepository.findVideoDetail(id)
         if (result == null) {
             repository.getContentDetails(listOf(id))?.forEach {
@@ -42,7 +44,7 @@ class DetailViewModel @Inject constructor(
         _media.postValue(result.convertToDetailItem())
     }
 
-    private suspend fun LocalVideoEntity.convertToDetailItem() = DetailItemModel(
+    private suspend fun LocalVideoEntity.convertToDetailItem() = DetailItemData(
         id = this.id,
         publishedAt = this.publishedAt,
         title = this.title,

@@ -8,6 +8,7 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.example.pintube.R
 import com.example.pintube.databinding.ActivityMainBinding
+import com.example.pintube.ui.mypage.MypageViewType
 import com.example.pintube.ui.shorts.ShortsActivity
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -23,6 +24,8 @@ class MainActivity : AppCompatActivity() {
     private val navController by lazy {
         navHostFragment.navController
     }
+
+    var recentItemsList = mutableListOf<String>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

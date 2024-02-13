@@ -19,4 +19,10 @@
         <item name="contentInsetStart">0dp</item>
         <item name="contentInsetStartWithNavigation">0dp</item>
     </style>
+
+    <style name="customDialogBackground" parent="">
+        <item name="background">@drawable/subtract</item>
+    </style>
+
+
 </resources>

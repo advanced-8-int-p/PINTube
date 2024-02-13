@@ -1,7 +1,7 @@
 package com.example.pintube.ui.detailpage
 
 
-data class DetailItemModel(
+data class DetailItemData(
     //video
     val id: String?,
     val publishedAt: String?,

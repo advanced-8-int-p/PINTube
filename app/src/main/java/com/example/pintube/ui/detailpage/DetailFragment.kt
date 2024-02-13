@@ -28,7 +28,6 @@ class DetailFragment : Fragment() {
 
     private val binding get() = _binding!!
 
-    //    private lateinit var mediaItemData: DetailItemModel
     private lateinit var mContext: Context
 
     private var tempMediaId: String = "rkuE-ygaSgQ"
