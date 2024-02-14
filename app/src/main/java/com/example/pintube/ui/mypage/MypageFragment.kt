@@ -14,13 +14,15 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.Navigation.findNavController
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.LinearLayoutManager
 import coil.load
 import com.example.pintube.R
+import com.example.pintube.data.local.entity.LocalVideoEntity
 import com.example.pintube.databinding.FragmentMypageBinding
+import com.example.pintube.domain.entitiy.VideoEntity
+import com.example.pintube.domain.repository.LocalFavoriteRepository
+import com.example.pintube.domain.repository.LocalVideoRepository
 import com.example.pintube.ui.Search.SearchActivity
 import com.example.pintube.ui.main.MainActivity
 import com.example.pintube.utill.convertViewCount
@@ -31,14 +33,11 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
 import com.google.android.material.snackbar.Snackbar
-import kotlinx.coroutines.handleCoroutineException
+import kotlinx.coroutines.launch
 
 class MypageFragment : Fragment() {
 
-    private lateinit var mContext: Context
-
     private var _binding: FragmentMypageBinding? = null
-
     private val binding get() = _binding!!
 
     private lateinit var mGoogleSignInClient: GoogleSignInClient
@@ -62,30 +61,30 @@ class MypageFragment : Fragment() {
     private val mItems: MutableList<MypageViewType>
         get() {
             return mutableListOf<MypageViewType>(
+                MypageViewType.TopHeader,
+                MypageViewType.MyPageProfile(
+                    channelName = "aaa",
+                    channelId = "bbb"
+                ),
                 MypageViewType.Header("최근 시청 영상", true),
                 MypageViewType.RecentItems(RecyclerviewRecentVideoAdapter()),
                 MypageViewType.Header("저장한 동영상", false),
-                MypageViewType.PinItems(RecyclerviewPinnedGroupAdapter())
+                MypageViewType.PinItems(RecyclerviewPinnedGroupAdapter(emptyList()))
             )
         }
 
-    private val adapter by lazy { MypageAdapter(mContext, mItems) }
+    private val adapter by lazy { MypageAdapter(requireContext(), mItems) }
 
 //    private val recentAdapter by lazy { RecyclerviewRecentVideoAdapter() }
 
 //    private var pinGroup: MutableList<String> = mutableListOf()
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        mContext = context
-    }
 
     override fun onStart() {
         super.onStart()
         val account = GoogleSignIn.getLastSignedInAccount(requireContext())
         account?.let {
             isLoggedIn = true
-            Snackbar.make(binding.mypageFragment, "logged in", Snackbar.LENGTH_SHORT).show()
+            Snackbar.make(binding.mypageFragment, "로그인 상태입니다", Snackbar.LENGTH_SHORT).show()
         }
 
     }
@@ -95,27 +94,14 @@ class MypageFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-//        val mypageViewModel =
-//            ViewModelProvider(this).get(MypageViewModel::class.java)
-
         _binding = FragmentMypageBinding.inflate(inflater, container, false)
-        val root: View = binding.root
-
-//        val textView: TextView = binding.textNotifications
-        //viewmodel 위치 이상
-//        mypageViewModel.text.observe(viewLifecycleOwner) {
-//            textView.text = it
-//        }
-        initView()
-
-
-        return root
+        return binding.root
     }
-
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        initView()
         setupListeners()
         setResultSignUp()
 
@@ -150,55 +136,60 @@ class MypageFragment : Fragment() {
 
         getCurrentUserProfile()
 
-        binding.also { b ->
-            /*val textViews = listOf(b.tvMypageChannelName, b.tvMypageChannelId)
-
-            b.ivMypageProfile.load(myProfileData.myAccountProfileUri)
-            //배경..... 유튜브 채널 헤더를 어디서 가져오지 아니 근데 구글 계정마다 다 채널 있지는 않지 않나 음...
-            b.mypageFragment.setBackgroundResource(R.drawable.hamster)
-            b.tvMypageChannelName.text = myProfileData.myAccountName
-            b.tvMypageChannelId.text = myProfileData.myAccountId.toString()
-
-//            isLoggedIn = (myProfileData.myAccountId != null)
-
-            Log.d("login", "status= ${isLoggedIn}")
-            if (isLoggedIn) {
-                b.sibtnMypageChannelLogin.isVisible = false
-                b.tvMypageChannelLogout.isVisible = true
-                b.ivMypageProfile.setImageResource(R.drawable.ic_account_empty)
-                textViews.forEach {
-                    it.isVisible = true
-                }
-
-            } else {
-                b.sibtnMypageChannelLogin.isVisible = true
-                b.tvMypageChannelLogout.isVisible = false
-                textViews.forEach {
-                    it.isVisible = false
-                }
-            }
-
-            b.sibtnMypageChannelLogin.setOnClickListener {
-
-                val signInIntent = mGoogleSignInClient.signInIntent
-                startActivityForResult(signInIntent, 0)
-
-                signIn()
-                getCurrentUserProfile()
-
-            }
-
-            b.tvMypageChannelLogout.setOnClickListener {
-                isLoggedIn = false
-                myProfileData.myAccountProfileUri = null
-                myProfileData.myAccountName = null
-                myProfileData.myAccountName = null
-                signOut()
-                revokeAccess()
-            }*/
-
-            getCurrentUserProfile()
-        }
+//        binding.also { b ->
+//            val textViews = listOf(b.tvMypageChannelName, b.tvMypageChannelId)
+//
+//            b.ivMypageProfile.load(myProfileData.myAccountProfileUri)
+//            //배경..... 유튜브 채널 헤더를 어디서 가져오지 아니 근데 구글 계정마다 다 채널 있지는 않지 않나 음...
+//            b.mypageFragment.setBackgroundResource(R.drawable.hamster)
+//            b.tvMypageChannelName.text = myProfileData.myAccountName
+//            //id가 id가 아니라 그 숫자고유값?그런거같은
+//            b.tvMypageChannelId.text = myProfileData.myAccountId.toString()
+//
+////            isLoggedIn = (myProfileData.myAccountId != null)
+//
+//            Log.d("login", "status= ${isLoggedIn}")
+//            if (isLoggedIn) {
+//                b.sibtnMypageChannelLogin.isVisible = false
+//                b.tvMypageChannelLogout.isVisible = true
+//                b.ivMypageProfile.setImageResource(R.drawable.ic_account_empty)
+//                textViews.forEach {
+//                    it.isVisible = true
+//                }
+//
+//            } else {
+//                b.sibtnMypageChannelLogin.isVisible = true
+//                b.tvMypageChannelLogout.isVisible = false
+//                textViews.forEach {
+//                    it.isVisible = false
+//                }
+//            }
+//
+//            b.sibtnMypageChannelLogin.setOnClickListener {
+//
+//                val signInIntent = mGoogleSignInClient.signInIntent
+//                startActivityForResult(signInIntent, 0)
+//
+//                signIn()
+//                getCurrentUserProfile()
+//
+//                onResume()
+//
+//            }
+//
+//            b.tvMypageChannelLogout.setOnClickListener {
+//                isLoggedIn = false
+//                myProfileData.myAccountProfileUri = null
+//                myProfileData.myAccountName = null
+//                myProfileData.myAccountName = null
+//                signOut()
+//                revokeAccess()
+//
+//                onResume()
+//            }
+//
+//            getCurrentUserProfile()
+//        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -211,12 +202,18 @@ class MypageFragment : Fragment() {
                 val account = task.getResult(ApiException::class.java)
                 myProfileData.myAccountProfileUri = account.photoUrl.toString()
                 myProfileData.myAccountName = account.displayName
-                myProfileData.myAccountId = account.id
+                myProfileData.myAccountId = account.email
             } catch (e: ApiException) {
                 Log.d("googleLogin", e.toString())
             }
         }
     }
+
+//    // TODO: 뷰모델로
+//    private fun getFavoriteVideos() = lifecycleScope.launch {
+//        favIdList = localFavoriteRepository.findCategoryVideos("기본")
+////        favVideoList = favIdList.let { localVideoRepository.findVideoDetail(it) }
+//    }
 
 
     private fun initViewModel() {
@@ -292,11 +289,6 @@ class MypageFragment : Fragment() {
 
             Log.d("login", id)
             Log.d("login", myProfileData.myAccountId.toString())
-            Log.d("login", displayName)
-            Log.d("login", myProfileData.myAccountName.toString())
-            Log.d("login", photoUrl)
-            Log.d("login", myProfileData.myAccountProfileUri.toString())
-            //whyyyyyyyyyyyy.......
         }
     }
 
