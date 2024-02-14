@@ -1,32 +1,27 @@
 package com.example.pintube.ui.Search
 
-import android.content.Intent
 import android.os.Bundle
-import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
-import androidx.fragment.app.FragmentResultListener
-import androidx.fragment.app.commit
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.pintube.R
-import com.example.pintube.data.local.entity.LocalSearchEntity
-import com.example.pintube.data.repository.local.VideoWithThumbnail
-import com.example.pintube.databinding.FragmentDetailBinding
 import com.example.pintube.databinding.FragmentSearchResultBinding
-import com.example.pintube.domain.entitiy.SearchEntity
 import com.example.pintube.domain.entitiy.VideoEntity
 import com.example.pintube.ui.detailpage.DetailFragment
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.combine
 
 @AndroidEntryPoint
 class SearchResultFragment : Fragment() {
+
+    private val viewModel: SearchViewModel by activityViewModels()
+
     companion object {
         fun newInstance(searchResults: List<SearchData>?): SearchResultFragment {
             val fragment = SearchResultFragment()
@@ -67,7 +62,8 @@ class SearchResultFragment : Fragment() {
         binding.searchResultSppiner.adapter = viewAdapter
         binding.searchResultSppiner.onItemSelectedListener =
             object : AdapterView.OnItemSelectedListener {
-                override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long
+                override fun onItemSelected(
+                    parent: AdapterView<*>?, view: View?, position: Int, id: Long
                 ) {
                     val selectedItem = viewSelect[position]
 
@@ -117,6 +113,25 @@ class SearchResultFragment : Fragment() {
                     .addToBackStack(null)
                     .commit()
             }
+        }
+
+        binding.rvResult.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                val lastVisiblePosition = (recyclerView.layoutManager as LinearLayoutManager)
+                    .findLastCompletelyVisibleItemPosition()
+                val lastPosition = recyclerView.adapter!!.itemCount - 1
+
+                if (lastVisiblePosition == lastPosition) {
+                    viewModel.nextSearch()
+//                    categoryAdapter.selectedItem?.let { viewModel.categoryNextSearch(it) }
+                }
+            }
+        })
+
+        viewModel.searchDataList.observe(viewLifecycleOwner) {
+            items.clear()
+            items.addAll(it)
+            searchAdapter?.notifyDataSetChanged()
         }
     }
 

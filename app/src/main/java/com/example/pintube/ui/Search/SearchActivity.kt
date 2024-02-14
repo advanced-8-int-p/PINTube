@@ -136,8 +136,10 @@ class SearchActivity : AppCompatActivity() {
                 binding.rvSearchList.visibility = View.GONE
                 return@observe
             }
-            val searchResultFragment = SearchResultFragment.newInstance(it)
-            setFragment(searchResultFragment)
+            if (it.size <= 50) {
+                val searchResultFragment = SearchResultFragment.newInstance(it)
+                setFragment(searchResultFragment)
+            }
         }
     }
 
