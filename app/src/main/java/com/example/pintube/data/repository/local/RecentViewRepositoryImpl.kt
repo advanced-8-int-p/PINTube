@@ -19,5 +19,5 @@ class RecentViewRepositoryImpl @Inject constructor(
         )
     }
 
-    override suspend fun findRecentView(id: String) = recentViewsDAO.findRecentView(id)
+    override suspend fun findRecentView() = recentViewsDAO.findRecentView()
 }

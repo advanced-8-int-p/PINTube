@@ -27,7 +27,18 @@ class LocalVideoRepositoryImpl @Inject constructor(
 
     override suspend fun findVideoDetail(
         videoId: String,
-    ): LocalVideoEntity? = videoDAO.findVideo(videoId)
+    ): VideoWithThumbnail? {
+        var video = videoDAO.findVideo(
+            id = videoId,
+            date = LocalDateTime.now().minusHours(12).convertLocalDateTime()
+        )
+        var channelId = video?.channelId
+
+        return VideoWithThumbnail(
+            video = video,
+            thumbnail = channelDAO.getChannelThumbnail(channelId)
+        )
+    }
 
     override suspend fun findPopularVideos()
             : List<VideoWithThumbnail>? =

@@ -19,6 +19,6 @@ interface RecentViewsDAO {
     @Delete
     fun delete(item: RecentViewsEntity)
 
-    @Query("Select * From recent_view Where video_id = :id Order By save_date Desc")
-    fun findRecentView(id: String): List<RecentViewsEntity>?
+    @Query("Select * From recent_view Order By save_date Desc")
+    fun findRecentView(): List<RecentViewsEntity>?
 }

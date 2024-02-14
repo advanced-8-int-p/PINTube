@@ -7,6 +7,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.pintube.data.local.entity.LocalVideoEntity
+import com.example.pintube.data.repository.local.VideoWithThumbnail
 import com.example.pintube.domain.repository.LocalChannelRepository
 import com.example.pintube.domain.repository.LocalFavoriteRepository
 import com.example.pintube.domain.repository.LocalVideoRepository
@@ -74,7 +75,7 @@ class DetailViewModel @Inject constructor(
     }
     private fun getData() = viewModelScope.launch(Dispatchers.IO) {
         val result = videoId.let { localVideoRepository.findVideoDetail(it) }
-        result?.let { getComment(id = it.id) }
+        result?.let { it.video?.id?.let { it1 -> getComment(id = it1) } }
 
         _media.postValue(result?.convertToDetailItem())
     }
@@ -88,19 +89,19 @@ class DetailViewModel @Inject constructor(
         }
     }
 
-    private suspend fun LocalVideoEntity.convertToDetailItem() = DetailItemData(
-        id = this.id,
-        publishedAt = this.publishedAt,
-        title = this.title,
-        description = this.description,
-        thumbnailHigh = this.thumbnailHigh,
-        channelTitle = this.channelTitle,
-        viewCount = this.viewCount,
-        likeCount = this.likeCount,
-        commentCount = this.commentCount,
-        player = this.player,
-        channelProfile = this.channelId?.let { localChannelRepository.findChannel(it)?.thumbnailMedium },
-        isPinned = localFavoriteRepository.checkIsBookmark(this.id ?: "")
+    private suspend fun VideoWithThumbnail.convertToDetailItem() = DetailItemData(
+        id = this.video?.id,
+        publishedAt = this.video?.publishedAt,
+        title = this.video?.title,
+        description = this.video?.description,
+        thumbnailHigh = this.video?.thumbnailHigh,
+        channelTitle = this.video?.channelTitle,
+        viewCount = this.video?.viewCount,
+        likeCount = this.video?.likeCount,
+        commentCount = this.video?.commentCount,
+        player = this.video?.player,
+        channelProfile = this.thumbnail?.thumbnailMedium,
+        isPinned = localFavoriteRepository.checkIsBookmark(this.video?.id ?: "")
     )
 
     private fun isPinned():Boolean {

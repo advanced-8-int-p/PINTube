@@ -5,5 +5,5 @@ import com.example.pintube.data.repository.local.VideoWithThumbnail
 
 interface RecentViewRepository {
     suspend fun addRecentView(id: String)
-    suspend fun findRecentView(id: String): List<RecentViewsEntity>?
+    suspend fun findRecentView(): List<RecentViewsEntity>?
 }
