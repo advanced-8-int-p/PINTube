@@ -15,7 +15,7 @@ import com.example.pintube.utill.convertViewCount
 import java.time.LocalDateTime
 
 
-class SearchResultAdapter( private val items : MutableList<SearchEntity>) : RecyclerView.Adapter<SearchResultAdapter.SearchResultViewHolder>(){
+class SearchResultAdapter( private val items : MutableList<SearchData>) : RecyclerView.Adapter<SearchResultAdapter.SearchResultViewHolder>(){
 
     interface ItemClick {
         fun onClick(position: Int)
@@ -38,6 +38,7 @@ class SearchResultAdapter( private val items : MutableList<SearchEntity>) : Recy
         holder.chTitle.text = item.channelTitle
         holder.uploadDate.text = item.publishedAt?.convertToDaysAgo()
         holder.mainImage.load(items[position].thumbnailHigh)
+        holder.viewCount.text = item.viewCount?.convertViewCount()
 
 
     }

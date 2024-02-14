@@ -1,7 +1,5 @@
 package com.example.pintube.ui.Search
 
-import android.content.Context
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -9,31 +7,36 @@ import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.room.Room
-import androidx.room.util.query
 import com.example.pintube.R
-import com.example.pintube.data.local.dao.SearchDAO
-import com.example.pintube.data.local.database.YoutubeDatabase
 import com.example.pintube.data.remote.retrofit.YouTubeApi
+import com.example.pintube.data.repository.local.VideoWithThumbnail
 import com.example.pintube.data.repository.sever.ApiRepositoryImpl
 import com.example.pintube.databinding.ActivitySearchBinding
-import com.example.pintube.domain.entitiy.SearchEntity
 import com.example.pintube.domain.repository.ApiRepository
+import com.example.pintube.domain.repository.LocalChannelRepository
 import com.example.pintube.domain.repository.LocalSearchRepository
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.async
+import com.example.pintube.domain.repository.LocalVideoRepository
+import com.example.pintube.domain.repository.PageTokenPrefRepository
+import com.example.pintube.domain.usecase.GetSearchVideosUseCase
+import com.example.pintube.utill.convertPublishedAt
+import com.example.pintube.utill.convertToDaysAgo
+import com.example.pintube.utill.convertViewCount
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-
+@AndroidEntryPoint
 class SearchActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySearchBinding
 
-    private val apiRepository: ApiRepository = ApiRepositoryImpl(YouTubeApi.youtubeNetwork)
-
+//    private val apiRepository: ApiRepository = ApiRepositoryImpl(YouTubeApi.youtubeNetwork)
+    @Inject
+    lateinit var getSearchVideosUseCase : GetSearchVideosUseCase
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -102,7 +105,10 @@ class SearchActivity : AppCompatActivity() {
             }
             //텍스트 입력되면 x버튼 나옴.
             override fun afterTextChanged(s: Editable?) {
+                binding.tvNoSearch.visibility = View.GONE
+                binding.rvSearchList.visibility = View.VISIBLE
                 showXButton()
+
             }
         })
 
@@ -140,11 +146,31 @@ class SearchActivity : AppCompatActivity() {
         }
     }
 
-    private fun searchVideo(query : String) {
+    private fun searchVideo(query: String) {
         lifecycleScope.launch {
-            val searchResults = apiRepository.searchResult(query)
-            val searchResultFragment = SearchResultFragment.newInstance(searchResults)
+            val searchResults = getSearchVideosUseCase(query)
+
+            if (searchResults.isNullOrEmpty()) {
+                binding.tvNoSearch.visibility = View.VISIBLE
+                binding.rvSearchList.visibility = View.GONE
+                Toast.makeText(this@SearchActivity, "검색결과가 없습니다@E$$@.", Toast.LENGTH_SHORT).show()
+                return@launch
+            }
+            val searchDataList = createSearchDataList(searchResults)
+            val searchResultFragment = SearchResultFragment.newInstance(searchDataList)
             setFragment(searchResultFragment)
+        }
+    }
+    private fun createSearchDataList(searchResults: List<VideoWithThumbnail>): List<SearchData> {
+        return searchResults.map { searchData ->
+            SearchData(
+                title = searchData.video?.localizedTitle,
+                channelName = searchData.video?.channelTitle,
+                publishedAt = searchData.video?.publishedAt?.convertToDaysAgo(),
+                channelTitle = searchData.video?.channelTitle,
+                viewCount = searchData.video?.viewCount?.convertViewCount(),
+                thumbnailHigh = searchData.video?.thumbnailHigh
+            )
         }
     }
 

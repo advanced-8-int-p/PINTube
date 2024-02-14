@@ -37,5 +37,5 @@ abstract class RepositoryModule {
     abstract fun bindLocalCommentRepository(repository: LocalCommentRepositoryImpl): LocalCommentRepository
 
     @Binds
-    abstract fun bindLocalFavoriteRepsitory(repository: LocalFavoriteRepositoryImpl): LocalFavoriteRepository
+    abstract fun bindLocalFavoriteRepository(repository: LocalFavoriteRepositoryImpl): LocalFavoriteRepository
 }
