@@ -8,7 +8,6 @@ sealed interface MypageViewType {
     data class Header(val title: String, val isRecent: Boolean) : MypageViewType
 
     data class RecentItems(
-//        val items: MutableList<RecentItem>,
         val recentAdapter: RecyclerviewRecentVideoAdapter
     ) : MypageViewType
 

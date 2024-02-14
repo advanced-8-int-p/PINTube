@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.fragment.findNavController
 import com.example.pintube.R
 import com.example.pintube.databinding.FragmentMoreRecentVideosBinding
 import com.example.pintube.databinding.FragmentMypageBinding
@@ -23,7 +24,7 @@ class MoreRecentVideosFragment : Fragment() {
 
     private val binding get() = _binding!!
 
-    private val mItems: MutableList<RecentItem>
+    private val mItems: MutableList<VideoItem>
         get() {
             return mutableListOf()
         }
@@ -51,12 +52,19 @@ class MoreRecentVideosFragment : Fragment() {
         _binding = FragmentMoreRecentVideosBinding.inflate(inflater, container, false)
 
         initView()
+        initListeners()
 
         return binding.root
     }
 
     private fun initView() {
         binding.rvMoreRecentList.adapter = adapter
+    }
+
+    private fun initListeners() {
+        binding.ivMoreRecentClose.setOnClickListener {
+            findNavController().popBackStack()
+        }
     }
 
     companion object {

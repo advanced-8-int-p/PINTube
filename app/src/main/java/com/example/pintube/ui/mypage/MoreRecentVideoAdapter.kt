@@ -11,7 +11,7 @@ import com.example.pintube.R
 import com.example.pintube.databinding.VideoItemBinding
 import com.example.pintube.ui.detailpage.DetailFragment
 
-class MoreRecentVideoAdapter(private val mContext: Context, private val mItems: MutableList<RecentItem>): RecyclerView.Adapter<ViewHolder>() {
+class MoreRecentVideoAdapter(private val mContext: Context, private val mItems: MutableList<VideoItem>): RecyclerView.Adapter<ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding = VideoItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)

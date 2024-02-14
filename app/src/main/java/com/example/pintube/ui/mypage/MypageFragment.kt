@@ -2,18 +2,30 @@ package com.example.pintube.ui.mypage
 
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import coil.load
+import com.example.pintube.R
+import com.example.pintube.data.local.entity.LocalVideoEntity
 import com.example.pintube.databinding.FragmentMypageBinding
+import com.example.pintube.domain.entitiy.VideoEntity
+import com.example.pintube.domain.repository.LocalFavoriteRepository
+import com.example.pintube.domain.repository.LocalVideoRepository
 import com.example.pintube.ui.Search.SearchActivity
+import com.example.pintube.ui.main.MainActivity
+import com.example.pintube.utill.convertViewCount
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
@@ -21,6 +33,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
 import com.google.android.material.snackbar.Snackbar
+import kotlinx.coroutines.launch
 
 class MypageFragment : Fragment() {
 
@@ -71,7 +84,7 @@ class MypageFragment : Fragment() {
         val account = GoogleSignIn.getLastSignedInAccount(requireContext())
         account?.let {
             isLoggedIn = true
-            Snackbar.make(binding.mypageFragment, "logged in", Snackbar.LENGTH_SHORT).show()
+            Snackbar.make(binding.mypageFragment, "로그인 상태입니다", Snackbar.LENGTH_SHORT).show()
         }
 
     }
@@ -130,6 +143,7 @@ class MypageFragment : Fragment() {
 //            //배경..... 유튜브 채널 헤더를 어디서 가져오지 아니 근데 구글 계정마다 다 채널 있지는 않지 않나 음...
 //            b.mypageFragment.setBackgroundResource(R.drawable.hamster)
 //            b.tvMypageChannelName.text = myProfileData.myAccountName
+//            //id가 id가 아니라 그 숫자고유값?그런거같은
 //            b.tvMypageChannelId.text = myProfileData.myAccountId.toString()
 //
 ////            isLoggedIn = (myProfileData.myAccountId != null)
@@ -159,6 +173,8 @@ class MypageFragment : Fragment() {
 //                signIn()
 //                getCurrentUserProfile()
 //
+//                onResume()
+//
 //            }
 //
 //            b.tvMypageChannelLogout.setOnClickListener {
@@ -168,6 +184,8 @@ class MypageFragment : Fragment() {
 //                myProfileData.myAccountName = null
 //                signOut()
 //                revokeAccess()
+//
+//                onResume()
 //            }
 //
 //            getCurrentUserProfile()
@@ -184,11 +202,17 @@ class MypageFragment : Fragment() {
                 val account = task.getResult(ApiException::class.java)
                 myProfileData.myAccountProfileUri = account.photoUrl.toString()
                 myProfileData.myAccountName = account.displayName
-                myProfileData.myAccountId = account.id
+                myProfileData.myAccountId = account.email
             } catch (e: ApiException) {
                 Log.d("googleLogin", e.toString())
             }
         }
+    }
+
+    // TODO: 뷰모델로
+    private fun getFavoriteVideos() = lifecycleScope.launch {
+        favIdList = localFavoriteRepository.findCategoryVideos("기본")
+//        favVideoList = favIdList.let { localVideoRepository.findVideoDetail(it) }
     }
 
 
@@ -265,11 +289,6 @@ class MypageFragment : Fragment() {
 
             Log.d("login", id)
             Log.d("login", myProfileData.myAccountId.toString())
-            Log.d("login", displayName)
-            Log.d("login", myProfileData.myAccountName.toString())
-            Log.d("login", photoUrl)
-            Log.d("login", myProfileData.myAccountProfileUri.toString())
-            //whyyyyyyyyyyyy.......
         }
     }
 

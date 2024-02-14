@@ -18,7 +18,7 @@ myAccountVideoCount = null,
 myAccountDescription = null,
  */
 
-data class RecentItem(
+data class VideoItem(
     val thumbnailUrl: String,
     val title: String,
     val length: String,
@@ -29,4 +29,4 @@ data class RecentItem(
 )
 
 
-data class PinItem(val pinGroupTag: String, val thumbnailUrl: String, val videoCount: String)
+//data class PinItem(val pinGroupTag: String, val thumbnailUrl: String, val videoCount: String)
