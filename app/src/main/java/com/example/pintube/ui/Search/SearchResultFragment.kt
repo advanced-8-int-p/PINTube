@@ -42,7 +42,6 @@ class SearchResultFragment : Fragment() {
     private val binding get() = _binding!!
     private var searchAdapter: SearchResultAdapter? = null
     private val items = ArrayList<SearchData>()
-    private val cItems = ArrayList<VideoEntity>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -68,11 +67,7 @@ class SearchResultFragment : Fragment() {
         binding.searchResultSppiner.adapter = viewAdapter
         binding.searchResultSppiner.onItemSelectedListener =
             object : AdapterView.OnItemSelectedListener {
-                override fun onItemSelected(
-                    parent: AdapterView<*>?,
-                    view: View?,
-                    position: Int,
-                    id: Long
+                override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long
                 ) {
                     val selectedItem = viewSelect[position]
 
@@ -112,7 +107,7 @@ class SearchResultFragment : Fragment() {
             override fun onClick(position: Int) {
                 val getItem = items[position]
                 val bundle = Bundle().apply {
-                    putString("video_id", "DyLHWjU7UBA")
+                    putString("video_id", getItem.id)
                 }
                 Toast.makeText(requireContext(), "클릭", Toast.LENGTH_SHORT).show()
                 val detailFragment = DetailFragment()

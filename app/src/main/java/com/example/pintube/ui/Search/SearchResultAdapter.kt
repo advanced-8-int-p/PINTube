@@ -10,7 +10,7 @@ import com.example.pintube.utill.convertViewCount
 import java.time.LocalDateTime
 
 
-class SearchResultAdapter(private val items: MutableList<SearchData>) :
+class SearchResultAdapter(private var items: MutableList<SearchData>) :
     RecyclerView.Adapter<SearchResultAdapter.SearchResultViewHolder>() {
 
     interface ItemClick {
@@ -50,6 +50,10 @@ class SearchResultAdapter(private val items: MutableList<SearchData>) :
 
         }
     }
+//    fun resetSorting() {
+//        items = items.toMutableList()
+//        notifyDataSetChanged()
+//    }
 
     fun sortByAscending() {
         items.sortBy { it.publishedAt?.replace("Z", "").let { date -> LocalDateTime.parse(date) } }
@@ -64,9 +68,7 @@ class SearchResultAdapter(private val items: MutableList<SearchData>) :
     }
 
     fun sortByViewCount() {
-        items.sortWith(compareByDescending { item ->
-            item.viewCount ?: 0
-        })
+        items.sortBy { it. viewCount}
         notifyDataSetChanged()
     }
 }
