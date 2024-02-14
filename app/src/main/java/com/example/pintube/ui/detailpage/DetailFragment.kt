@@ -22,6 +22,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
+import coil.request.CachePolicy
 import com.example.pintube.R
 import com.example.pintube.databinding.FragmentDetailBinding
 import com.example.pintube.ui.detailpage.adapter.DetailCommentAdapter
@@ -126,7 +127,10 @@ class DetailFragment : Fragment(), VideoDataInterface {
             Log.d("viewModel", "player af $videoUrl")
             initPlayer()
             with(binding) {
-                ivDetailProfilePic.load(it.channelProfile)
+                ivDetailProfilePic.load(it.channelProfile){
+                    memoryCachePolicy(CachePolicy.ENABLED)
+                    crossfade(true)
+                }
                 tvDetailChannelName.text = it.channelTitle.toString()
                 tvDetailViewCount.text =
                     it.viewCount?.convertViewCount().toString() + " views"
@@ -140,6 +144,13 @@ class DetailFragment : Fragment(), VideoDataInterface {
                 ivPopularItemPin.isVisible = it.isPinned
                 tvDetailMotionTitle.text = it.title
                 tvDetailMotionChannelTitle.text = it.channelTitle
+                clDetailMotionBar.setOnClickListener {i ->
+                    detailFragment.transitionToStart()
+                    ivDetailProfilePic.load(it.channelProfile){
+                        memoryCachePolicy(CachePolicy.ENABLED)
+                        crossfade(true)
+                    }
+                }
             }
         })
 
