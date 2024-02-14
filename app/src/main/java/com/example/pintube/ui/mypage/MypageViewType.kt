@@ -7,6 +7,7 @@ import com.example.pintube.ui.home.VideoItemData
 sealed class MypageViewType {
 
 //    data class Profile(val myProfile: MypageProfileData) : MypageViewType()
+    data object TopHeader: MypageViewType()
 
     data class Header(val title: String, val isRecent: Boolean) : MypageViewType()
 

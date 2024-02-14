@@ -2,7 +2,6 @@ package com.example.pintube.ui.detailpage
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.content.Intent
 import android.content.res.ColorStateList
 import android.os.Bundle
 import android.util.Log
@@ -17,21 +16,17 @@ import androidx.constraintlayout.motion.widget.MotionLayout
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.example.pintube.R
 import com.example.pintube.databinding.FragmentDetailBinding
 import com.example.pintube.ui.detailpage.adapter.DetailCommentAdapter
-import com.example.pintube.ui.main.MainActivity
 import com.example.pintube.ui.main.MainSharedViewModel
 import com.example.pintube.ui.main.MotionState
-import com.example.pintube.ui.shorts.ShortsActivity
 import com.example.pintube.utill.ShareLink
 import com.example.pintube.utill.VideoDataInterface
 import com.example.pintube.utill.convertToDaysAgo
@@ -60,7 +55,7 @@ class DetailFragment : Fragment(), VideoDataInterface {
 
     private lateinit var viewModel: DetailViewModel
 
-    private val sharedViewModel: MainSharedViewModel by viewModels()
+    private val sharedViewModel: MainSharedViewModel by activityViewModels()
 
     private val commentAdapter: DetailCommentAdapter by lazy {
         DetailCommentAdapter(
