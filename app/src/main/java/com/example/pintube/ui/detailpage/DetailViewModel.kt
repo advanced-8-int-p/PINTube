@@ -73,15 +73,14 @@ class DetailViewModel @Inject constructor(
         commentCount = this.commentCount,
         player = this.player,
         channelProfile = this.channelId?.let { localChannelRepository.findChannel(it)?.thumbnailMedium },
-        isPinned = isPinned()
     )
 
-    private fun isPinned():Boolean {
-        //FavoriteEntity?
-//        if () {
-//            return true
-//        } else
-            return false
-    }
+//    private fun isPinned():Boolean {
+//        //FavoriteEntity?
+////        if () {
+////            return true
+////        } else
+//            return false
+//    }
 
 }

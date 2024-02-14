@@ -29,6 +29,7 @@ import com.example.pintube.utill.getUrlFromSrc
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import dagger.hilt.android.AndroidEntryPoint
 
+@SuppressLint("InflateParams")
 @AndroidEntryPoint
 
 class DetailFragment : Fragment(), VideoDataInterface {
@@ -44,8 +45,6 @@ class DetailFragment : Fragment(), VideoDataInterface {
     private lateinit var videoUrl: String
 
     private lateinit var videoId: String
-
-    private var isPlaying = false
 
     private lateinit var viewModel: DetailViewModel
 
@@ -87,28 +86,8 @@ class DetailFragment : Fragment(), VideoDataInterface {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        videoUrl = "youtube.com"
         initView()
         initViewModel()
-
-//        Log.d("viewModel", "player bf $videoUrl")
-//        getUrlFromSrc()
-//        Log.d("viewModel", "player af $videoUrl")
-//        initPlayer()
-
-        binding.ivDetailClose.setOnClickListener {
-//            parentFragmentManager.popBackStack()
-            findNavController().navigateUp()
-        }
-        binding.ivDetailShare.setOnClickListener {
-        }
-        binding.ivDetailPin.setOnClickListener {
-            //보관함 저장
-        }
-        binding.playerDetail.setOnClickListener {
-            isPlaying = !isPlaying
-            binding.clDetailTopBar.isVisible = isPlaying
-        }
 
     }
 
@@ -143,6 +122,7 @@ class DetailFragment : Fragment(), VideoDataInterface {
                     .toString() + "\n\n\n" + it.description.toString()
                 count = it.commentCount?.convertViewCount()?: "0"
                 tvDetailCommentCount.text = "댓글 $count"
+                clDetailCommentList.isVisible = it.commentCount?.toInt() != 0
             }
         })
 
@@ -163,8 +143,6 @@ class DetailFragment : Fragment(), VideoDataInterface {
 
     @SuppressLint("SetJavaScriptEnabled")
     private fun initPlayer() {
-
-        //왜안되지...........으악
 
         val webView = binding.playerDetail
 
