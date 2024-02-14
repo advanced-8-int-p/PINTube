@@ -107,7 +107,7 @@ class SearchResultFragment : Fragment() {
             override fun onClick(position: Int) {
                 val getItem = items[position]
                 val bundle = Bundle().apply {
-                    putString("video_id", getItem.id)
+                    putString("video_id", getItem.channelId)
                 }
                 Toast.makeText(requireContext(), "클릭", Toast.LENGTH_SHORT).show()
                 val detailFragment = DetailFragment()

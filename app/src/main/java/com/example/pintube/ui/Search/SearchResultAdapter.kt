@@ -45,7 +45,7 @@ class SearchResultAdapter(private var items: MutableList<SearchData>) :
             b.rvSearchChTitle.text = item.channelTitle
             b.rvSearchUploadDate.text = item.publishedAt?.convertToDaysAgo()
             b.rvSearchImage.load(items[position].videoThumbnailUri)
-            b.rvSearchViewCount.text = item.viewCount?.convertViewCount()
+            b.rvSearchViewCount.text = item.viewCount
             b.rvSearchChImage.load(items[position].channelThumbnailUri)
 
         }

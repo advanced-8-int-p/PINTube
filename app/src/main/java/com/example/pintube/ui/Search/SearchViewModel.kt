@@ -56,12 +56,12 @@ class SearchViewModel @Inject constructor(
                 channelName = searchData.video?.channelTitle,
                 publishedAt = searchData.video?.publishedAt,
                 channelTitle = searchData.video?.channelTitle,
-                viewCount = searchData.video?.viewCount,
+                viewCount = searchData.video?.viewCount?.convertViewCount(),
                 // TODO: 이게 채널 썸네일 맞는지 모르겠음.
                 channelThumbnailUri = searchData.thumbnail?.thumbnailHigh,
                 videoThumbnailUri = searchData.video?.thumbnailHigh,
                 id = searchData.video?.channelId,
-                channelId = searchData.video?.channelId
+                channelId = searchData.video?.id
             )
         }
 
