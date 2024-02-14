@@ -95,5 +95,9 @@ android {
 
         //lottie
         implementation("com.airbnb.android:lottie:6.3.0")
+
+        //google account login
+        implementation("com.google.android.gms:play-services-auth:20.7.0")
+
     }
 }

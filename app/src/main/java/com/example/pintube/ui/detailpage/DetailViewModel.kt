@@ -11,6 +11,7 @@ import com.example.pintube.domain.repository.ApiRepository
 import com.example.pintube.domain.repository.LocalChannelRepository
 import com.example.pintube.domain.repository.LocalCommentRepository
 import com.example.pintube.domain.repository.LocalVideoRepository
+import com.example.pintube.ui.main.MainActivity
 import com.example.pintube.domain.usecase.GetCommentsUseCase
 import com.example.pintube.utill.convertDetailComment
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -26,8 +27,8 @@ class DetailViewModel @Inject constructor(
     private val getCommentsUseCase: GetCommentsUseCase,
 ) : ViewModel() {
 
-    private var _media: MutableLiveData<DetailItemModel> = MutableLiveData()
-    val media: LiveData<DetailItemModel> get() = _media
+    private var _media: MutableLiveData<DetailItemData> = MutableLiveData()
+    val media: LiveData<DetailItemData> get() = _media
 
     private var _comments: MutableLiveData<List<DetailCommentsItem.Comments>> = MutableLiveData()
     val comments: LiveData<List<DetailCommentsItem.Comments>> get() = _comments
@@ -60,7 +61,7 @@ class DetailViewModel @Inject constructor(
         }
     }
 
-    private suspend fun LocalVideoEntity.convertToDetailItem() = DetailItemModel(
+    private suspend fun LocalVideoEntity.convertToDetailItem() = DetailItemData(
         id = this.id,
         publishedAt = this.publishedAt,
         title = this.title,
@@ -72,15 +73,14 @@ class DetailViewModel @Inject constructor(
         commentCount = this.commentCount,
         player = this.player,
         channelProfile = this.channelId?.let { localChannelRepository.findChannel(it)?.thumbnailMedium },
-        isPinned = isPinned()
     )
 
-    private fun isPinned():Boolean {
-        //FavoriteEntity?
-//        if () {
-//            return true
-//        } else
-            return false
-    }
+//    private fun isPinned():Boolean {
+//        //FavoriteEntity?
+////        if () {
+////            return true
+////        } else
+//            return false
+//    }
 
 }

@@ -15,7 +15,8 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.GridLayoutManager.SpanSizeLookup
-import androidx.room.util.query
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.pintube.R
 import com.example.pintube.databinding.FragmentHomeBinding
 import com.example.pintube.ui.Search.SearchActivity
@@ -42,16 +43,16 @@ class HomeFragment : Fragment() {
         )
 //            mainMotion.transitionToStart()
     }
-    //ddd
+
     private val categoryEditDialogAdapter = CategoryEditDialogAdapter { category ->
         viewModel.removeFromCategories(category)
     }
-    private val homeAdapter by lazy {  HomeAdapter(
+    private val homeAdapter = HomeAdapter(
         onCategorySettingClick = {
             binding.clHomeDialogCategoryBackground.isVisible = true
         },
         onVideoClick = onVideoClick
-    )}
+    )
     private val popularVideoAdapter = PopularVideoAdapter(
         onItemClick = onVideoClick,
         onBookmarkClick = { item ->
@@ -160,6 +161,18 @@ class HomeFragment : Fragment() {
             onClickListenerOfBtnTvDialogCategoryAddOk.onClick(v)
             true
         }
+
+        b.rvHomeMain.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                val lastVisiblePosition = (recyclerView.layoutManager as LinearLayoutManager)
+                    .findLastCompletelyVisibleItemPosition()
+                val lastPosition = recyclerView.adapter!!.itemCount - 1
+
+                if (lastVisiblePosition == lastPosition) {
+                    categoryAdapter.selectedItem?.let { viewModel.categoryNextSearch(it) }
+                }
+            }
+        })
     }
 
     private fun initViewModel() = viewModel.also { vm ->

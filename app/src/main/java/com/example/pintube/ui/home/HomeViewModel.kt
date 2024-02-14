@@ -39,6 +39,9 @@ class HomeViewModel @Inject constructor(
         MutableLiveData(List(10) { VideoItemData() })  //ddd
     val categoryVideos: LiveData<List<VideoItemData>> get() = _categoryVideos
 
+    private var _currentWord: String? = null
+    private var _currentPage: Int = -1
+
     init {
         updatePopulars()
         if (categories.value!!.isEmpty().not())
@@ -67,6 +70,33 @@ class HomeViewModel @Inject constructor(
                     it.convertVideoItemData()
                         .copy(isSaved = localFavoriteRepository.checkIsBookmark(it.video?.id ?: ""))
                 })
+        } catch (error: Exception) {
+            Log.e("HomeViewModel", "Error searching category: $query, ${error.message}", error)
+        }
+    }
+
+    fun categoryNextSearch(query: String) = viewModelScope.launch(Dispatchers.IO) {
+        try {
+            if (query != _currentWord) {
+                _currentWord = query
+                _currentPage = 0
+            }
+            Log.d(
+                "jj-홈뷰모델 categoryNextSearch",
+                "currentWord: $_currentWord, currentPage: $_currentPage"
+                        + '\n' +
+                        "categoryVideos.value!!.size: ${categoryVideos.value!!.size}"
+            )
+            val searchResult = getCategoryVideos.invoke(query, (++_currentPage).toString())
+            Log.d(
+                "jj-홈뷰모델 categoryNextSearch",
+                "첫제목: ${searchResult.firstOrNull()?.video?.title}"
+            )
+            _categoryVideos.postValue(
+                _categoryVideos.value!!.toMutableList()
+                    .apply { addAll(searchResult.map { it.convertVideoItemData() }) }
+            )
+
         } catch (error: Exception) {
             Log.e("HomeViewModel", "Error searching category: $query, ${error.message}", error)
         }
