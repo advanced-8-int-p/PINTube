@@ -12,12 +12,14 @@ import com.example.pintube.data.local.entity.LocalVideoEntity
 import com.example.pintube.ui.main.MainActivity
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import dagger.hilt.android.lifecycle.HiltViewModel
 import java.io.File
 import java.util.concurrent.Flow
 import java.util.prefs.Preferences
 import kotlin.properties.ReadOnlyProperty
 import kotlin.reflect.KProperty
 
+@HiltViewModel
 class MypageViewModel(
     private val savedStateHandle: SavedStateHandle,
     private val favoriteEntity: FavoriteEntity,

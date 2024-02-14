@@ -2,6 +2,7 @@ package com.example.pintube.ui.mypage
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -160,6 +161,60 @@ class MypageAdapter(
             b.tvMypageChannelName.text = item.channelName
             b.tvMypageChannelId.text = item.channelId
             // TODO: 로그인 여부에 따라서 버튼을 로그인/로그아웃 변경..?
+
+
+            val textViews = listOf(b.tvMypageChannelName, b.tvMypageChannelId)
+
+            b.ivMypageProfile.load(item.channelThumbnail)
+            //배경..... 유튜브 채널 헤더를 어디서 가져오지 아니 근데 구글 계정마다 다 채널 있지는 않지 않나 음...
+            b.mypageFragment.setBackgroundResource(R.drawable.hamster)
+            b.tvMypageChannelName.text = myProfileData.myAccountName
+            //id가 id가 아니라 그 숫자고유값?그런거같은
+            b.tvMypageChannelId.text = myProfileData.myAccountId.toString()
+
+//            isLoggedIn = (myProfileData.myAccountId != null)
+
+            Log.d("login", "status= ${isLoggedIn}")
+            if (isLoggedIn) {
+                b.sibtnMypageChannelLogin.isVisible = false
+                b.tvMypageChannelLogout.isVisible = true
+                b.ivMypageProfile.setImageResource(R.drawable.ic_account_empty)
+                textViews.forEach {
+                    it.isVisible = true
+                }
+
+            } else {
+                b.sibtnMypageChannelLogin.isVisible = true
+                b.tvMypageChannelLogout.isVisible = false
+                textViews.forEach {
+                    it.isVisible = false
+                }
+            }
+
+            b.sibtnMypageChannelLogin.setOnClickListener {
+
+                val signInIntent = mGoogleSignInClient.signInIntent
+                startActivityForResult(signInIntent, 0)
+
+                signIn()
+                getCurrentUserProfile()
+
+                onResume()
+
+            }
+
+            b.tvMypageChannelLogout.setOnClickListener {
+                isLoggedIn = false
+                myProfileData.myAccountProfileUri = null
+                myProfileData.myAccountName = null
+                myProfileData.myAccountName = null
+                signOut()
+                revokeAccess()
+
+                onResume()
+            }
+
+            getCurrentUserProfile()
         }
     }
 
