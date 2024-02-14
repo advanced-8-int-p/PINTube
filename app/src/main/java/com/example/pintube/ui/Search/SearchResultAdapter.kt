@@ -26,34 +26,28 @@ class SearchResultAdapter(private val items: MutableList<SearchData>) :
     }
 
     override fun onBindViewHolder(holder: SearchResultViewHolder, position: Int) {
-        holder.itemView.setOnClickListener {
-            itemClick?.onClick(position)
-        }
-
-        val item = items[position]
-
-        holder.mainTitle.text = item.title?.replace("&#39;", "'")
-        holder.chTitle.text = item.channelTitle
-        holder.uploadDate.text = item.publishedAt?.convertToDaysAgo()
-        holder.mainImage.load(items[position].videoThumbnailUri)
-        holder.viewCount.text = item.viewCount?.convertViewCount()
-
-
+        holder.onBind(items[position])
     }
 
     override fun getItemCount(): Int {
         return items.size
     }
 
-    // TODO: onBind 함수로 만드는거
-    inner class SearchResultViewHolder(binding: RecyclerviewResultBinding) :
+    inner class SearchResultViewHolder(private val binding: RecyclerviewResultBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        var mainImage = binding.rvSearchImage
-        var chImage = binding.rvSearchChImage
-        var mainTitle = binding.rvSearchTitle
-        var chTitle = binding.rvSearchChTitle
-        var uploadDate = binding.rvSearchUploadDate
-        var viewCount = binding.rvSearchViewCount
+
+        fun onBind(item: SearchData) = binding.also { b ->
+            itemView.setOnClickListener {
+                itemClick?.onClick(position)
+            }
+
+            b.rvSearchTitle.text = item.title?.replace("&#39;", "'")
+            b.rvSearchChTitle.text = item.channelTitle
+            b.rvSearchUploadDate.text = item.publishedAt?.convertToDaysAgo()
+            b.rvSearchImage.load(items[position].videoThumbnailUri)
+            b.rvSearchViewCount.text = item.viewCount?.convertViewCount()
+
+        }
     }
 
     fun sortByAscending() {
