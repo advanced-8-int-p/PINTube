@@ -69,7 +69,7 @@ class MypageFragment : Fragment() {
                 MypageViewType.Header("최근 시청 영상", true),
                 MypageViewType.RecentItems(RecyclerviewRecentVideoAdapter()),
                 MypageViewType.Header("저장한 동영상", false),
-                MypageViewType.PinItems(RecyclerviewPinnedGroupAdapter())
+                MypageViewType.PinItems(RecyclerviewPinnedGroupAdapter(emptyList()))
             )
         }
 
@@ -209,11 +209,11 @@ class MypageFragment : Fragment() {
         }
     }
 
-    // TODO: 뷰모델로
-    private fun getFavoriteVideos() = lifecycleScope.launch {
-        favIdList = localFavoriteRepository.findCategoryVideos("기본")
-//        favVideoList = favIdList.let { localVideoRepository.findVideoDetail(it) }
-    }
+//    // TODO: 뷰모델로
+//    private fun getFavoriteVideos() = lifecycleScope.launch {
+//        favIdList = localFavoriteRepository.findCategoryVideos("기본")
+////        favVideoList = favIdList.let { localVideoRepository.findVideoDetail(it) }
+//    }
 
 
     private fun initViewModel() {
