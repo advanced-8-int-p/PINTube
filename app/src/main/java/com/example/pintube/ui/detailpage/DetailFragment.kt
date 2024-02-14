@@ -185,9 +185,18 @@ class DetailFragment : Fragment(), VideoDataInterface {
         webView.loadUrl("https://$videoUrl")
 
         val playBtn = binding.ivDetailMotionPlay
+        var isPlaying = false
 
         playBtn.setOnClickListener {
-            webView.evaluateJavascript("document.querySelector('video').play()", null)
+            isPlaying = if (isPlaying) {
+                webView.evaluateJavascript("document.querySelector('video').pause()", null)
+                playBtn.setImageResource(R.drawable.ic_splash_play)
+                false
+            } else {
+                webView.evaluateJavascript("document.querySelector('video').play()", null)
+                playBtn.setImageResource(R.drawable.ic_splash_pause)
+                true
+            }
         }
 
 
