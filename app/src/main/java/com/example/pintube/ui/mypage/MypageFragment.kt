@@ -151,7 +151,7 @@ class MypageFragment : Fragment() {
         getCurrentUserProfile()
 
         binding.also { b ->
-            val textViews = listOf(b.tvMypageChannelName, b.tvMypageChannelId)
+            /*val textViews = listOf(b.tvMypageChannelName, b.tvMypageChannelId)
 
             b.ivMypageProfile.load(myProfileData.myAccountProfileUri)
             //배경..... 유튜브 채널 헤더를 어디서 가져오지 아니 근데 구글 계정마다 다 채널 있지는 않지 않나 음...
@@ -195,7 +195,7 @@ class MypageFragment : Fragment() {
                 myProfileData.myAccountName = null
                 signOut()
                 revokeAccess()
-            }
+            }*/
 
             getCurrentUserProfile()
         }

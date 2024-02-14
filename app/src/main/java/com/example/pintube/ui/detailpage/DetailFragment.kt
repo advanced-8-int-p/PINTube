@@ -138,7 +138,8 @@ class DetailFragment : Fragment(), VideoDataInterface {
                 tvDetailCommentCount.text = "댓글 $count"
                 clDetailCommentList.isVisible = it.commentCount?.toInt() != 0
                 ivPopularItemPin.isVisible = it.isPinned
-
+                tvDetailMotionTitle.text = it.title
+                tvDetailMotionChannelTitle.text = it.channelTitle
             }
         })
 
@@ -192,7 +193,7 @@ class DetailFragment : Fragment(), VideoDataInterface {
 
     @SuppressLint("ClickableViewAccessibility")
     private fun setMotion() = with(binding){
-        var initialY = 0f
+       /* var initialY = 0f
 
         playerDetail.setOnTouchListener { _, event ->
             when (event.action) {
@@ -204,7 +205,7 @@ class DetailFragment : Fragment(), VideoDataInterface {
                     }
                 }
 
-                MotionEvent.ACTION_MOVE -> {
+                MotionEvent.ACTION_SCROLL -> {
                     sharedViewModel.updateMotionState(MotionState.MOVE)
                     if (initialY < event.y && detailFragment.currentState == R.id.start) {
                         detailFragment.transitionToEnd()
@@ -214,14 +215,19 @@ class DetailFragment : Fragment(), VideoDataInterface {
                 }
 
                 MotionEvent.ACTION_UP -> {
-                    sharedViewModel.updateMotionState(MotionState.END)
+                    sharedViewModel.updateMotionState(MotionState.START)
                     if (detailFragment.currentState == R.id.start) {
                         detailFragment.transitionToEnd()
                     }
                 }
+
+                MotionEvent.ACTION_CANCEL -> {
+                    sharedViewModel.updateMotionState(MotionState.END)
+                }
+
             }
             true
-        }
+        }*/
     }
 
     private fun setMotionBtn() = with(binding){
