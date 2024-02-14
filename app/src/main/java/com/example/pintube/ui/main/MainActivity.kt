@@ -21,6 +21,7 @@ import com.example.pintube.ui.detailpage.DetailFragment
 import com.example.pintube.ui.shorts.ShortsActivity
 import com.example.pintube.utill.ShareLink
 import com.example.pintube.utill.VideoDataInterface
+import com.example.pintube.utill.dpToPx
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
@@ -88,26 +89,28 @@ class MainActivity : AppCompatActivity() {
         supportFragmentManager.beginTransaction()
             .replace(R.id.detail_fragment_activity_main, fragment)
             .commit()
-        sharedViewModel.motionState.observe(this@MainActivity) { stats ->
-            when (stats) {
-                MotionState.START -> {
-                }
+        lifecycleScope.launch {
+            sharedViewModel.motionState.collect { stats ->
+                when (stats) {
+                    MotionState.START -> {
+                    }
 
-                MotionState.MOVE -> {
-                    val params =
-                        detailFragmentActivityMain.layoutParams as ViewGroup.MarginLayoutParams
-                    params.bottomMargin += 64
-                    detailFragmentActivityMain.layoutParams = params
-                }
+                    MotionState.MOVE -> {
+                        val params =
+                            detailFragmentActivityMain.layoutParams as ViewGroup.MarginLayoutParams
+                        params.bottomMargin = 64.dpToPx(this@MainActivity)
+                        detailFragmentActivityMain.layoutParams = params
+                    }
 
-                MotionState.END -> {
-                    val params = detailFragmentActivityMain.layoutParams
-                    if (params.height != ViewGroup.LayoutParams.MATCH_PARENT) {
-                        params.height = ViewGroup.LayoutParams.MATCH_PARENT
-                        detailFragmentActivityMain.layoutParams = params
-                    } else {
-                        params.height = ViewGroup.LayoutParams.WRAP_CONTENT
-                        detailFragmentActivityMain.layoutParams = params
+                    MotionState.END -> {
+                        val params = detailFragmentActivityMain.layoutParams
+                        if (params.height != ViewGroup.LayoutParams.MATCH_PARENT) {
+                            params.height = ViewGroup.LayoutParams.MATCH_PARENT
+                            detailFragmentActivityMain.layoutParams = params
+                        } else {
+                            params.height = 128.dpToPx(this@MainActivity)
+                            detailFragmentActivityMain.layoutParams = params
+                        }
                     }
                 }
             }
@@ -191,15 +194,33 @@ class MainActivity : AppCompatActivity() {
                                 mainMotion.transitionToStart()
                             }
                         }
+                        mainFab.setImageResource(R.drawable.ic_main_fab_plus)
+                        mainFab.backgroundTintList =
+                            ColorStateList.valueOf(
+                                ContextCompat.getColor(
+                                    mainFab.context,
+                                    R.color.main_color
+                                )
+                            )
                     }
                 } else {
-                    binding.mainFab.setOnClickListener {
-                        startActivity(
-                            Intent(
-                                this@MainActivity,
-                                ShortsActivity::class.java
+                    with(binding.mainFab) {
+                        setImageResource(R.drawable.ic_nav_fab_shorts)
+                        backgroundTintList =
+                            ColorStateList.valueOf(
+                                ContextCompat.getColor(
+                                    context,
+                                    R.color.white
+                                )
                             )
-                        )
+                        setOnClickListener {
+                            startActivity(
+                                Intent(
+                                    this@MainActivity,
+                                    ShortsActivity::class.java
+                                )
+                            )
+                        }
                     }
                 }
             }
