@@ -42,9 +42,9 @@ class LocalFavoriteRepositoryImpl @Inject constructor(
         favoriteDao.deleteFavoriteCategoryCross(FavoriteCategoryCross(videoId, categoryId))
     }
 
-    override suspend fun findCategoryVideos(category: String): List<String> {
-        var categoryId = categoryDao.getCategoryByName(category)!!.categoryId
-        return favoriteDao.getFavoritesByCategory(categoryId).map { it.videoId }
+    override suspend fun findCategoryVideos(category: String): List<String>? {
+        var categoryId = categoryDao.getCategoryByName(category)?.categoryId
+        return categoryId?.let { favoriteDao.getFavoritesByCategory(it).map { it.videoId } }
     }
 
 }

@@ -36,7 +36,7 @@ class ShortsActivity : AppCompatActivity() {
     private val adapter: ShortsAdapter by lazy {
         ShortsAdapter(
             onBookmarkChecked = { item ->
-                item
+                item.id?.let { viewModel.onClickBookmark(it) }
             },
             onSharedChecked = { item ->
                 ShareLink(this, item.getUrlFromSrc())
@@ -108,8 +108,12 @@ class ShortsActivity : AppCompatActivity() {
     private fun setPlayer() = with(binding) {
         vpShortsViewpager.adapter = adapter
         vpShortsViewpager.orientation = ViewPager2.ORIENTATION_VERTICAL
+        vpShortsViewpager.registerOnPageChangeCallback(
+            object : OnPageChangeCallback() {
 
-        vpShortsViewpager.offscreenPageLimit = 2
+            }
+        )
+        vpShortsViewpager.offscreenPageLimit = 1
     }
 
     private fun setCommentSheet() = with(binding){

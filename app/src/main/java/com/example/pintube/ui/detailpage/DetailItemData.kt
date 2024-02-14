@@ -15,4 +15,5 @@ data class DetailItemData(
     val player: String?,
     //channel
     val channelProfile: String?,
+    val isPinned: Boolean = false
 )

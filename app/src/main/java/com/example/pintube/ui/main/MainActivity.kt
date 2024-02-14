@@ -1,11 +1,16 @@
 package com.example.pintube.ui.main
 
+import android.app.ActionBar.LayoutParams
 import android.content.Intent
 import android.content.res.ColorStateList
 import android.os.Bundle
+import android.view.ViewGroup
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.core.view.marginBottom
+import androidx.fragment.app.FragmentManager
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import androidx.recyclerview.widget.RecyclerView
@@ -18,6 +23,8 @@ import com.example.pintube.utill.ShareLink
 import com.example.pintube.utill.VideoDataInterface
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -31,6 +38,8 @@ class MainActivity : AppCompatActivity() {
     private val navController by lazy {
         navHostFragment.navController
     }
+
+    private val sharedViewModel: MainSharedViewModel by viewModels()
 
     var recentItemsList = mutableListOf<String>()
 
@@ -65,7 +74,46 @@ class MainActivity : AppCompatActivity() {
 
     private fun initView() {
         initBottomNav()
+        detailState()
     }
+
+    var detail: Boolean = false
+    fun initDetailFragment(videoId: String) = with(binding) {
+        val fragment = DetailFragment()
+        fragment.apply {
+            arguments = Bundle().apply {
+                putString("video_id", videoId)
+            }
+        }
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.detail_fragment_activity_main, fragment)
+            .commit()
+        sharedViewModel.motionState.observe(this@MainActivity) { stats ->
+            when (stats) {
+                MotionState.START -> {
+                }
+
+                MotionState.MOVE -> {
+                    val params =
+                        detailFragmentActivityMain.layoutParams as ViewGroup.MarginLayoutParams
+                    params.bottomMargin += 64
+                    detailFragmentActivityMain.layoutParams = params
+                }
+
+                MotionState.END -> {
+                    val params = detailFragmentActivityMain.layoutParams
+                    if (params.height != ViewGroup.LayoutParams.MATCH_PARENT) {
+                        params.height = ViewGroup.LayoutParams.MATCH_PARENT
+                        detailFragmentActivityMain.layoutParams = params
+                    } else {
+                        params.height = ViewGroup.LayoutParams.WRAP_CONTENT
+                        detailFragmentActivityMain.layoutParams = params
+                    }
+                }
+            }
+        }
+    }
+
 
     private fun initBottomNav() = with(binding) {
         navView.setupWithNavController(navController)
@@ -74,7 +122,7 @@ class MainActivity : AppCompatActivity() {
         var currentFragment = R.id.navigation_home
 
         mainFab.setOnClickListener {
-            if (currentFragment == R.id.navigation_detail) {
+            if (currentFragment == R.id.detail_fragment) {
                 if (mainMotion.currentState == mainMotion.startState) {
                     mainMotion.transitionToEnd()
                 } else {
@@ -110,6 +158,7 @@ class MainActivity : AppCompatActivity() {
 
             val videoId = currentFragmentInstance.getVideoId()
             viewModel.onClickBookmark(videoId)
+            currentFragmentInstance.initData()
             mainMotion.transitionToStart()
         }
 
@@ -120,13 +169,38 @@ class MainActivity : AppCompatActivity() {
                 R.id.navigation_home, R.id.navigation_mypage -> currentFragment = destination.id
             }
             when (destination.id) {
-                R.id.navigation_detail -> with(mainFab){
-                    setImageResource(R.drawable.ic_main_fab_plus)
-                    backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(context, R.color.main_color))
-                }
-                else -> with(mainFab){
+                else -> with(mainFab) {
                     setImageResource(R.drawable.ic_nav_fab_shorts)
-                    backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(context, R.color.white))
+                    backgroundTintList =
+                        ColorStateList.valueOf(ContextCompat.getColor(context, R.color.white))
+                }
+            }
+        }
+    }
+
+    private fun detailState() = with(sharedViewModel) {
+        lifecycleScope.launch {
+            viewState.collect {
+                detail = it
+                if (it) {
+                    with(binding) {
+                        mainFab.setOnClickListener {
+                            if (mainMotion.currentState == mainMotion.startState) {
+                                mainMotion.transitionToEnd()
+                            } else {
+                                mainMotion.transitionToStart()
+                            }
+                        }
+                    }
+                } else {
+                    binding.mainFab.setOnClickListener {
+                        startActivity(
+                            Intent(
+                                this@MainActivity,
+                                ShortsActivity::class.java
+                            )
+                        )
+                    }
                 }
             }
         }
@@ -138,12 +212,14 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        val currentFragment = navHostFragment.childFragmentManager.fragments[0]
-
-        if (currentFragment is DetailFragment) {
-            navController.navigate(
-                resId = R.id.action_navigation_detail_to_navigation_home,
-            )
+        if (detail) {
+            val detailFragment =
+                supportFragmentManager.findFragmentById(R.id.detail_fragment_activity_main)
+            detailFragment?.let {
+                this.supportFragmentManager.beginTransaction()
+                    .remove(it)
+                    .commit()
+            }
         } else {
             super.onBackPressed()
         }

@@ -6,12 +6,14 @@ import com.example.pintube.data.repository.local.LocalCommentRepositoryImpl
 import com.example.pintube.data.repository.local.LocalFavoriteRepositoryImpl
 import com.example.pintube.data.repository.local.LocalSearchRepositoryImpl
 import com.example.pintube.data.repository.local.LocalVideoRepositoryImpl
+import com.example.pintube.data.repository.local.RecentViewRepositoryImpl
 import com.example.pintube.domain.repository.ApiRepository
 import com.example.pintube.domain.repository.LocalChannelRepository
 import com.example.pintube.domain.repository.LocalCommentRepository
 import com.example.pintube.domain.repository.LocalFavoriteRepository
 import com.example.pintube.domain.repository.LocalSearchRepository
 import com.example.pintube.domain.repository.LocalVideoRepository
+import com.example.pintube.domain.repository.RecentViewRepository
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -37,5 +39,8 @@ abstract class RepositoryModule {
     abstract fun bindLocalCommentRepository(repository: LocalCommentRepositoryImpl): LocalCommentRepository
 
     @Binds
-    abstract fun bindLocalFavoriteRepsitory(repository: LocalFavoriteRepositoryImpl): LocalFavoriteRepository
+    abstract fun bindLocalFavoriteRepository(repository: LocalFavoriteRepositoryImpl): LocalFavoriteRepository
+
+    @Binds
+    abstract fun bindRecentViewRepository(repository: RecentViewRepositoryImpl): RecentViewRepository
 }

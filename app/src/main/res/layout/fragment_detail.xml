@@ -1,71 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.motion.widget.MotionLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/detail_fragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="64dp"
-    android:background="@color/white"
+    android:background="@android:color/transparent"
     app:layoutDescription="@xml/fragment_detail_scene"
     tools:context=".ui.detailpage.DetailFragment">
-
-<!--    <androidx.constraintlayout.widget.ConstraintLayout-->
-<!--        android:id="@+id/cl_detail_top_bar"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:background="@drawable/bg_blur"-->
-<!--        android:elevation="1dp"-->
-<!--        android:visibility="gone"-->
-
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toTopOf="parent">-->
-
-<!--        <ImageView-->
-<!--            android:id="@+id/iv_detail_close"-->
-<!--            android:layout_width="24dp"-->
-<!--            android:layout_height="24dp"-->
-<!--            android:layout_marginStart="10dp"-->
-<!--            android:layout_marginTop="10dp"-->
-<!--            android:layout_marginBottom="10dp"-->
-<!--            android:elevation="4dp"-->
-<!--            android:src="@drawable/ic_close_x"-->
-
-<!--            app:layout_constraintBottom_toBottomOf="parent"-->
-<!--            app:layout_constraintStart_toStartOf="parent"-->
-<!--            app:layout_constraintTop_toTopOf="parent" />-->
-
-<!--        <ImageView-->
-<!--            android:id="@+id/iv_detail_share"-->
-<!--            android:layout_width="18dp"-->
-<!--            android:layout_height="18dp"-->
-<!--            android:layout_marginTop="10dp"-->
-<!--            android:layout_marginEnd="16dp"-->
-<!--            android:layout_marginBottom="10dp"-->
-<!--            android:elevation="4dp"-->
-<!--            android:src="@drawable/ic_detail_share"-->
-
-<!--            app:layout_constraintBottom_toBottomOf="parent"-->
-<!--            app:layout_constraintEnd_toStartOf="@+id/iv_detail_pin"-->
-<!--            app:layout_constraintTop_toTopOf="parent" />-->
-
-<!--        <ImageView-->
-<!--            android:id="@+id/iv_detail_pin"-->
-<!--            android:layout_width="18dp"-->
-<!--            android:layout_height="18dp"-->
-<!--            android:layout_marginTop="10dp"-->
-<!--            android:layout_marginEnd="10dp"-->
-<!--            android:layout_marginBottom="10dp"-->
-<!--            android:elevation="4dp"-->
-<!--            android:src="@drawable/ic_pin"-->
-
-<!--            app:layout_constraintBottom_toBottomOf="parent"-->
-<!--            app:layout_constraintEnd_toEndOf="parent"-->
-<!--            app:layout_constraintTop_toTopOf="parent" />-->
-
-
-<!--    </androidx.constraintlayout.widget.ConstraintLayout>-->
 
     <WebView
         android:id="@+id/player_detail"
@@ -73,45 +15,117 @@
         android:layout_height="0dp"
         app:layout_constraintDimensionRatio="16:9"
         app:layout_constraintBottom_toTopOf="@+id/cl_detail_channel"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/cl_detail_motion_bar"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        android:visibility="gone"
+        android:background="@color/white"
+        android:gravity="center_vertical"
+        app:layout_constraintStart_toEndOf="@id/player_detail"
+        app:layout_constraintTop_toTopOf="@id/player_detail"
+        app:layout_constraintBottom_toBottomOf="@id/player_detail"
+        app:layout_constraintEnd_toStartOf="@+id/ll_detail_motion_btn_bar">
+
+        <TextView
+            android:id="@+id/tv_detail_motion_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:text="타이틀"
+            android:textSize="12sp"
+            android:textColor="@color/black"
+            android:maxLines="1"
+            android:ellipsize="end"/>
+
+        <TextView
+            android:id="@+id/tv_detail_motion_channel_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="4dp"
+            android:text="채널명"
+            android:textSize="12sp"
+            android:textColor="@color/black"
+            android:maxLines="1"
+            android:ellipsize="end"/>
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+    <LinearLayout
+        android:id="@+id/ll_detail_motion_btn_bar"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="horizontal"
+        android:visibility="gone"
+        android:background="@color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/cl_detail_motion_bar"
+        app:layout_constraintBottom_toBottomOf="@id/cl_detail_motion_bar">
+        <FrameLayout
+            android:id="@+id/btn_detail_motion_play"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_gravity="center_vertical"
+            android:background="@drawable/custom_ripple_effect"
+            android:backgroundTint="@color/white">
+
+            <ImageView
+                android:id="@+id/iv_detail_motion_play"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_splash_play"/>
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/btn_detail_motion_close"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_gravity="center_vertical"
+            android:background="@drawable/custom_ripple_effect"
+            android:backgroundTint="@color/white">
+
+            <ImageView
+                android:id="@+id/iv_detail_motion_close"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_comment_x"/>
+        </FrameLayout>
+    </LinearLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cl_detail_channel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:elevation="4dp"
+        android:background="@color/white"
         app:layout_constraintTop_toBottomOf="@+id/player_detail"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         >
 
-        <androidx.cardview.widget.CardView
-            android:id="@+id/cv_detail_profile"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_margin="10dp"
-            android:background="@drawable/ic_account_empty"
-            app:cardCornerRadius="200dp"
-
-
-            app:cardElevation="1dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
 
             <ImageView
                 android:id="@+id/iv_detail_profile_pic"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_margin="10dp"
                 android:layout_gravity="center"
                 android:adjustViewBounds="true"
+                android:background="@drawable/round_image"
                 android:clipToOutline="true"
                 android:scaleType="centerCrop"
-                android:src="@drawable/ic_account_empty" />
+                android:src="@drawable/ic_account_empty"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-        </androidx.cardview.widget.CardView>
 
         <TextView
             android:id="@+id/tv_detail_channel_name"
@@ -122,9 +136,9 @@
             android:textSize="14sp"
             android:textStyle="bold"
 
-            app:layout_constraintBottom_toBottomOf="@id/cv_detail_profile"
-            app:layout_constraintStart_toEndOf="@+id/cv_detail_profile"
-            app:layout_constraintTop_toTopOf="@+id/cv_detail_profile" />
+            app:layout_constraintBottom_toBottomOf="@id/iv_detail_profile_pic"
+            app:layout_constraintStart_toEndOf="@+id/iv_detail_profile_pic"
+            app:layout_constraintTop_toTopOf="@+id/iv_detail_profile_pic" />
 
         <TextView
             android:id="@+id/tv_detail_view_count"
@@ -165,12 +179,11 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-
-
     <ScrollView
         android:id="@+id/sv_detail_info"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:background="@color/white"
 
         app:layout_constraintBottom_toTopOf="@+id/cl_detail_comment"
         app:layout_constraintEnd_toEndOf="parent"
@@ -205,17 +218,16 @@
 
     </ScrollView>
 
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cl_detail_comment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white"
         android:elevation="4dp"
+        android:paddingBottom="64dp"
         app:layout_constraintHeight_percent="0.24"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/sv_detail_info">
 
         <TextView
@@ -246,8 +258,8 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:paddingHorizontal="10dp"
-            android:paddingBottom="4dp"
             android:visibility="visible"
+            android:background="@color/white"
 
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -258,11 +270,11 @@
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_marginStart="10dp"
+                android:layout_marginTop="8dp"
                 android:background="@drawable/ic_account_empty"
                 app:cardCornerRadius="200dp"
 
                 app:cardElevation="1dp"
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
@@ -290,7 +302,7 @@
                 app:layout_constraintTop_toTopOf="@+id/cv_detail_comment_first_profile"
                 app:layout_constraintStart_toEndOf="@+id/cv_detail_comment_first_profile"
                 />
-            <kr.co.prnd.readmore.ReadMoreTextView
+            <TextView
                 android:id="@+id/tv_detail_comment_first"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -300,9 +312,8 @@
                 android:fontFamily="@font/roboto_medium"
                 app:layout_constraintTop_toBottomOf="@+id/tv_detail_comment_first_name"
                 app:layout_constraintStart_toStartOf="@+id/tv_detail_comment_first_name"
-                app:readMoreMaxLine="2"
-                app:readMoreText="...더보기"
-                app:readMoreColor="@color/enable_color"
+                android:maxLines="3"
+                android:ellipsize="end"
                 />
             <ImageView
                 android:id="@+id/iv_detail_comment_first_like"
@@ -327,8 +338,40 @@
                 app:layout_constraintBottom_toBottomOf="@+id/iv_detail_comment_first_like"
                 />
 
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="120dp"
+                app:layout_constraintTop_toBottomOf="@+id/tv_detail_comment_first_like_count"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_detail_bookmark"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/cl_detail_comment"
+        app:layout_constraintEnd_toEndOf="@+id/sv_detail_info"
+        app:layout_constraintStart_toStartOf="@+id/sv_detail_info"
+        app:layout_constraintTop_toTopOf="@+id/sv_detail_info">
+
+        <FrameLayout
+            android:id="@+id/btn_fl_popular_item_pin_back"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <ImageView
+                android:id="@+id/iv_popular_item_pin"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="2dp"
+                app:srcCompat="@drawable/push_pin"
+                app:tint="@color/main_color" />
+        </FrameLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.constraintlayout.motion.widget.MotionLayout>

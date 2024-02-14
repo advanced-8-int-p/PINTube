@@ -1,18 +1,26 @@
 package com.example.pintube.ui.mypage
 
-sealed class MypageViewType {
+sealed interface MypageViewType {
 
-//    data class Profile(val myProfile: MypageProfileData) : MypageViewType()
+    //    data class Profile(val myProfile: MypageProfileData) : MypageViewType()
+    data object TopHeader : MypageViewType
 
-    data class Header(val title: String, val isRecent: Boolean) : MypageViewType()
+    data class Header(val title: String, val isRecent: Boolean) : MypageViewType
 
     data class RecentItems(
         val recentAdapter: RecyclerviewRecentVideoAdapter
-    ) : MypageViewType()
+    ) : MypageViewType
 
     data class PinItems(
 //        val items: MutableList<PinItem>,
         val pinAdapter: RecyclerviewPinnedGroupAdapter
-    ) : MypageViewType()
-}
+    ) : MypageViewType
 
+    data class MyPageProfile(
+        var channelThumbnail: String? = null,
+        var channelName: String? = null,
+        var channelId: String? = null,
+        var isLogin: Boolean? = null,
+    ) : MypageViewType
+
+}

@@ -67,6 +67,26 @@
             app:layout_constraintVertical_bias="0.38" />
     </ConstraintSet>
 
+    <ConstraintSet android:id="@+id/detail_start">
+        <Constraint
+            android:id="@+id/detail_fragment_activity_main"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+    </ConstraintSet>
+
+    <ConstraintSet android:id="@+id/detail_end">
+        <Constraint
+            android:id="@+id/detail_fragment_activity_main"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+    </ConstraintSet>
     <Transition
         app:constraintSetEnd="@id/end"
         app:constraintSetStart="@+id/start"
@@ -75,5 +95,12 @@
 <!--        <OnClick motion:target="@id/main_fab"
             motion:clickAction="toggle"
             app:clickAction="toggle" />-->
+    </Transition>
+
+    <Transition
+        app:constraintSetStart="@+id/detail_start"
+        app:constraintSetEnd="@+id/detail_end"
+        app:duration="300">
+
     </Transition>
 </MotionScene>

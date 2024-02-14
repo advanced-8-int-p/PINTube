@@ -15,12 +15,21 @@
         app:defaultNavHost="true"
         app:navGraph="@navigation/mobile_navigation" />
 
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/detail_fragment_activity_main"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:id="@+id/main_coordinator"
         android:layout_width="match_parent"
         android:layout_height="100dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:theme="@style/Theme.MaterialComponents">
+        android:theme="@style/Theme.MaterialComponents"
+        app:layout_constraintBottom_toBottomOf="parent">
 
         <com.google.android.material.bottomappbar.BottomAppBar
             android:id="@+id/main_bottom_appbar"
@@ -35,11 +44,11 @@
 
             <com.google.android.material.bottomnavigation.BottomNavigationView
                 android:id="@+id/nav_view"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="56dp"
                 android:layout_marginEnd="16dp"
+                android:background="@android:color/transparent"
                 app:elevation="0dp"
-                android:background ="@android:color/transparent"
                 app:itemIconTint="@color/selector_navi_icon_colors"
                 app:labelVisibilityMode="unlabeled"
                 app:menu="@menu/bottom_nav_menu" />
@@ -51,11 +60,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_main_fab"
-            app:tint = "@android:color/transparent"
             app:backgroundTint="@android:color/transparent"
             app:fabCustomSize="60dp"
+            app:layout_anchor="@id/main_bottom_appbar"
             app:maxImageSize="28.67dp"
-            app:layout_anchor="@id/main_bottom_appbar" />
+            app:tint="@android:color/transparent" />
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
@@ -64,32 +73,32 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/ic_detail_share"
-        app:tint = "@color/main_color"
         app:backgroundTint="@color/white"
         app:fabCustomSize="40dp"
-        app:maxImageSize="24dp"
-        app:layout_constraintHorizontal_bias="0.36"
-        app:layout_constraintVertical_bias="0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/main_coordinator"/>
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.36"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/main_coordinator"
+        app:layout_constraintVertical_bias="0"
+        app:maxImageSize="24dp"
+        app:tint="@color/main_color" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/main_fab_pin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/ic_nav_fab_pin"
-        app:tint = "@color/main_color"
         app:backgroundTint="@color/white"
         app:fabCustomSize="40dp"
-        app:maxImageSize="24dp"
-        app:layout_constraintHorizontal_bias="0.64"
-        app:layout_constraintVertical_bias="0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/main_coordinator"/>
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.64"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/main_coordinator"
+        app:layout_constraintVertical_bias="0"
+        app:maxImageSize="24dp"
+        app:tint="@color/main_color" />
 
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -99,10 +108,11 @@
         android:src="@drawable/ic_nav_fab_shorts"
         app:backgroundTint="@color/white"
         app:fabCustomSize="60dp"
-        app:maxImageSize="28.67dp"
-        app:layout_constraintVertical_bias="0.38"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/main_coordinator"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/main_coordinator"
+        app:layout_constraintVertical_bias="0.38"
+        app:maxImageSize="28.67dp" />
+
 </androidx.constraintlayout.motion.widget.MotionLayout>
