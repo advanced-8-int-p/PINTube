@@ -43,11 +43,7 @@ class MypageFragment : Fragment() {
     private lateinit var mGoogleSignInClient: GoogleSignInClient
     private lateinit var resultLauncher: ActivityResultLauncher<Intent>
 
-    private var myProfileData: MypageProfileData = MypageProfileData(
-        myAccountProfileUri = null,
-        myAccountName = null,
-        myAccountId = null,
-    )
+    private var myProfileData = MypageViewType.MyPageProfile()
 //        get() {
 //            return MypageProfileData(
 //                myAccountProfileUri = null,
@@ -73,7 +69,16 @@ class MypageFragment : Fragment() {
             )
         }
 
-    private val adapter by lazy { MypageAdapter(requireContext(), mItems) }
+    private val adapter by lazy {
+        MypageAdapter(requireContext(),
+            mItems,
+            onClickLogin = {
+                signIn()
+            },
+            onClickLogOut = {
+                signOut()
+            })
+    }
 
 //    private val recentAdapter by lazy { RecyclerviewRecentVideoAdapter() }
 
@@ -104,13 +109,10 @@ class MypageFragment : Fragment() {
         initView()
         setupListeners()
         setResultSignUp()
-
-
     }
 
     override fun onResume() {
         super.onResume()
-        initView()
     }
 
     override fun onDestroyView() {
@@ -121,12 +123,6 @@ class MypageFragment : Fragment() {
     @SuppressLint("SetTextI18n")
     private fun initView() {
         binding.rvMypageList.adapter = adapter
-
-//        myProfileData.myAccountProfileUri = null
-//        myProfileData.myAccountName = null
-//        myProfileData.myAccountId = null
-
-
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestProfile()
             .requestId()
@@ -135,61 +131,6 @@ class MypageFragment : Fragment() {
         mGoogleSignInClient = GoogleSignIn.getClient(requireContext(), gso)
 
         getCurrentUserProfile()
-
-//        binding.also { b ->
-//            val textViews = listOf(b.tvMypageChannelName, b.tvMypageChannelId)
-//
-//            b.ivMypageProfile.load(myProfileData.myAccountProfileUri)
-//            //배경..... 유튜브 채널 헤더를 어디서 가져오지 아니 근데 구글 계정마다 다 채널 있지는 않지 않나 음...
-//            b.mypageFragment.setBackgroundResource(R.drawable.hamster)
-//            b.tvMypageChannelName.text = myProfileData.myAccountName
-//            //id가 id가 아니라 그 숫자고유값?그런거같은
-//            b.tvMypageChannelId.text = myProfileData.myAccountId.toString()
-//
-////            isLoggedIn = (myProfileData.myAccountId != null)
-//
-//            Log.d("login", "status= ${isLoggedIn}")
-//            if (isLoggedIn) {
-//                b.sibtnMypageChannelLogin.isVisible = false
-//                b.tvMypageChannelLogout.isVisible = true
-//                b.ivMypageProfile.setImageResource(R.drawable.ic_account_empty)
-//                textViews.forEach {
-//                    it.isVisible = true
-//                }
-//
-//            } else {
-//                b.sibtnMypageChannelLogin.isVisible = true
-//                b.tvMypageChannelLogout.isVisible = false
-//                textViews.forEach {
-//                    it.isVisible = false
-//                }
-//            }
-//
-//            b.sibtnMypageChannelLogin.setOnClickListener {
-//
-//                val signInIntent = mGoogleSignInClient.signInIntent
-//                startActivityForResult(signInIntent, 0)
-//
-//                signIn()
-//                getCurrentUserProfile()
-//
-//                onResume()
-//
-//            }
-//
-//            b.tvMypageChannelLogout.setOnClickListener {
-//                isLoggedIn = false
-//                myProfileData.myAccountProfileUri = null
-//                myProfileData.myAccountName = null
-//                myProfileData.myAccountName = null
-//                signOut()
-//                revokeAccess()
-//
-//                onResume()
-//            }
-//
-//            getCurrentUserProfile()
-//        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -200,9 +141,9 @@ class MypageFragment : Fragment() {
             try {
                 isLoggedIn = true
                 val account = task.getResult(ApiException::class.java)
-                myProfileData.myAccountProfileUri = account.photoUrl.toString()
-                myProfileData.myAccountName = account.displayName
-                myProfileData.myAccountId = account.email
+                myProfileData.channelThumbnail = account.photoUrl.toString()
+                myProfileData.channelName = account.displayName
+                myProfileData.channelId = account.email
             } catch (e: ApiException) {
                 Log.d("googleLogin", e.toString())
             }
@@ -276,6 +217,7 @@ class MypageFragment : Fragment() {
 //            }
     }
 
+    //현재 유저 정보
     private fun getCurrentUserProfile() {
         val curUser = GoogleSignIn.getLastSignedInAccount(requireContext())
         curUser?.let {
@@ -283,12 +225,12 @@ class MypageFragment : Fragment() {
             val displayName = curUser.displayName.toString()
             val photoUrl = curUser.photoUrl.toString()
 
-            myProfileData.myAccountId = id
-            myProfileData.myAccountName = displayName
-            myProfileData.myAccountProfileUri = photoUrl
+            myProfileData.channelId = id
+            myProfileData.channelName = displayName
+            myProfileData.channelThumbnail = photoUrl
 
             Log.d("login", id)
-            Log.d("login", myProfileData.myAccountId.toString())
+            Log.d("login", myProfileData.channelId.toString())
         }
     }
 

@@ -2,10 +2,12 @@ package com.example.pintube.ui.mypage
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.app.ActivityCompat.startActivityForResult
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
@@ -17,10 +19,14 @@ import com.example.pintube.databinding.ItemMypageProfileBinding
 import com.example.pintube.databinding.RecyclerviewPinnedGroupBinding
 import com.example.pintube.databinding.RecyclerviewRecentVideosBinding
 import com.example.pintube.ui.main.MainActivity
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 
 class MypageAdapter(
     private val mContext: Context,
-    private val multiViewType: MutableList<MypageViewType>
+    private val multiViewType: MutableList<MypageViewType>,
+    private val onClickLogin: () -> Unit,
+    private val onClickLogOut: () -> Unit,
 ) : RecyclerView.Adapter<ViewHolder>() {
 
 
@@ -74,7 +80,9 @@ class MypageAdapter(
 
             VIEW_TYPE_PROFILE -> MypageProfileViewHolder(
                 ItemMypageProfileBinding
-                    .inflate(LayoutInflater.from(parent.context), parent, false)
+                    .inflate(LayoutInflater.from(parent.context), parent, false),
+                onClickLogin = onClickLogin,
+                onClickLogOut = onClickLogOut,
             )
 
             else -> error("jj-마이페이지어댑터 onCreateViewHolder - viewType error: $viewType")
@@ -153,69 +161,58 @@ class MypageAdapter(
 
     }
 
-    inner class MypageProfileViewHolder(private val binding: ItemMypageProfileBinding) :
-        RecyclerView.ViewHolder(binding.root) {
+    inner class MypageProfileViewHolder(
+        private val binding: ItemMypageProfileBinding,
+        private val onClickLogin: () -> Unit,
+        private val onClickLogOut: () -> Unit
+    ) : RecyclerView.ViewHolder(binding.root) {
 
-        fun onBind(item: MypageViewType.MyPageProfile) = binding.also { b ->
-            b.ivMypageProfile.load(item.channelThumbnail)
-            b.tvMypageChannelName.text = item.channelName
-            b.tvMypageChannelId.text = item.channelId
+        private var isLoggedIn: Boolean = false
+
+        fun onBind(
+            item: MypageViewType.MyPageProfile
+        ) = with(binding){
+            ivMypageProfile.load(item.channelThumbnail)
+            tvMypageChannelName.text = item.channelName
+            tvMypageChannelId.text = item.channelId
             // TODO: 로그인 여부에 따라서 버튼을 로그인/로그아웃 변경..?
 
 
-            val textViews = listOf(b.tvMypageChannelName, b.tvMypageChannelId)
+            val textViews = listOf(tvMypageChannelName, tvMypageChannelId)
 
-            b.ivMypageProfile.load(item.channelThumbnail)
-            //배경..... 유튜브 채널 헤더를 어디서 가져오지 아니 근데 구글 계정마다 다 채널 있지는 않지 않나 음...
-            b.mypageFragment.setBackgroundResource(R.drawable.hamster)
-            b.tvMypageChannelName.text = myProfileData.myAccountName
-            //id가 id가 아니라 그 숫자고유값?그런거같은
-            b.tvMypageChannelId.text = myProfileData.myAccountId.toString()
+            ivMypageProfile.load(item.channelThumbnail)
+            tvMypageChannelName.text = item.channelName
+            tvMypageChannelId.text = item.channelId.toString()
 
-//            isLoggedIn = (myProfileData.myAccountId != null)
+            isLoggedIn = (item.channelId != null)
 
             Log.d("login", "status= ${isLoggedIn}")
             if (isLoggedIn) {
-                b.sibtnMypageChannelLogin.isVisible = false
-                b.tvMypageChannelLogout.isVisible = true
-                b.ivMypageProfile.setImageResource(R.drawable.ic_account_empty)
+                sibtnMypageChannelLogin.isVisible = false
+                tvMypageChannelLogout.isVisible = true
+                ivMypageProfile.setImageResource(R.drawable.ic_account_empty)
                 textViews.forEach {
                     it.isVisible = true
                 }
 
             } else {
-                b.sibtnMypageChannelLogin.isVisible = true
-                b.tvMypageChannelLogout.isVisible = false
+                sibtnMypageChannelLogin.isVisible = true
+                tvMypageChannelLogout.isVisible = false
                 textViews.forEach {
                     it.isVisible = false
                 }
             }
 
-            b.sibtnMypageChannelLogin.setOnClickListener {
-
-                val signInIntent = mGoogleSignInClient.signInIntent
-                startActivityForResult(signInIntent, 0)
-
-                signIn()
-                getCurrentUserProfile()
-
-                onResume()
-
+            sibtnMypageChannelLogin.setOnClickListener {
+                onClickLogin
             }
 
-            b.tvMypageChannelLogout.setOnClickListener {
-                isLoggedIn = false
-                myProfileData.myAccountProfileUri = null
-                myProfileData.myAccountName = null
-                myProfileData.myAccountName = null
-                signOut()
-                revokeAccess()
-
-                onResume()
+            tvMypageChannelLogout.setOnClickListener {
+                onClickLogOut
             }
 
-            getCurrentUserProfile()
         }
+
     }
 
 }
