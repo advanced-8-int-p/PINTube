@@ -82,7 +82,7 @@ class SearchResultFragment : Fragment() {
                         }
                         //조회수 순
                         1 -> {
-
+                            searchAdapter?.sortByViewCount()
                         }
                         //최근 업로드 순
                         2 -> {

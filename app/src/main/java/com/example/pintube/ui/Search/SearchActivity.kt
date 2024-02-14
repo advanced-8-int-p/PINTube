@@ -1,10 +1,12 @@
 package com.example.pintube.ui.Search
 
+import android.content.Context
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
@@ -35,6 +37,9 @@ class SearchActivity : AppCompatActivity() {
 
 
         binding.ivSearchFragmentSearch.setOnClickListener {
+            val inputMethodManager =
+                getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            inputMethodManager.hideSoftInputFromWindow(window.decorView.applicationWindowToken, 0)
             val query = binding.etSearchFragmentBar.text.toString()
             if (query.isNotBlank()) {
                 SharedPrefManager.saveSearchHistory(this, query)
@@ -46,6 +51,7 @@ class SearchActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
             viewModel.searchVideo(query)
+            initViewModel()
         }
         binding.ivSearchFragmentBackArrow.setOnClickListener {
             finish()
@@ -87,6 +93,9 @@ class SearchActivity : AppCompatActivity() {
 
             //텍스트 입력되면 x버튼 나옴.
             override fun afterTextChanged(s: Editable?) {
+                if (s.isNullOrEmpty()) {
+                    supportFragmentManager.popBackStack()
+                }
                 binding.tvNoSearch.visibility = View.GONE
                 binding.rvSearchList.visibility = View.VISIBLE
                 showXButton()
@@ -94,16 +103,17 @@ class SearchActivity : AppCompatActivity() {
             }
         })
 
+
+        //x버튼 누르면 검색창에 입력된 텍스트 없앰.
         binding.removeQuery.setOnClickListener {
             binding.etSearchFragmentBar.setText("")
-
-            supportFragmentManager.popBackStack()
         }
 
         adapter.itemClick = object : SearchListAdapter.ItemClick {
             override fun onClick(query: String) {
 
                 viewModel.searchVideo(query)
+                initViewModel()
                 binding.etSearchFragmentBar.setText(query)
 
                 Toast.makeText(this@SearchActivity, "$query 클릭", Toast.LENGTH_SHORT).show()
@@ -118,15 +128,12 @@ class SearchActivity : AppCompatActivity() {
             }
         }
 
-        initViewModel()
     }
 
     private fun initViewModel() = viewModel.also { vm ->
         vm.searchDataList.observe(this) {
             if (it.isNullOrEmpty()) {
-                binding.tvNoSearch.visibility = View.VISIBLE
                 binding.rvSearchList.visibility = View.GONE
-                Toast.makeText(this, "검색결과가 없습니다@E$$@.", Toast.LENGTH_SHORT).show()
                 return@observe
             }
             val searchResultFragment = SearchResultFragment.newInstance(it)

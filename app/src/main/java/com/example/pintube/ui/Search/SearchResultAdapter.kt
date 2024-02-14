@@ -46,6 +46,7 @@ class SearchResultAdapter(private val items: MutableList<SearchData>) :
             b.rvSearchUploadDate.text = item.publishedAt?.convertToDaysAgo()
             b.rvSearchImage.load(items[position].videoThumbnailUri)
             b.rvSearchViewCount.text = item.viewCount?.convertViewCount()
+            b.rvSearchChImage.load(items[position].channelThumbnailUri)
 
         }
     }
@@ -59,6 +60,13 @@ class SearchResultAdapter(private val items: MutableList<SearchData>) :
         items.sortByDescending {
             it.publishedAt?.replace("Z", "").let { date -> LocalDateTime.parse(date) }
         }
+        notifyDataSetChanged()
+    }
+
+    fun sortByViewCount() {
+        items.sortWith(compareByDescending { item ->
+            item.viewCount ?: 0
+        })
         notifyDataSetChanged()
     }
 }
