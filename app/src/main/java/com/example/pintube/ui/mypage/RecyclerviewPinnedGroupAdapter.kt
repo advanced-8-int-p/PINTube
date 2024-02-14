@@ -21,7 +21,7 @@ class RecyclerviewPinnedGroupAdapter(
 //    private var localVideoRepository: LocalVideoRepository
 ) : RecyclerView.Adapter<ViewHolder>() {
 
-    private val mItems : MutableList<VideoItem> = mutableListOf()
+    val mItems : MutableList<VideoItem> = mutableListOf()
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
