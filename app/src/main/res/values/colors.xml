@@ -13,6 +13,7 @@
     <color name="enable_color">#C8C8C8</color>
     <color name="background">#F0F0F5</color>
     <color name="ios_color">#2F6EF6</color>
-    <color name="selected_color">#474554</color>
+    <color name="selected_color">#D8D8D8</color>
+    <color name="gray">#7C7C7C</color>
 
 </resources>

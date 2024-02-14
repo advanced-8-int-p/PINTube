@@ -20,8 +20,8 @@ interface VideoDAO {
     fun delete(item: LocalVideoEntity)
 
     // 비디오 아이디 입력시 테이블에 저장된 상세 비디오 값 호출
-    @Query("Select * From video_info Where id = :id")
-    fun findVideo(id: String): LocalVideoEntity?
+    @Query("Select * From video_info Where id = :id AND saveDate >= :date")
+    fun findVideo(id: String, date: String): LocalVideoEntity?
 
     @Query("SELECT * FROM video_info WHERE isPopular = 1 AND saveDate >= :date")
     fun findPopularVideos(date: String): List<LocalVideoEntity>?

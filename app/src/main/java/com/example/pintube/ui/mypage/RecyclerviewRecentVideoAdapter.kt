@@ -1,20 +1,17 @@
 package com.example.pintube.ui.mypage
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.net.toUri
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
-import com.example.pintube.databinding.RecyclerviewRecentVideosBinding
 import com.example.pintube.databinding.VideoItemBinding
-import com.example.pintube.utill.Constants
 import com.example.pintube.utill.convertDurationTime
 
 class RecyclerviewRecentVideoAdapter() : RecyclerView.Adapter<ViewHolder>() {
 
-    val mItems = mutableListOf<RecentItem>()
+    val mItems = mutableListOf<VideoItem>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding = VideoItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)

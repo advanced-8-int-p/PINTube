@@ -1,19 +1,18 @@
 package com.example.pintube.ui.mypage
 
 import android.annotation.SuppressLint
-import android.app.Activity
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
-import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentTransaction
-import androidx.navigation.fragment.FragmentNavigator
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
+import coil.load
 import com.example.pintube.R
+import com.example.pintube.databinding.ItemHeaderBinding
 import com.example.pintube.databinding.ItemMypageHeaderBinding
+import com.example.pintube.databinding.ItemMypageProfileBinding
 import com.example.pintube.databinding.RecyclerviewPinnedGroupBinding
 import com.example.pintube.databinding.RecyclerviewRecentVideosBinding
 import com.example.pintube.ui.main.MainActivity
@@ -30,6 +29,8 @@ class MypageAdapter(
         private const val VIEW_TYPE_TITLE = 1
         private const val VIEW_TYPE_RECENT = 2
         private const val VIEW_TYPE_PINNED = 3
+        private const val VIEW_TYPE_TOP_HEADER = 4
+        private const val VIEW_TYPE_PROFILE = 5
     }
 
     interface ItemClick {
@@ -56,7 +57,7 @@ class MypageAdapter(
                 MypageRecentItemViewHolder(binding)
             }
 
-            else -> {
+            VIEW_TYPE_PINNED -> {
                 val binding = RecyclerviewPinnedGroupBinding.inflate(
                     LayoutInflater.from(parent.context),
                     parent,
@@ -64,41 +65,58 @@ class MypageAdapter(
                 )
                 MypagePinItemViewHolder(binding)
             }
+
+            VIEW_TYPE_TOP_HEADER -> TopHeaderViewHolder(
+                ItemHeaderBinding
+                    .inflate(LayoutInflater.from(parent.context), parent, false)
+            )
+
+            VIEW_TYPE_PROFILE -> MypageProfileViewHolder(
+                ItemMypageProfileBinding
+                    .inflate(LayoutInflater.from(parent.context), parent, false)
+            )
+
+            else -> error("jj-마이페이지어댑터 onCreateViewHolder - viewType error: $viewType")
         }
     }
 
 
     @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        when (val items = multiViewType[position]) {
+        when (val item = multiViewType[position]) {
 
             is MypageViewType.Header -> {
-                (holder as MypageHeaderViewHolder).onBind(items)
+                (holder as MypageHeaderViewHolder).onBind(item)
             }
 
             is MypageViewType.RecentItems -> {
-                (holder as MypageRecentItemViewHolder).onBind(items)
+                (holder as MypageRecentItemViewHolder).onBind(item)
             }
 
             is MypageViewType.PinItems -> {
-                val adapter = items.pinAdapter
-                (holder as MypagePinItemViewHolder).onBind(items)
+                (holder as MypagePinItemViewHolder).onBind(item)
             }
+
+            MypageViewType.TopHeader -> Unit
+
+            is MypageViewType.MyPageProfile -> (holder as MypageProfileViewHolder).onBind(item)
         }
     }
 
-    override fun getItemCount(): Int {
-        return multiViewType.size
-    }
+    override fun getItemCount(): Int = multiViewType.size
 
     override fun getItemViewType(position: Int): Int {
         return when (multiViewType[position]) {
             is MypageViewType.Header -> VIEW_TYPE_TITLE
             is MypageViewType.RecentItems -> VIEW_TYPE_RECENT
             is MypageViewType.PinItems -> VIEW_TYPE_PINNED
+            MypageViewType.TopHeader -> VIEW_TYPE_TOP_HEADER
+            is MypageViewType.MyPageProfile -> VIEW_TYPE_PROFILE
         }
-
     }
+
+    inner class TopHeaderViewHolder(binding: ItemHeaderBinding) :
+        RecyclerView.ViewHolder(binding.root)
 
     inner class MypageHeaderViewHolder(private val binding: ItemMypageHeaderBinding) :
         RecyclerView.ViewHolder(binding.root) {
@@ -132,6 +150,17 @@ class MypageAdapter(
             binding.rvRecyclerviewPinned.adapter = adapter
         }
 
+    }
+
+    inner class MypageProfileViewHolder(private val binding: ItemMypageProfileBinding) :
+        RecyclerView.ViewHolder(binding.root) {
+
+        fun onBind(item: MypageViewType.MyPageProfile) = binding.also { b ->
+            b.ivMypageProfile.load(item.channelThumbnail)
+            b.tvMypageChannelName.text = item.channelName
+            b.tvMypageChannelId.text = item.channelId
+            // TODO: 로그인 여부에 따라서 버튼을 로그인/로그아웃 변경..?
+        }
     }
 
 }
