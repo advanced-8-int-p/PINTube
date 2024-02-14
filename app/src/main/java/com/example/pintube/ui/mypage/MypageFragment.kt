@@ -54,6 +54,24 @@ class MypageFragment : Fragment() {
 
     private var isLoggedIn: Boolean = false
 
+    private val recyclerviewRecentVideoAdapter = RecyclerviewRecentVideoAdapter().also {
+        it.mItems.addAll(List(10) { VideoItem(
+            "https://picsum.photos/200/300",
+            "title",
+            "length",
+            "channelName"
+        ) })
+    }
+
+    private val recyclerviewPinnedGroupAdapter = RecyclerviewPinnedGroupAdapter(emptyList()).also {
+        it.mItems.addAll(List(10) { VideoItem(
+            "https://picsum.photos/200/300",
+            "title",
+            "length",
+            "channelName"
+        ) })
+    }
+
     private val mItems: MutableList<MypageViewType>
         get() {
             return mutableListOf<MypageViewType>(
@@ -63,9 +81,9 @@ class MypageFragment : Fragment() {
                     channelId = "bbb"
                 ),
                 MypageViewType.Header("최근 시청 영상", true),
-                MypageViewType.RecentItems(RecyclerviewRecentVideoAdapter()),
+                MypageViewType.RecentItems(recyclerviewRecentVideoAdapter),
                 MypageViewType.Header("저장한 동영상", false),
-                MypageViewType.PinItems(RecyclerviewPinnedGroupAdapter(emptyList()))
+                MypageViewType.PinItems(recyclerviewPinnedGroupAdapter)
             )
         }
 
