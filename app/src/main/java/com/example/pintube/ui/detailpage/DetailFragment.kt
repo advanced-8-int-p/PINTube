@@ -96,19 +96,6 @@ class DetailFragment : Fragment(), VideoDataInterface {
 //        Log.d("viewModel", "player af $videoUrl")
 //        initPlayer()
 
-        binding.ivDetailClose.setOnClickListener {
-//            parentFragmentManager.popBackStack()
-            findNavController().navigateUp()
-        }
-        binding.ivDetailShare.setOnClickListener {
-        }
-        binding.ivDetailPin.setOnClickListener {
-            //보관함 저장
-        }
-        binding.playerDetail.setOnClickListener {
-            isPlaying = !isPlaying
-            binding.clDetailTopBar.isVisible = isPlaying
-        }
 
     }
 
@@ -202,5 +189,8 @@ class DetailFragment : Fragment(), VideoDataInterface {
     }
 
     override fun getVideoId(): String = videoId
+    override fun initData() {
+        viewModel.initBookmark()
+    }
 
 }

@@ -6,6 +6,7 @@ import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.FragmentManager
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.example.pintube.R
@@ -48,6 +49,13 @@ class MainActivity : AppCompatActivity() {
         initBottomNav()
     }
 
+    private fun initDetailFragment() = with(binding){
+
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.detail_fragment_activity_main, DetailFragment())
+            .commit()
+    }
+
     private fun initBottomNav() = with(binding) {
         navView.setupWithNavController(navController)
         navView.background = null
@@ -88,6 +96,7 @@ class MainActivity : AppCompatActivity() {
 
             val videoId = currentFragmentInstance.getVideoId()
             viewModel.onClickBookmark(videoId)
+            currentFragmentInstance.initData()
             mainMotion.transitionToStart()
         }
 

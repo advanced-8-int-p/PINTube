@@ -49,6 +49,14 @@ class DetailViewModel @Inject constructor(
         }
     }
 
+    fun initBookmark() = viewModelScope.launch(Dispatchers.IO) {
+        _media.postValue(
+            media.value?.copy(
+                isPinned = localFavoriteRepository.checkIsBookmark(videoId).not()
+            )
+        )
+    }
+
     private fun getData() = viewModelScope.launch(Dispatchers.IO) {
         val result = videoId.let { localVideoRepository.findVideoDetail(it) }
         result?.let { getComment(id = it.id) }
