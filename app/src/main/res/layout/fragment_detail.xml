@@ -192,7 +192,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_height="wrap_content"
             android:orientation="vertical">
 
             <TextView
@@ -221,7 +221,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cl_detail_comment"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:background="@color/white"
         android:elevation="4dp"
         android:paddingBottom="64dp"

@@ -21,6 +21,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
@@ -40,6 +41,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import dagger.hilt.android.AndroidEntryPoint
 
+@SuppressLint("InflateParams")
 @AndroidEntryPoint
 
 class DetailFragment : Fragment(), VideoDataInterface {
@@ -55,8 +57,6 @@ class DetailFragment : Fragment(), VideoDataInterface {
     private lateinit var videoUrl: String
 
     private lateinit var videoId: String
-
-    private var isPlaying = false
 
     private lateinit var viewModel: DetailViewModel
 
@@ -100,20 +100,12 @@ class DetailFragment : Fragment(), VideoDataInterface {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        videoUrl = "youtube.com"
         initView()
         initViewModel()
-
-//        Log.d("viewModel", "player bf $videoUrl")
-//        getUrlFromSrc()
-//        Log.d("viewModel", "player af $videoUrl")
-//        initPlayer()
-
 
     }
 
     override fun onDestroy() {
-        (activity as MainActivity).detail = false
         sharedViewModel.updateViewState(false)
 
         super.onDestroy()
@@ -147,8 +139,9 @@ class DetailFragment : Fragment(), VideoDataInterface {
                 tvDetailTitle.text = it.title.toString()
                 tvDetailContent.text = it.publishedAt?.convertToDaysAgo()
                     .toString() + "\n\n\n" + it.description.toString()
-                count = it.commentCount?.convertViewCount() ?: "0"
+                count = it.commentCount?.convertViewCount()?: "0"
                 tvDetailCommentCount.text = "댓글 $count"
+                clDetailCommentList.isVisible = it.commentCount?.toInt() != 0
                 ivPopularItemPin.isVisible = it.isPinned
 
             }
@@ -173,8 +166,6 @@ class DetailFragment : Fragment(), VideoDataInterface {
     @SuppressLint("SetJavaScriptEnabled")
     private fun initPlayer() {
 
-        //왜안되지...........으악
-
         val webView = binding.playerDetail
 
         webView.settings.javaScriptEnabled = true
@@ -189,7 +180,7 @@ class DetailFragment : Fragment(), VideoDataInterface {
 
     }
 
-    private fun setCommentSheet() = with(binding) {
+    private fun setCommentSheet() = with(binding){
         bottomSheetDialog.setContentView(commentSheetView)
         commentRecyclerView.adapter = commentAdapter
         commentRecyclerView.layoutManager = LinearLayoutManager(requireContext())

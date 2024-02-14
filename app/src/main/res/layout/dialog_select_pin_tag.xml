@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="10dp"
+    android:background="@drawable/subtract"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/bottom_sheet_selector"
     app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
@@ -38,21 +39,59 @@
         android:background="@color/sub_color"
 
         app:layout_constraintTop_toBottomOf="@+id/tv_pin_selector_dialog_title"
-        app:layout_constraintBottom_toTopOf="@+id/cb_pin_selector_dialog_tag1"
+        app:layout_constraintBottom_toTopOf="@+id/rv_pin_check_list"
         />
 
-    <CheckBox
-        android:id="@+id/cb_pin_selector_dialog_tag1"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_pin_check_list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
-        android:text="기본 저장목록"
-        android:fontFamily="@font/roboto_regular"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
 
         app:layout_constraintTop_toBottomOf="@+id/tv_pin_selector_dialog_title"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         />
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_pin_tag_add"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+
+        app:layout_constraintTop_toBottomOf="@id/rv_pin_check_list"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        >
+
+        <ImageView
+            android:id="@+id/iv_tag_add_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_add_btn"
+
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            />
+
+        <TextView
+            android:id="@+id/tv_tag_add"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:text="저장목록 추가"
+            android:textSize="14sp"
+            android:fontFamily="@font/roboto_regular"
+
+            app:layout_constraintStart_toEndOf="@id/iv_tag_add_icon"
+            app:layout_constraintTop_toTopOf="@+id/iv_tag_add_icon"
+            app:layout_constraintBottom_toBottomOf="@+id/iv_tag_add_icon"
+            />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
