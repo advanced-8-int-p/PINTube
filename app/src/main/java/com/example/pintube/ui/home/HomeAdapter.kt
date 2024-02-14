@@ -17,7 +17,7 @@ import com.example.pintube.databinding.VideoItemBinding
 
 class HomeAdapter(
     private val onCategorySettingClick: () -> Unit,
-    private val onVideoClick: (item: VideoItemData) -> Unit?
+    private val onVideoClick: (item: VideoItemData) -> Job?
 ) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
