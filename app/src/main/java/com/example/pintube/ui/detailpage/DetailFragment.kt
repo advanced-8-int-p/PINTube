@@ -186,6 +186,8 @@ class DetailFragment : Fragment(), VideoDataInterface {
 
         val playBtn = binding.ivDetailMotionPlay
         var isPlaying = false
+        //재생상태확인이 어려움
+        //모션레이아웃 애니메이션 후에 재생 이슈
 
         playBtn.setOnClickListener {
             isPlaying = if (isPlaying) {
@@ -199,8 +201,9 @@ class DetailFragment : Fragment(), VideoDataInterface {
             }
         }
 
-
     }
+
+
 
     private fun setCommentSheet() = with(binding){
         bottomSheetDialog.setContentView(commentSheetView)
