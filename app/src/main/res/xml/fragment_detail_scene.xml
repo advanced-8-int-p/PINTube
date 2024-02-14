@@ -6,6 +6,12 @@
 
     <ConstraintSet android:id="@+id/start">
         <Constraint
+            android:id="@+id/detail_fragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingBottom="64dp"
+            android:background="@color/white"/>
+        <Constraint
             android:id="@+id/player_detail"
             motion:layout_constraintEnd_toEndOf="parent"
             android:layout_width="0dp"
@@ -70,31 +76,25 @@
 
     <ConstraintSet android:id="@+id/end">
         <Constraint
-            android:id="@+id/detail_fragment"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:paddingBottom="64dp"
-            android:background="@color/white"/>
-        <Constraint
             android:id="@+id/player_detail"
-            android:layout_width="96dp"
-            android:layout_height="0dp"
-            motion:layout_constraintTop_toTopOf="parent"
+            android:layout_width="0dp"
+            android:layout_height="69.75dp"
             motion:layout_constraintDimensionRatio="16:9"
-            motion:layout_constraintStart_toStartOf="parent" />
+            motion:layout_constraintStart_toStartOf="parent"
+            motion:layout_constraintBottom_toBottomOf="parent" />
         <Constraint
             android:id="@+id/cl_detail_motion_bar"
             motion:layout_constraintStart_toEndOf="@id/player_detail"
             motion:layout_constraintEnd_toStartOf="@+id/ll_detail_motion_btn_bar"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="69.75dp"
             motion:layout_constraintBottom_toBottomOf="@id/player_detail"
             motion:layout_constraintTop_toTopOf="@id/player_detail" />
         <Constraint
             android:id="@+id/ll_detail_motion_btn_bar"
             motion:layout_constraintEnd_toEndOf="parent"
-            android:layout_width="96dp"
-            android:layout_height="0dp"
+            android:layout_width="0dp"
+            android:layout_height="69.75dp"
             motion:layout_constraintBottom_toBottomOf="@id/cl_detail_motion_bar"
             motion:layout_constraintTop_toTopOf="@id/cl_detail_motion_bar" />
         <Constraint
@@ -137,25 +137,36 @@
             motion:layout_constraintTop_toTopOf="@+id/sv_detail_info"
             motion:layout_constraintStart_toStartOf="@+id/sv_detail_info" />
     </ConstraintSet>
+
     <Transition
         motion:constraintSetStart="@+id/start"
         motion:constraintSetEnd="@+id/end"
         motion:duration="1000">
-        <KeyFrameSet></KeyFrameSet>
+        <KeyFrameSet>
+
+            <KeyPosition
+                motion:motionTarget="@+id/player_detail"
+                motion:framePosition="60"
+                motion:keyPositionType="deltaRelative" />
+        </KeyFrameSet>
         <OnSwipe
             motion:dragDirection="dragDown"
             motion:touchAnchorId="@+id/player_detail"
-            motion:touchAnchorSide="bottom" />
+            motion:touchAnchorSide="top"/>
     </Transition>
+
 
     <Transition
         motion:constraintSetStart="@+id/end"
         motion:constraintSetEnd="@+id/start"
         motion:duration="1000">
-        <KeyFrameSet></KeyFrameSet>
+        <KeyFrameSet>
+
+        </KeyFrameSet>
         <OnSwipe
             motion:dragDirection="dragUp"
-            motion:touchAnchorId="@+id/detail_fragment"
-            motion:touchAnchorSide="bottom" />
+            motion:touchAnchorId="@+id/cl_detail_motion_bar"
+            motion:touchAnchorSide="bottom"/>
     </Transition>
+
 </MotionScene>

@@ -3,30 +3,41 @@ package com.example.pintube.ui.detailpage
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
+import android.content.res.ColorStateList
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.webkit.WebChromeClient
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.constraintlayout.motion.widget.MotionLayout
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.example.pintube.R
 import com.example.pintube.databinding.FragmentDetailBinding
 import com.example.pintube.ui.detailpage.adapter.DetailCommentAdapter
+import com.example.pintube.ui.main.MainActivity
+import com.example.pintube.ui.main.MainSharedViewModel
+import com.example.pintube.ui.main.MotionState
+import com.example.pintube.ui.shorts.ShortsActivity
+import com.example.pintube.utill.ShareLink
 import com.example.pintube.utill.VideoDataInterface
 import com.example.pintube.utill.convertToDaysAgo
 import com.example.pintube.utill.convertViewCount
 import com.example.pintube.utill.getUrlFromSrc
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -48,6 +59,8 @@ class DetailFragment : Fragment(), VideoDataInterface {
     private var isPlaying = false
 
     private lateinit var viewModel: DetailViewModel
+
+    private val sharedViewModel: MainSharedViewModel by viewModels()
 
     private val commentAdapter: DetailCommentAdapter by lazy {
         DetailCommentAdapter(
@@ -100,6 +113,9 @@ class DetailFragment : Fragment(), VideoDataInterface {
     }
 
     override fun onDestroy() {
+        (activity as MainActivity).detail = false
+        sharedViewModel.updateViewState(false)
+
         super.onDestroy()
         _binding = null
     }
@@ -107,6 +123,9 @@ class DetailFragment : Fragment(), VideoDataInterface {
     private fun initView() {
         //뷰 초기화, 받아온 정보 배치
         setCommentSheet()
+        setMotion()
+        setMotionBtn()
+        sharedViewModel.updateViewState(true)
     }
 
     @SuppressLint("SetTextI18n")
@@ -184,6 +203,49 @@ class DetailFragment : Fragment(), VideoDataInterface {
     }
 
     private fun onRepliesClick(comments: List<DetailCommentsItem.Comments?>?) = Unit
+
+    @SuppressLint("ClickableViewAccessibility")
+    private fun setMotion() = with(binding){
+        var initialY = 0f
+
+        playerDetail.setOnTouchListener { _, event ->
+            when (event.action) {
+                MotionEvent.ACTION_DOWN -> {
+                    sharedViewModel.updateMotionState(MotionState.START)
+                    initialY = event.y
+                    if (detailFragment.currentState == R.id.end) {
+                        detailFragment.transitionToStart()
+                    }
+                }
+
+                MotionEvent.ACTION_MOVE -> {
+                    sharedViewModel.updateMotionState(MotionState.MOVE)
+                    if (initialY < event.y && detailFragment.currentState == R.id.start) {
+                        detailFragment.transitionToEnd()
+                    } else if (initialY > event.y && detailFragment.currentState == R.id.end) {
+                        detailFragment.transitionToStart()
+                    }
+                }
+
+                MotionEvent.ACTION_UP -> {
+                    sharedViewModel.updateMotionState(MotionState.END)
+                    if (detailFragment.currentState == R.id.start) {
+                        detailFragment.transitionToEnd()
+                    }
+                }
+            }
+            true
+        }
+    }
+
+    private fun setMotionBtn() = with(binding){
+        btnDetailMotionClose.setOnClickListener {
+            requireActivity().supportFragmentManager.beginTransaction()
+                .remove(this@DetailFragment)
+                .commit()
+        }
+    }
+
     override fun getVideoUrl(): String {
         return videoUrl
     }
@@ -191,6 +253,36 @@ class DetailFragment : Fragment(), VideoDataInterface {
     override fun getVideoId(): String = videoId
     override fun initData() {
         viewModel.initBookmark()
+    }
+
+    override fun onResume() {
+        val mainFab: FloatingActionButton = activity?.findViewById(R.id.main_fab) ?: return
+        val mainMotion: MotionLayout = activity?.findViewById(R.id.main_motion) ?: return
+        val mainFabShare: FloatingActionButton = activity?.findViewById(R.id.main_fab_share) ?: return
+        val mainFabPin: FloatingActionButton = activity?.findViewById(R.id.main_fab_pin) ?: return
+        with(mainFab) {
+            setImageResource(R.drawable.ic_main_fab_plus)
+            backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(context, R.color.main_color))
+            setOnClickListener {
+                    if (mainMotion.currentState == mainMotion.startState) {
+                        mainMotion.transitionToEnd()
+                    } else {
+                        mainMotion.transitionToStart()
+                    }
+                }
+        }
+
+        mainFabShare.setOnClickListener {
+            ShareLink(requireActivity(), videoUrl)
+            mainMotion.transitionToStart()
+        }
+
+        mainFabPin.setOnClickListener {
+            viewModel.onClickBookmark(videoId)
+            mainMotion.transitionToStart()
+        }
+        super.onResume()
+
     }
 
 }

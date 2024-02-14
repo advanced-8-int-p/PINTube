@@ -15,10 +15,11 @@ import com.example.pintube.databinding.HomeItemPopularBinding
 import com.example.pintube.databinding.ItemHeaderBinding
 import com.example.pintube.databinding.ItemLoadingProgressBinding
 import com.example.pintube.databinding.VideoItemBinding
+import kotlinx.coroutines.Job
 
 class HomeAdapter(
     private val onCategorySettingClick: () -> Unit,
-    private val onVideoClick: (item: VideoItemData) -> Unit
+    private val onVideoClick: (item: VideoItemData) -> Unit?
 ) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 

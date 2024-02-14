@@ -57,6 +57,21 @@ class DetailViewModel @Inject constructor(
         )
     }
 
+    fun onClickBookmark(id: String) = viewModelScope.launch(Dispatchers.IO) {
+        if (localFavoriteRepository.checkIsBookmark(id)){
+            removeBookmark(id)
+        } else {
+            addBookmark(id)
+        }
+        initBookmark()
+    }
+    private fun addBookmark(id: String) = viewModelScope.launch(Dispatchers.IO) {
+        localFavoriteRepository.addBookmark(id)
+    }
+
+    private fun removeBookmark(id: String) = viewModelScope.launch(Dispatchers.IO) {
+        localFavoriteRepository.deleteBookmark(id)
+    }
     private fun getData() = viewModelScope.launch(Dispatchers.IO) {
         val result = videoId.let { localVideoRepository.findVideoDetail(it) }
         result?.let { getComment(id = it.id) }

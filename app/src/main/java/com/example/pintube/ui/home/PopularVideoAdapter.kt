@@ -12,10 +12,10 @@ import coil.load
 import coil.request.CachePolicy
 import com.example.pintube.R
 import com.example.pintube.databinding.PopularItemBinding
-import org.jsoup.helper.RequestAuthenticator.Context
+import kotlinx.coroutines.Job
 
 class PopularVideoAdapter(
-    private val onItemClick: (item: VideoItemData) -> Unit,
+    private val onItemClick: (item: VideoItemData) -> Unit?,
     private val onBookmarkClick: (item: VideoItemData) -> Unit,
 ) : ListAdapter<VideoItemData, PopularVideoAdapter.PopularViewHolder>(object :
     DiffUtil.ItemCallback<VideoItemData>() {
