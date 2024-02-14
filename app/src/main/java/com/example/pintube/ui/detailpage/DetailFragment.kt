@@ -172,6 +172,12 @@ class DetailFragment : Fragment(), VideoDataInterface {
         Log.d("viewModel", "play link $videoUrl")
         webView.loadUrl("https://$videoUrl")
 
+        val playBtn = binding.ivDetailMotionPlay
+
+        playBtn.setOnClickListener {
+            webView.evaluateJavascript("document.querySelector('video').play()", null)
+        }
+
 
     }
 

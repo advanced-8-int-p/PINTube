@@ -41,8 +41,6 @@ class MainActivity : AppCompatActivity() {
 
     private val sharedViewModel: MainSharedViewModel by viewModels()
 
-    var recentItemsList = mutableListOf<String>()
-
     private val viewModel: MainViewModel by viewModels()
 
     private val pinTagAdapter by lazy {

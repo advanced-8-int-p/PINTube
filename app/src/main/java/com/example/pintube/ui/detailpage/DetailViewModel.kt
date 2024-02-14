@@ -104,12 +104,5 @@ class DetailViewModel @Inject constructor(
         isPinned = localFavoriteRepository.checkIsBookmark(this.video?.id ?: "")
     )
 
-    private fun isPinned():Boolean {
-        //FavoriteEntity?
-//        if () {
-//            return true
-//        } else
-            return false
-    }
 
 }

@@ -212,7 +212,7 @@ class MypageFragment : Fragment() {
 //    // TODO: 뷰모델로
 //    private fun getFavoriteVideos() = lifecycleScope.launch {
 //        favIdList = localFavoriteRepository.findCategoryVideos("기본")
-////        favVideoList = favIdList.let { localVideoRepository.findVideoDetail(it) }
+////        favVideoList = favIdList.map { localVideoRepository.findVideoDetail(it) }
 //    }
 
 
@@ -291,5 +291,6 @@ class MypageFragment : Fragment() {
             Log.d("login", myProfileData.myAccountId.toString())
         }
     }
+
 
 }
