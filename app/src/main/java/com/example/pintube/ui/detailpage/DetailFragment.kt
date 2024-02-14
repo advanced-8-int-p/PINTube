@@ -22,6 +22,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
+import coil.request.CachePolicy
 import com.example.pintube.R
 import com.example.pintube.databinding.FragmentDetailBinding
 import com.example.pintube.ui.detailpage.adapter.DetailCommentAdapter
@@ -126,7 +127,10 @@ class DetailFragment : Fragment(), VideoDataInterface {
             Log.d("viewModel", "player af $videoUrl")
             initPlayer()
             with(binding) {
-                ivDetailProfilePic.load(it.channelProfile)
+                ivDetailProfilePic.load(it.channelProfile){
+                    memoryCachePolicy(CachePolicy.ENABLED)
+                    crossfade(true)
+                }
                 tvDetailChannelName.text = it.channelTitle.toString()
                 tvDetailViewCount.text =
                     it.viewCount?.convertViewCount().toString() + " views"
@@ -138,7 +142,15 @@ class DetailFragment : Fragment(), VideoDataInterface {
                 tvDetailCommentCount.text = "댓글 $count"
                 clDetailCommentList.isVisible = it.commentCount?.toInt() != 0
                 ivPopularItemPin.isVisible = it.isPinned
-
+                tvDetailMotionTitle.text = it.title
+                tvDetailMotionChannelTitle.text = it.channelTitle
+                clDetailMotionBar.setOnClickListener {i ->
+                    detailFragment.transitionToStart()
+                    ivDetailProfilePic.load(it.channelProfile){
+                        memoryCachePolicy(CachePolicy.ENABLED)
+                        crossfade(true)
+                    }
+                }
             }
         })
 
@@ -198,7 +210,7 @@ class DetailFragment : Fragment(), VideoDataInterface {
 
     @SuppressLint("ClickableViewAccessibility")
     private fun setMotion() = with(binding){
-        var initialY = 0f
+       /* var initialY = 0f
 
         playerDetail.setOnTouchListener { _, event ->
             when (event.action) {
@@ -210,7 +222,7 @@ class DetailFragment : Fragment(), VideoDataInterface {
                     }
                 }
 
-                MotionEvent.ACTION_MOVE -> {
+                MotionEvent.ACTION_SCROLL -> {
                     sharedViewModel.updateMotionState(MotionState.MOVE)
                     if (initialY < event.y && detailFragment.currentState == R.id.start) {
                         detailFragment.transitionToEnd()
@@ -220,14 +232,19 @@ class DetailFragment : Fragment(), VideoDataInterface {
                 }
 
                 MotionEvent.ACTION_UP -> {
-                    sharedViewModel.updateMotionState(MotionState.END)
+                    sharedViewModel.updateMotionState(MotionState.START)
                     if (detailFragment.currentState == R.id.start) {
                         detailFragment.transitionToEnd()
                     }
                 }
+
+                MotionEvent.ACTION_CANCEL -> {
+                    sharedViewModel.updateMotionState(MotionState.END)
+                }
+
             }
             true
-        }
+        }*/
     }
 
     private fun setMotionBtn() = with(binding){

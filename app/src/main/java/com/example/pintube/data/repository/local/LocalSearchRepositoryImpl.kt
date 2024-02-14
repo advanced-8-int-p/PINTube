@@ -31,8 +31,10 @@ class LocalSearchRepositoryImpl @Inject constructor(
         LocalDateTime.now().minusHours(12).convertLocalDateTime()
         )?.map {
         VideoWithThumbnail(
-            // TODO: 그냥 it.saveDate!! 추가하면 되는건가요 규상님?
-            video = videoDAO.findVideo(it.id, it.saveDate!!),
+            video = videoDAO.findVideo(
+                it.id,
+                LocalDateTime.now().minusHours(12).convertLocalDateTime()
+            ),
             thumbnail = channelDAO.getChannelThumbnail(it.channelId)
         )
     }
