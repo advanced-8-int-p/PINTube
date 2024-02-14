@@ -35,6 +35,7 @@ import kotlinx.coroutines.handleCoroutineException
 
 class MypageFragment : Fragment() {
 
+    private lateinit var mContext: Context
 
     private var _binding: FragmentMypageBinding? = null
 
@@ -64,11 +65,16 @@ class MypageFragment : Fragment() {
             )
         }
 
-    private val adapter by lazy { MypageAdapter(mItems) }
+    private val adapter by lazy { MypageAdapter(mContext, mItems) }
 
 //    private val recentAdapter by lazy { RecyclerviewRecentVideoAdapter() }
 
 //    private var pinGroup: MutableList<String> = mutableListOf()
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        mContext = context
+    }
 
     override fun onStart() {
         super.onStart()

@@ -3,9 +3,6 @@ package com.example.pintube.ui.mypage
 import android.content.Context
 import android.content.SharedPreferences
 import android.service.autofill.FillEventHistory
-import androidx.datastore.core.DataStore
-import androidx.datastore.preferences.core.intPreferencesKey
-import androidx.datastore.preferences.preferencesDataStore
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
@@ -32,10 +29,7 @@ class MypageViewModel(
     }
     val text: LiveData<String> = _text
 
-    private lateinit var sharedPreferences: SharedPreferences
-
-    val isLoggedIn: Boolean = false
-
+    private var sharedPreferences: SharedPreferences
 
 
 //    val EXAMPLE_COUNTER = intPreferencesKey("example_counter")

@@ -1,17 +1,25 @@
 package com.example.pintube.ui.mypage
 
 import android.annotation.SuppressLint
+import android.app.Activity
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentTransaction
+import androidx.navigation.fragment.FragmentNavigator
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
+import com.example.pintube.R
 import com.example.pintube.databinding.ItemMypageHeaderBinding
 import com.example.pintube.databinding.RecyclerviewPinnedGroupBinding
 import com.example.pintube.databinding.RecyclerviewRecentVideosBinding
+import com.example.pintube.ui.main.MainActivity
 
 class MypageAdapter(
+    private val mContext: Context,
     private val multiViewType: MutableList<MypageViewType>
 ) : RecyclerView.Adapter<ViewHolder>() {
 
@@ -98,6 +106,13 @@ class MypageAdapter(
             binding.tvMyHeaderTitle.text = item.title
             binding.tvMyHeaderBtn.isVisible = item.isRecent
             binding.ivMyHeaderIcon.isVisible = !item.isRecent
+            binding.tvMyHeaderBtn.setOnClickListener {
+                val fragment = MoreRecentVideosFragment()
+                (mContext as MainActivity).supportFragmentManager.beginTransaction()
+                    .replace(R.id.mypage_fragment, fragment)
+                    .addToBackStack("")
+                    .commit()
+            }
         }
     }
 

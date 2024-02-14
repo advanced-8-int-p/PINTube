@@ -46,8 +46,6 @@ class DetailFragment : Fragment(), VideoDataInterface {
 
     private lateinit var videoId: String
 
-    private var isPlaying = false
-
     private lateinit var viewModel: DetailViewModel
 
     private val commentAdapter: DetailCommentAdapter by lazy {
@@ -91,25 +89,6 @@ class DetailFragment : Fragment(), VideoDataInterface {
         initView()
         initViewModel()
 
-//        Log.d("viewModel", "player bf $videoUrl")
-//        getUrlFromSrc()
-//        Log.d("viewModel", "player af $videoUrl")
-//        initPlayer()
-
-//        binding.ivDetailClose.setOnClickListener {
-////            parentFragmentManager.popBackStack()
-//            findNavController().navigateUp()
-//        }
-//        binding.ivDetailShare.setOnClickListener {
-//        }
-//        binding.ivDetailPin.setOnClickListener {
-//            //보관함 저장
-//        }
-//        binding.playerDetail.setOnClickListener {
-//            isPlaying = !isPlaying
-//            binding.clDetailTopBar.isVisible = isPlaying
-//        }
-
     }
 
     override fun onDestroy() {
@@ -143,7 +122,7 @@ class DetailFragment : Fragment(), VideoDataInterface {
                     .toString() + "\n\n\n" + it.description.toString()
                 count = it.commentCount?.convertViewCount()?: "0"
                 tvDetailCommentCount.text = "댓글 $count"
-                clDetailCommentList.isVisible = count.toInt() != 0
+                clDetailCommentList.isVisible = it.commentCount?.toInt() != 0
             }
         })
 
@@ -164,7 +143,6 @@ class DetailFragment : Fragment(), VideoDataInterface {
 
     @SuppressLint("SetJavaScriptEnabled")
     private fun initPlayer() {
-
 
         val webView = binding.playerDetail
 

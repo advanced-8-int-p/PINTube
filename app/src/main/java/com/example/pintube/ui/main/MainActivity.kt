@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
+import androidx.recyclerview.widget.RecyclerView
 import com.example.pintube.R
 import com.example.pintube.databinding.ActivityMainBinding
 import com.example.pintube.ui.mypage.MypageViewType
@@ -15,6 +16,7 @@ import com.example.pintube.ui.detailpage.DetailFragment
 import com.example.pintube.ui.shorts.ShortsActivity
 import com.example.pintube.utill.ShareLink
 import com.example.pintube.utill.VideoDataInterface
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -33,6 +35,24 @@ class MainActivity : AppCompatActivity() {
     var recentItemsList = mutableListOf<String>()
 
     private val viewModel: MainViewModel by viewModels()
+
+    private val pinTagAdapter by lazy {
+        PinTagAdapter()
+    }
+
+    private val pinTagDialogSheet by lazy {
+        layoutInflater.inflate(R.layout.dialog_select_pin_tag, null)
+    }
+
+    private val pinTagRecyclerView by lazy {
+        pinTagDialogSheet.findViewById<RecyclerView>(R.id.rv_pin_check_list)
+    }
+
+    private val bottomSheetDialogPinTag by lazy {
+        BottomSheetDialog(this)
+    }
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -81,6 +101,9 @@ class MainActivity : AppCompatActivity() {
         }
 
         mainFabPin.setOnClickListener {
+
+            setPinTagDialogSheet()
+
             val currentFragmentInstance =
                 supportFragmentManager
                     .findFragmentById(R.id.nav_host_fragment_activity_main)?.childFragmentManager?.fragments?.first() as VideoDataInterface
@@ -107,6 +130,11 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    private fun setPinTagDialogSheet() = with(binding) {
+        bottomSheetDialogPinTag.setContentView(pinTagDialogSheet)
+        pinTagRecyclerView.adapter = pinTagAdapter
     }
 
     override fun onBackPressed() {
