@@ -30,8 +30,6 @@ class MainActivity : AppCompatActivity() {
         navHostFragment.navController
     }
 
-    var recentItemsList = mutableListOf<String>()
-
     private val viewModel: MainViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

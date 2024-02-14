@@ -98,5 +98,9 @@ android {
 
         //google account login
         implementation("com.google.android.gms:play-services-auth:20.7.0")
+
+        //dataStore
+        implementation("androidx.datastore:datastore-preferences:1.0.0")
+        implementation("androidx.datastore:datastore-preferences-core:1.0.0")
     }
 }
