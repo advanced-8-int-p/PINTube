@@ -7,6 +7,7 @@ import com.example.pintube.data.local.dao.CategoryDAO
 import com.example.pintube.data.local.dao.ChannelDAO
 import com.example.pintube.data.local.dao.CommentDAO
 import com.example.pintube.data.local.dao.FavoriteDAO
+import com.example.pintube.data.local.dao.RecentViewsDAO
 import com.example.pintube.data.local.dao.SearchDAO
 import com.example.pintube.data.local.dao.VideoDAO
 import com.example.pintube.data.local.entity.CategoryEntity
@@ -16,6 +17,7 @@ import com.example.pintube.data.local.entity.LocalChannelEntity
 import com.example.pintube.data.local.entity.LocalCommentEntity
 import com.example.pintube.data.local.entity.LocalSearchEntity
 import com.example.pintube.data.local.entity.LocalVideoEntity
+import com.example.pintube.data.local.entity.RecentViewsEntity
 
 @Database(
     entities = [
@@ -26,8 +28,9 @@ import com.example.pintube.data.local.entity.LocalVideoEntity
         LocalCommentEntity::class,
         FavoriteCategoryCross::class,
         CategoryEntity::class,
+        RecentViewsEntity::class,
     ],
-    version = 6
+    version = 7
 )
 @TypeConverters(LocalTypeConverters::class)
 abstract class YoutubeDatabase : RoomDatabase() {
@@ -38,5 +41,6 @@ abstract class YoutubeDatabase : RoomDatabase() {
     abstract fun favoriteDao(): FavoriteDAO
 
     abstract fun categoryDao(): CategoryDAO
+    abstract fun recentViewDao(): RecentViewsDAO
 
 }

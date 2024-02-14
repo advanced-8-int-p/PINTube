@@ -20,6 +20,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.pintube.R
 import com.example.pintube.databinding.FragmentHomeBinding
 import com.example.pintube.ui.Search.SearchActivity
+import com.example.pintube.ui.main.MainActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -34,16 +35,9 @@ class HomeFragment : Fragment() {
     private val viewModel: HomeViewModel by viewModels()
 
     private val onVideoClick = { item: VideoItemData ->
-        findNavController().navigate(
-            resId = R.id.action_navigation_home_to_navigation_detail,
-            //args = null,
-            args = Bundle().apply {
-                putString("video_id", item.id)
-            }
-        )
-//            mainMotion.transitionToStart()
+        item.id?.let { (activity as MainActivity).initDetailFragment(it) }
     }
-
+    //ddd
     private val categoryEditDialogAdapter = CategoryEditDialogAdapter { category ->
         viewModel.removeFromCategories(category)
     }
@@ -83,6 +77,10 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        binding.ivHomeSearch.setOnClickListener {
+            startActivity(Intent(requireContext(),SearchActivity::class.java))
+        }
 
         initView()
         initViewModel()

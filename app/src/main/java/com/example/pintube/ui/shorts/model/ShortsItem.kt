@@ -8,7 +8,7 @@ sealed interface ShortsItem {
         val channelThumbnail: String?,
         val title: String?,
         val commentCount: String?,
-        val isBookmark: Boolean? = false,
+        val isBookmark: Boolean = false,
         val player: String?,
     ) : ShortsItem
 }

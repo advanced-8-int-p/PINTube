@@ -9,15 +9,6 @@
         android:title="@string/title_home" />
 
     <item
-        android:id="@+id/navigation_shorts"
-        android:enabled="false"
-        android:title="" />
-    <item
-        android:id="@+id/navigation_detail"
-        android:enabled="false"
-        android:title="" />
-
-    <item
         android:id="@+id/navigation_mypage"
         android:icon="@drawable/ic_nav_profile"
         android:iconTint="@color/selector_navi_icon_colors"

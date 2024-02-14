@@ -6,6 +6,7 @@ import com.example.pintube.data.local.dao.CategoryDAO
 import com.example.pintube.data.local.dao.ChannelDAO
 import com.example.pintube.data.local.dao.CommentDAO
 import com.example.pintube.data.local.dao.FavoriteDAO
+import com.example.pintube.data.local.dao.RecentViewsDAO
 import com.example.pintube.data.local.dao.SearchDAO
 import com.example.pintube.data.local.dao.VideoDAO
 import com.example.pintube.data.local.database.YoutubeDatabase
@@ -48,6 +49,10 @@ object DatabaseModule {
 
     @Singleton
     @Provides
+    fun provideRecentViewDao(database: YoutubeDatabase): RecentViewsDAO = database.recentViewDao()
+
+    @Singleton
+    @Provides
     fun provideDatabase(@ApplicationContext context: Context): YoutubeDatabase =
         Room.databaseBuilder(
             context.applicationContext,
@@ -60,5 +65,4 @@ object DatabaseModule {
     @Provides
     fun provideSearchService(): YoutubeSearchService =
         YouTubeApi.youtubeNetwork
-
 }

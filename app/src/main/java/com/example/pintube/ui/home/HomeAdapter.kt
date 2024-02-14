@@ -9,7 +9,6 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import coil.load
 import coil.request.CachePolicy
-import com.example.pintube.R
 import com.example.pintube.databinding.HomeItemCategoryBinding
 import com.example.pintube.databinding.HomeItemPopularBinding
 import com.example.pintube.databinding.ItemHeaderBinding
@@ -18,7 +17,7 @@ import com.example.pintube.databinding.VideoItemBinding
 
 class HomeAdapter(
     private val onCategorySettingClick: () -> Unit,
-    private val onVideoClick: (item: VideoItemData) -> Unit
+    private val onVideoClick: (item: VideoItemData) -> Unit?
 ) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
@@ -128,7 +127,7 @@ class HomeAdapter(
                         .inflate(LayoutInflater.from(parent.context), parent, false)
                 )
 
-            else -> error("jj-HomeAdapter.kt onCreateViewHolder viewType error")
+            else -> error("jj-홈어댑터 onCreateViewHolder - viewType error: $viewType")
         }
     }
 

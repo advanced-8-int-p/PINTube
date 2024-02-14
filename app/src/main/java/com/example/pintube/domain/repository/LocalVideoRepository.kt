@@ -7,6 +7,6 @@ import com.example.pintube.domain.entitiy.VideoEntity
 interface LocalVideoRepository {
 
     suspend fun saveVideos(item: VideoEntity, isPopular: Boolean? = false)
-    suspend fun findVideoDetail(videoId: String): LocalVideoEntity?
+    suspend fun findVideoDetail(videoId: String): VideoWithThumbnail?
     suspend fun findPopularVideos(): List<VideoWithThumbnail>?
 }
