@@ -44,14 +44,18 @@ class MypageFragment : Fragment() {
     private lateinit var mGoogleSignInClient: GoogleSignInClient
     private lateinit var resultLauncher: ActivityResultLauncher<Intent>
 
-    private val myProfileData: MypageProfileData
-        get() {
-            return MypageProfileData(
-                myAccountProfileUri = null,
-                myAccountName = null,
-                myAccountId = null,
-            )
-        }
+    private var myProfileData: MypageProfileData = MypageProfileData(
+        myAccountProfileUri = null,
+        myAccountName = null,
+        myAccountId = null,
+    )
+//        get() {
+//            return MypageProfileData(
+//                myAccountProfileUri = null,
+//                myAccountName = null,
+//                myAccountId = null,
+//            )
+//        }
 
     private var isLoggedIn: Boolean = false
 
@@ -132,6 +136,9 @@ class MypageFragment : Fragment() {
     private fun initView() {
         binding.rvMypageList.adapter = adapter
 
+//        myProfileData.myAccountProfileUri = null
+//        myProfileData.myAccountName = null
+//        myProfileData.myAccountId = null
 
 
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -141,6 +148,7 @@ class MypageFragment : Fragment() {
 
         mGoogleSignInClient = GoogleSignIn.getClient(requireContext(), gso)
 
+        getCurrentUserProfile()
 
         binding.also { b ->
             val textViews = listOf(b.tvMypageChannelName, b.tvMypageChannelId)
@@ -278,9 +286,9 @@ class MypageFragment : Fragment() {
             val displayName = curUser.displayName.toString()
             val photoUrl = curUser.photoUrl.toString()
 
-            myProfileData.myAccountProfileUri = photoUrl
-            myProfileData.myAccountName = displayName
             myProfileData.myAccountId = id
+            myProfileData.myAccountName = displayName
+            myProfileData.myAccountProfileUri = photoUrl
 
             Log.d("login", id)
             Log.d("login", myProfileData.myAccountId.toString())
