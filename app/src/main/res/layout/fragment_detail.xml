@@ -1,0 +1,376 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.motion.widget.MotionLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/detail_fragment"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:elevation="4dp"
+    android:background="@android:color/transparent"
+    app:layoutDescription="@xml/fragment_detail_scene"
+    tools:context=".ui.detailpage.DetailFragment">
+
+    <WebView
+        android:id="@+id/player_detail"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/cl_detail_channel"
+        app:layout_constraintDimensionRatio="16:9"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/cl_detail_motion_bar"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@color/white"
+        android:gravity="center_vertical"
+        android:orientation="vertical"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@id/player_detail"
+        app:layout_constraintEnd_toStartOf="@+id/ll_detail_motion_btn_bar"
+        app:layout_constraintStart_toEndOf="@id/player_detail"
+        app:layout_constraintTop_toTopOf="@id/player_detail">
+
+        <TextView
+            android:id="@+id/tv_detail_motion_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="타이틀"
+            android:textColor="@color/black"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/tv_detail_motion_channel_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="4dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="채널명"
+            android:textColor="@color/black"
+            android:textSize="12sp" />
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+    <LinearLayout
+        android:id="@+id/ll_detail_motion_btn_bar"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@color/white"
+        android:orientation="horizontal"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@id/cl_detail_motion_bar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/cl_detail_motion_bar">
+
+        <FrameLayout
+            android:id="@+id/btn_detail_motion_play"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_gravity="center_vertical"
+            android:background="@drawable/custom_ripple_effect"
+            android:backgroundTint="@color/white">
+
+            <ImageView
+                android:id="@+id/iv_detail_motion_play"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_splash_play" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/btn_detail_motion_close"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_gravity="center_vertical"
+            android:background="@drawable/custom_ripple_effect"
+            android:backgroundTint="@color/white">
+
+            <ImageView
+                android:id="@+id/iv_detail_motion_close"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_comment_x" />
+        </FrameLayout>
+    </LinearLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_detail_channel"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="@color/white"
+        android:elevation="4dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/player_detail">
+
+
+        <ImageView
+            android:id="@+id/iv_detail_profile_pic"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center"
+            android:layout_margin="10dp"
+            android:adjustViewBounds="true"
+            android:background="@drawable/round_image"
+            android:clipToOutline="true"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_account_empty"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+        <TextView
+            android:id="@+id/tv_detail_channel_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:text="채널명"
+            android:textSize="14sp"
+            android:textStyle="bold"
+
+            app:layout_constraintBottom_toBottomOf="@id/iv_detail_profile_pic"
+            app:layout_constraintStart_toEndOf="@+id/iv_detail_profile_pic"
+            app:layout_constraintTop_toTopOf="@+id/iv_detail_profile_pic" />
+
+        <TextView
+            android:id="@+id/tv_detail_view_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="12dp"
+            android:fontFamily="@font/roboto_regular"
+            android:text="1,000 views"
+            android:textSize="14sp"
+
+            app:layout_constraintBottom_toBottomOf="@+id/iv_detail_favorite"
+            app:layout_constraintEnd_toStartOf="@id/iv_detail_favorite"
+            app:layout_constraintTop_toTopOf="@+id/iv_detail_favorite" />
+
+        <ImageView
+            android:id="@+id/iv_detail_favorite"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:layout_marginEnd="4dp"
+            android:src="@drawable/ic_favorite"
+
+            app:layout_constraintBottom_toBottomOf="@id/tv_detail_fav_count"
+            app:layout_constraintEnd_toStartOf="@+id/tv_detail_fav_count"
+            app:layout_constraintTop_toTopOf="@id/tv_detail_fav_count" />
+
+        <TextView
+            android:id="@+id/tv_detail_fav_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="10dp"
+            android:fontFamily="@font/roboto_regular"
+            android:text="10"
+            android:textSize="14sp"
+
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <ScrollView
+        android:id="@+id/sv_detail_info"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="@color/white"
+
+        app:layout_constraintBottom_toTopOf="@+id/cl_detail_comment"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cl_detail_channel">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_detail_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="20dp"
+                android:gravity="start"
+                android:text="제목"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tv_detail_content"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="20dp"
+                android:minHeight="200dp"
+                android:text="내용"
+                android:textSize="12sp" />
+
+        </LinearLayout>
+
+    </ScrollView>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_detail_comment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:elevation="4dp"
+        android:paddingBottom="64dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_percent="0.24"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/sv_detail_info">
+
+        <TextView
+            android:id="@+id/tv_detail_comment_count"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_margin="14dp"
+            android:gravity="center"
+            android:text="댓글 23"
+            android:textSize="14sp"
+
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <View
+            android:id="@+id/line_detail_comment"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginHorizontal="10dp"
+            android:layout_marginTop="4dp"
+            android:background="@color/sub_color"
+            app:layout_constraintBottom_toTopOf="@+id/cl_detail_comment_list"
+            app:layout_constraintTop_toBottomOf="@+id/tv_detail_comment_count" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cl_detail_comment_list"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:background="@color/white"
+            android:paddingHorizontal="10dp"
+            android:visibility="visible"
+
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/line_detail_comment">
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cv_detail_comment_first_profile"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/ic_account_empty"
+                app:cardCornerRadius="200dp"
+
+                app:cardElevation="1dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <ImageView
+                    android:id="@+id/iv_detail_comment_first_profile_pic"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:adjustViewBounds="true"
+                    android:clipToOutline="true"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/ic_account_empty" />
+
+            </androidx.cardview.widget.CardView>
+
+            <TextView
+                android:id="@+id/tv_detail_comment_first_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="14dp"
+                android:fontFamily="@font/roboto_bold"
+                android:text="이름"
+                android:textSize="11sp"
+
+                app:layout_constraintStart_toEndOf="@+id/cv_detail_comment_first_profile"
+                app:layout_constraintTop_toTopOf="@+id/cv_detail_comment_first_profile" />
+
+            <TextView
+                android:id="@+id/tv_detail_comment_first"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:fontFamily="@font/roboto_medium"
+                android:maxLines="3"
+                android:paddingStart="64dp"
+                android:text="댓글 내용"
+                android:textSize="12sp"
+                app:layout_constraintStart_toStartOf="@+id/tv_detail_comment_first_name"
+                app:layout_constraintTop_toBottomOf="@+id/tv_detail_comment_first_name" />
+
+            <ImageView
+                android:id="@+id/iv_detail_comment_first_like"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:layout_marginTop="4dp"
+                android:src="@drawable/ic_favorite"
+
+                app:layout_constraintStart_toStartOf="@+id/tv_detail_comment_first"
+                app:layout_constraintTop_toBottomOf="@+id/tv_detail_comment_first" />
+
+            <TextView
+                android:id="@+id/tv_detail_comment_first_like_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto_regular"
+                android:text="10"
+                android:textSize="12sp"
+
+                app:layout_constraintBottom_toBottomOf="@+id/iv_detail_comment_first_like"
+                app:layout_constraintStart_toEndOf="@+id/iv_detail_comment_first_like"
+                app:layout_constraintTop_toTopOf="@+id/iv_detail_comment_first_like" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="120dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_detail_comment_first_like_count" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_detail_bookmark"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        app:layout_constraintBottom_toTopOf="@+id/cl_detail_comment"
+        app:layout_constraintEnd_toEndOf="@+id/sv_detail_info"
+        app:layout_constraintStart_toStartOf="@+id/sv_detail_info"
+        app:layout_constraintTop_toTopOf="@+id/sv_detail_info">
+
+        <FrameLayout
+            android:id="@+id/btn_fl_popular_item_pin_back"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <ImageView
+                android:id="@+id/iv_popular_item_pin"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="2dp"
+                app:srcCompat="@drawable/push_pin"
+                app:tint="@color/main_color" />
+        </FrameLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.constraintlayout.motion.widget.MotionLayout>

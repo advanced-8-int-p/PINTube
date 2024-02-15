@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_marginEnd="16dp"
+    android:padding="8dp">
+
+    <ImageView
+        android:layout_width="160dp"
+        android:layout_height="148dp"
+        android:background="@drawable/round_corner"
+        android:backgroundTint="#CB2B2A2A"
+        android:elevation="0dp"
+
+        app:layout_constraintStart_toStartOf="@+id/iv_pin_group_thumbnail"
+        app:layout_constraintEnd_toEndOf="@+id/iv_pin_group_thumbnail"
+        app:layout_constraintBottom_toBottomOf="@+id/iv_pin_group_thumbnail"
+        />
+
+
+    <ImageView
+        android:id="@+id/iv_pin_group_thumbnail"
+        android:layout_width="180dp"
+        android:layout_height="140dp"
+        android:scaleType="centerCrop"
+        android:background="@drawable/round_corner"
+        android:clipToOutline="true"
+        android:src="@drawable/hamster"
+        android:elevation="1dp"
+
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_pin_group_count"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:alpha="0.5"
+        android:background="@drawable/round_corner_legnth_back"
+        android:paddingHorizontal="6dp"
+        android:paddingVertical="2dp"
+        android:elevation="1dp"
+        app:layout_constraintEnd_toEndOf="@id/iv_pin_group_thumbnail"
+        app:layout_constraintBottom_toBottomOf="@id/iv_pin_group_thumbnail">
+
+        <ImageView
+            android:id="@+id/iv_pin_group"
+            android:layout_width="18dp"
+            android:layout_height="18dp"
+            android:src="@drawable/ic_video_group"
+            android:scaleType="fitXY"
+
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            />
+
+        <TextView
+            android:id="@+id/tv_pin_group_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="15"
+            android:textSize="12sp"
+            android:textColor="@color/white"
+
+            app:layout_constraintStart_toEndOf="@+id/iv_pin_group"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <TextView
+        android:id="@+id/tv_pin_group_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="start"
+        android:text="내 재생목록"
+
+        app:layout_constraintTop_toBottomOf="@+id/iv_pin_group_thumbnail"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

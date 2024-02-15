@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/subtract"
+    android:elevation="8dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".ui.mypage.MoreRecentVideosFragment">
+
+    <ImageView
+        android:id="@+id/iv_more_recent_close"
+        android:layout_width="18dp"
+        android:layout_height="18dp"
+        android:layout_margin="14dp"
+        android:src="@drawable/ic_close_x"
+        android:layout_gravity="top|end"
+        />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_more_recent_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="49dp"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        />
+
+</FrameLayout>
