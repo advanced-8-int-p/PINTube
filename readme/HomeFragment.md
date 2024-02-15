@@ -71,10 +71,10 @@
 각기 다른 아이템들을 리사이클러뷰로 구성하려면 멀티뷰타입으로 구현해야 했다.\
 멀티 뷰타입을 구현하기 위해서 뷰타입과 함께 각 아이템에 쓰일 데이터 등을 묶어 클래스로 만들고, sealed interface로 묶어 관리했다.
 
+### [SealedMulti.kt]()
+
 <details>
 <summary>SealedMulti.kt 코드 펼치기/접기</summary>
-
-### [SealedMulti.kt]()
 
 ```kotlin
 const val MULTI_POPULAR = 1
