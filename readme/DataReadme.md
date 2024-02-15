@@ -689,7 +689,7 @@ abstract class RepositoryModule {
 
 레포지토리나, 프리퍼런스는 뷰모델 생명주기에 맞춰서 생성해 줬다.
 
-#Domain
+# Domain
 
 ## [Usecase](https://github.com/advanced-8-int-p/PINTube/tree/dev/app/src/main/java/com/example/pintube/domain/usecase)
 
