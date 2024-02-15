@@ -1,7 +1,8 @@
-package com.example.pintube.ui.mypage
+package com.example.pintube.ui.mypage.adapter
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,10 +17,14 @@ import com.example.pintube.databinding.ItemMypageProfileBinding
 import com.example.pintube.databinding.RecyclerviewPinnedGroupBinding
 import com.example.pintube.databinding.RecyclerviewRecentVideosBinding
 import com.example.pintube.ui.main.MainActivity
+import com.example.pintube.ui.mypage.MoreRecentVideosFragment
+import com.example.pintube.ui.mypage.viewtype.MypageViewType
 
 class MypageAdapter(
     private val mContext: Context,
-    private val multiViewType: MutableList<MypageViewType>
+    private val multiViewType: MutableList<MypageViewType>,
+    private val onClickLogin: (View) -> Unit,
+    private val onClickLogOut: (View) -> Unit,
 ) : RecyclerView.Adapter<ViewHolder>() {
 
 
@@ -73,7 +78,9 @@ class MypageAdapter(
 
             VIEW_TYPE_PROFILE -> MypageProfileViewHolder(
                 ItemMypageProfileBinding
-                    .inflate(LayoutInflater.from(parent.context), parent, false)
+                    .inflate(LayoutInflater.from(parent.context), parent, false),
+                onClickLogin = onClickLogin,
+                onClickLogOut = onClickLogOut,
             )
 
             else -> error("jj-마이페이지어댑터 onCreateViewHolder - viewType error: $viewType")
@@ -104,6 +111,12 @@ class MypageAdapter(
     }
 
     override fun getItemCount(): Int = multiViewType.size
+
+    fun updateProfile(user: MypageViewType.MyPageProfile) {
+        val profileIndex = multiViewType.indexOfFirst { it is MypageViewType.MyPageProfile }
+        multiViewType[profileIndex] = user
+        notifyItemChanged(profileIndex)
+    }
 
     override fun getItemViewType(position: Int): Int {
         return when (multiViewType[position]) {
@@ -152,15 +165,58 @@ class MypageAdapter(
 
     }
 
-    inner class MypageProfileViewHolder(private val binding: ItemMypageProfileBinding) :
-        RecyclerView.ViewHolder(binding.root) {
+    inner class MypageProfileViewHolder(
+        private val binding: ItemMypageProfileBinding,
+        private val onClickLogin: (View) -> Unit,
+        private val onClickLogOut: (View) -> Unit
+    ) : RecyclerView.ViewHolder(binding.root) {
 
-        fun onBind(item: MypageViewType.MyPageProfile) = binding.also { b ->
-            b.ivMypageProfile.load(item.channelThumbnail)
-            b.tvMypageChannelName.text = item.channelName
-            b.tvMypageChannelId.text = item.channelId
+        private var isLoggedIn: Boolean = false
+
+        fun onBind(
+            item: MypageViewType.MyPageProfile
+        ) = with(binding){
+            ivMypageProfile.load(item.channelThumbnail)
+            tvMypageChannelName.text = item.channelName
+            tvMypageChannelId.text = item.channelId
             // TODO: 로그인 여부에 따라서 버튼을 로그인/로그아웃 변경..?
+
+
+            val textViews = listOf(tvMypageChannelName, tvMypageChannelId)
+
+            ivMypageProfile.load(item.channelThumbnail)
+            tvMypageChannelName.text = item.channelName
+            tvMypageChannelId.text = item.channelId.toString()
+
+            isLoggedIn = (item.channelId != null)
+
+            Log.d("login", "status= ${isLoggedIn}")
+            if (isLoggedIn) {
+                sibtnMypageChannelLogin.isVisible = false
+                ccMypageProfileItem.isVisible = true
+                ivMypageProfile.setImageResource(R.drawable.ic_account_empty)
+                textViews.forEach {
+                    it.isVisible = true
+                }
+
+            } else {
+                sibtnMypageChannelLogin.isVisible = true
+                ccMypageProfileItem.isVisible = false
+                textViews.forEach {
+                    it.isVisible = false
+                }
+            }
+
+            sibtnMypageChannelLogin.setOnClickListener {
+                onClickLogin(it)
+            }
+
+            tvMypageChannelLogout.setOnClickListener {
+                onClickLogOut(it)
+            }
+
         }
+
     }
 
 }

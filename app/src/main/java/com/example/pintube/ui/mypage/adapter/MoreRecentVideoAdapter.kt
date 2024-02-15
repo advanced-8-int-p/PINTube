@@ -1,4 +1,4 @@
-package com.example.pintube.ui.mypage
+package com.example.pintube.ui.mypage.adapter
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -10,6 +10,7 @@ import coil.load
 import com.example.pintube.R
 import com.example.pintube.databinding.VideoItemBinding
 import com.example.pintube.ui.detailpage.DetailFragment
+import com.example.pintube.ui.mypage.VideoItem
 
 class MoreRecentVideoAdapter(private val mContext: Context, private val mItems: MutableList<VideoItem>): RecyclerView.Adapter<ViewHolder>() {
 

@@ -1,4 +1,7 @@
-package com.example.pintube.ui.mypage
+package com.example.pintube.ui.mypage.viewtype
+
+import com.example.pintube.ui.mypage.adapter.RecyclerviewPinnedGroupAdapter
+import com.example.pintube.ui.mypage.adapter.RecyclerviewRecentVideoAdapter
 
 sealed interface MypageViewType {
 

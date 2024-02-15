@@ -1,6 +1,5 @@
 package com.example.pintube.ui.main
 
-import android.app.ActionBar.LayoutParams
 import android.content.Intent
 import android.content.res.ColorStateList
 import android.os.Bundle
@@ -8,15 +7,12 @@ import android.view.ViewGroup
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import androidx.core.view.marginBottom
-import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.example.pintube.R
 import com.example.pintube.databinding.ActivityMainBinding
-import com.example.pintube.ui.mypage.MypageViewType
 import com.example.pintube.ui.detailpage.DetailFragment
 import com.example.pintube.ui.shorts.ShortsActivity
 import com.example.pintube.utill.ShareLink
@@ -24,7 +20,6 @@ import com.example.pintube.utill.VideoDataInterface
 import com.example.pintube.utill.dpToPx
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -89,32 +84,7 @@ class MainActivity : AppCompatActivity() {
         supportFragmentManager.beginTransaction()
             .replace(R.id.detail_fragment_activity_main, fragment)
             .commit()
-        lifecycleScope.launch {
-            sharedViewModel.motionState.collect { stats ->
-                when (stats) {
-                    MotionState.START -> {
-                    }
 
-                    MotionState.MOVE -> {
-                        val params =
-                            detailFragmentActivityMain.layoutParams as ViewGroup.MarginLayoutParams
-                        params.bottomMargin = 64.dpToPx(this@MainActivity)
-                        detailFragmentActivityMain.layoutParams = params
-                    }
-
-                    MotionState.END -> {
-                        val params = detailFragmentActivityMain.layoutParams
-                        if (params.height != ViewGroup.LayoutParams.MATCH_PARENT) {
-                            params.height = ViewGroup.LayoutParams.MATCH_PARENT
-                            detailFragmentActivityMain.layoutParams = params
-                        } else {
-                            params.height = 128.dpToPx(this@MainActivity)
-                            detailFragmentActivityMain.layoutParams = params
-                        }
-                    }
-                }
-            }
-        }
     }
 
 

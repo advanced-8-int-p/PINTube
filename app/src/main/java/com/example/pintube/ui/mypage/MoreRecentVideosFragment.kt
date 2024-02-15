@@ -7,9 +7,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
-import com.example.pintube.R
 import com.example.pintube.databinding.FragmentMoreRecentVideosBinding
-import com.example.pintube.databinding.FragmentMypageBinding
+import com.example.pintube.ui.mypage.adapter.MoreRecentVideoAdapter
 
 //private const val ARG_PARAM3 = "param1"
 //private const val ARG_PARAM4 = "param2"
