@@ -136,11 +136,11 @@ class MypageFragment : Fragment() {
     }
     private fun initViewModel() = with(viewModel){
         recentView.observe(viewLifecycleOwner) {
-            recyclerviewRecentVideoAdapter.updateItem(it)
+            it?.let { it1 -> recyclerviewRecentVideoAdapter.updateItem(it1) }
         }
 
         favorite.observe(viewLifecycleOwner) {
-            recyclerviewPinnedGroupAdapter.updateItem(it)
+            it?.let { it1 -> recyclerviewPinnedGroupAdapter.updateItem(it1) }
         }
 
         currentUser.observe(viewLifecycleOwner) {

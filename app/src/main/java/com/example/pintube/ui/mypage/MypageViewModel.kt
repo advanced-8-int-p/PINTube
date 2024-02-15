@@ -32,11 +32,11 @@ class MypageViewModel @Inject constructor(
     }
     val text: LiveData<String> = _text
 
-    private val _recentView: MutableLiveData<List<MypageVideoItem?>> = MutableLiveData()
-    val recentView: LiveData<List<MypageVideoItem?>> get() = _recentView
+    private val _recentView: MutableLiveData<List<MypageVideoItem?>?> = MutableLiveData()
+    val recentView: LiveData<List<MypageVideoItem?>?> get() = _recentView
 
-    private val _favorite: MutableLiveData<List<MypageVideoItem?>> = MutableLiveData()
-    val favorite: LiveData<List<MypageVideoItem?>> get() = _favorite
+    private val _favorite: MutableLiveData<List<MypageVideoItem?>?> = MutableLiveData()
+    val favorite: LiveData<List<MypageVideoItem?>?> get() = _favorite
 
     private val _currentUser: MutableLiveData<MypageViewType.MyPageProfile> = MutableLiveData()
     val currentUser: LiveData<MypageViewType.MyPageProfile> get() = _currentUser
