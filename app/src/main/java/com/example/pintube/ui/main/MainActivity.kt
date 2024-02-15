@@ -37,27 +37,10 @@ class MainActivity : AppCompatActivity() {
 
     private val sharedViewModel: MainSharedViewModel by viewModels()
 
-    var recentItemsList = mutableListOf<String>()
-
     private val viewModel: MainViewModel by viewModels()
-
-    private val pinTagAdapter by lazy {
-        PinTagAdapter()
-    }
-
     private val pinTagDialogSheet by lazy {
         layoutInflater.inflate(R.layout.dialog_select_pin_tag, null)
     }
-
-    private val pinTagRecyclerView by lazy {
-        pinTagDialogSheet.findViewById<RecyclerView>(R.id.rv_pin_check_list)
-    }
-
-    private val bottomSheetDialogPinTag by lazy {
-        BottomSheetDialog(this)
-    }
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -73,7 +56,7 @@ class MainActivity : AppCompatActivity() {
         detailState()
     }
 
-    var detail: Boolean = false
+    private var detail: Boolean = false
     fun initDetailFragment(videoId: String) = with(binding) {
         val fragment = DetailFragment()
         fragment.apply {
@@ -92,25 +75,6 @@ class MainActivity : AppCompatActivity() {
         navView.setupWithNavController(navController)
         navView.background = null
 
-        var currentFragment = R.id.navigation_home
-
-        mainFab.setOnClickListener {
-            if (currentFragment == R.id.detail_fragment) {
-                if (mainMotion.currentState == mainMotion.startState) {
-                    mainMotion.transitionToEnd()
-                } else {
-                    mainMotion.transitionToStart()
-                }
-            } else {
-                startActivity(
-                    Intent(
-                        this@MainActivity,
-                        ShortsActivity::class.java
-                    )
-                )
-            }
-        }
-
         mainFabShare.setOnClickListener {
             val currentFragmentInstance =
                 supportFragmentManager
@@ -122,9 +86,6 @@ class MainActivity : AppCompatActivity() {
         }
 
         mainFabPin.setOnClickListener {
-
-            setPinTagDialogSheet()
-
             val currentFragmentInstance =
                 supportFragmentManager
                     .findFragmentById(R.id.nav_host_fragment_activity_main)?.childFragmentManager?.fragments?.first() as VideoDataInterface
@@ -133,21 +94,6 @@ class MainActivity : AppCompatActivity() {
             viewModel.onClickBookmark(videoId)
             currentFragmentInstance.initData()
             mainMotion.transitionToStart()
-        }
-
-
-        navController.addOnDestinationChangedListener { _, destination, _ ->
-            currentFragment = destination.id
-            when (destination.id) {
-                R.id.navigation_home, R.id.navigation_mypage -> currentFragment = destination.id
-            }
-            when (destination.id) {
-                else -> with(mainFab) {
-                    setImageResource(R.drawable.ic_nav_fab_shorts)
-                    backgroundTintList =
-                        ColorStateList.valueOf(ContextCompat.getColor(context, R.color.white))
-                }
-            }
         }
     }
 
@@ -195,11 +141,6 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
-    }
-
-    private fun setPinTagDialogSheet() = with(binding) {
-        bottomSheetDialogPinTag.setContentView(pinTagDialogSheet)
-        pinTagRecyclerView.adapter = pinTagAdapter
     }
 
     override fun onBackPressed() {
