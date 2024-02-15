@@ -12,12 +12,10 @@ import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.GridLayoutManager.SpanSizeLookup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.pintube.R
 import com.example.pintube.databinding.FragmentHomeBinding
 import com.example.pintube.ui.Search.SearchActivity
 import com.example.pintube.ui.main.MainActivity
@@ -37,6 +35,7 @@ class HomeFragment : Fragment() {
     private val onVideoClick = { item: VideoItemData ->
         item.id?.let { (activity as MainActivity).initDetailFragment(it) }
     }
+
     //ddd
     private val categoryEditDialogAdapter = CategoryEditDialogAdapter { category ->
         viewModel.removeFromCategories(category)
@@ -79,7 +78,7 @@ class HomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.ivHomeSearch.setOnClickListener {
-            startActivity(Intent(requireContext(),SearchActivity::class.java))
+            startActivity(Intent(requireContext(), SearchActivity::class.java))
         }
 
         initView()
@@ -171,6 +170,8 @@ class HomeFragment : Fragment() {
                 }
             }
         })
+
+        viewModel.loadCategories()
     }
 
     private fun initViewModel() = viewModel.also { vm ->

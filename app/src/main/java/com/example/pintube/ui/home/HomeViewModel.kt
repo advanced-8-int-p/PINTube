@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.pintube.data.repository.local.VideoWithThumbnail
 import com.example.pintube.domain.repository.LocalFavoriteRepository
+import com.example.pintube.domain.repository.PageTokenPrefRepository
 import com.example.pintube.domain.usecase.GetPopularVideosUseCase
 import com.example.pintube.domain.usecase.GetSearchVideosUseCase
 import com.example.pintube.utill.convertDurationTime
@@ -22,7 +23,11 @@ class HomeViewModel @Inject constructor(
     private val getPopularVideosUseCase: GetPopularVideosUseCase,
     private val getCategoryVideos: GetSearchVideosUseCase,
     private val localFavoriteRepository: LocalFavoriteRepository,
+    private val pageTokenPrefRepository: PageTokenPrefRepository,
 ) : ViewModel() {
+    private data object key {
+        const val category = "category"
+    }
 
     private var _populars: MutableLiveData<List<VideoItemData>> =
         //MutableLiveData(emptyList())
@@ -123,10 +128,16 @@ class HomeViewModel @Inject constructor(
 
     fun addToCategories(category: String) {
         _categories.value = _categories.value!!.toMutableList().apply { add(category) }
+        pageTokenPrefRepository.saveCategory(key.category, categories.value!!)
     }
 
     fun removeFromCategories(category: String) {
         _categories.value = _categories.value!!.toMutableList().apply { remove(category) }
+        pageTokenPrefRepository.saveCategory(key.category, categories.value!!)
+    }
+
+    fun loadCategories() {
+        _categories.value = pageTokenPrefRepository.loadCategory(key.category)
     }
 
     private fun VideoWithThumbnail.convertVideoItemData() = VideoItemData(
