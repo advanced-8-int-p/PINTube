@@ -30,24 +30,22 @@ class HomeViewModel @Inject constructor(
     }
 
     private var _populars: MutableLiveData<List<VideoItemData>> =
-        //MutableLiveData(emptyList())
-        MutableLiveData(List(10) { VideoItemData() })  //ddd
+        MutableLiveData(emptyList())
     val populars: LiveData<List<VideoItemData>> get() = _populars
 
     private var _categories: MutableLiveData<List<String>> =
-        //MutableLiveData(emptyList())
-        MutableLiveData(listOf("박보영", "ytn", "안드로이드 스튜디오", "jazz bgm", "#shorts"))  //ddd
+        MutableLiveData(emptyList())
     val categories: LiveData<List<String>> get() = _categories
 
     private var _categoryVideos: MutableLiveData<List<VideoItemData>> =
-        //MutableLiveData(emptyList())
-        MutableLiveData(List(10) { VideoItemData() })  //ddd
+        MutableLiveData(emptyList())
     val categoryVideos: LiveData<List<VideoItemData>> get() = _categoryVideos
 
     private var _currentWord: String? = null
     private var _currentPage: Int = -1
 
     init {
+        loadCategories()
         updatePopulars()
         if (categories.value!!.isEmpty().not())
             categories.value?.let { searchCategory(it.first()) }

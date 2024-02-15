@@ -170,8 +170,6 @@ class HomeFragment : Fragment() {
                 }
             }
         })
-
-        viewModel.loadCategories()
     }
 
     private fun initViewModel() = viewModel.also { vm ->
