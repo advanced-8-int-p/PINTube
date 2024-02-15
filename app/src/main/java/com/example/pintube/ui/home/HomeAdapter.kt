@@ -18,7 +18,7 @@ import kotlinx.coroutines.Job
 
 class HomeAdapter(
     private val onCategorySettingClick: () -> Unit,
-    private val onVideoClick: (item: VideoItemData) -> Job?
+    private val onVideoClick: (item: VideoItemData) -> Int?
 ) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 

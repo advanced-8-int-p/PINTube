@@ -1,13 +1,11 @@
-package com.example.pintube.ui.mypage
+package com.example.pintube.ui.mypage.adapter
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.content.Intent
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.app.ActivityCompat.startActivityForResult
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
@@ -19,14 +17,14 @@ import com.example.pintube.databinding.ItemMypageProfileBinding
 import com.example.pintube.databinding.RecyclerviewPinnedGroupBinding
 import com.example.pintube.databinding.RecyclerviewRecentVideosBinding
 import com.example.pintube.ui.main.MainActivity
-import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.example.pintube.ui.mypage.MoreRecentVideosFragment
+import com.example.pintube.ui.mypage.viewtype.MypageViewType
 
 class MypageAdapter(
     private val mContext: Context,
     private val multiViewType: MutableList<MypageViewType>,
-    private val onClickLogin: () -> Unit,
-    private val onClickLogOut: () -> Unit,
+    private val onClickLogin: (View) -> Unit,
+    private val onClickLogOut: (View) -> Unit,
 ) : RecyclerView.Adapter<ViewHolder>() {
 
 
@@ -114,6 +112,12 @@ class MypageAdapter(
 
     override fun getItemCount(): Int = multiViewType.size
 
+    fun updateProfile(user: MypageViewType.MyPageProfile) {
+        val profileIndex = multiViewType.indexOfFirst { it is MypageViewType.MyPageProfile }
+        multiViewType[profileIndex] = user
+        notifyItemChanged(profileIndex)
+    }
+
     override fun getItemViewType(position: Int): Int {
         return when (multiViewType[position]) {
             is MypageViewType.Header -> VIEW_TYPE_TITLE
@@ -163,8 +167,8 @@ class MypageAdapter(
 
     inner class MypageProfileViewHolder(
         private val binding: ItemMypageProfileBinding,
-        private val onClickLogin: () -> Unit,
-        private val onClickLogOut: () -> Unit
+        private val onClickLogin: (View) -> Unit,
+        private val onClickLogOut: (View) -> Unit
     ) : RecyclerView.ViewHolder(binding.root) {
 
         private var isLoggedIn: Boolean = false
@@ -189,7 +193,7 @@ class MypageAdapter(
             Log.d("login", "status= ${isLoggedIn}")
             if (isLoggedIn) {
                 sibtnMypageChannelLogin.isVisible = false
-                tvMypageChannelLogout.isVisible = true
+                ccMypageProfileItem.isVisible = true
                 ivMypageProfile.setImageResource(R.drawable.ic_account_empty)
                 textViews.forEach {
                     it.isVisible = true
@@ -197,18 +201,18 @@ class MypageAdapter(
 
             } else {
                 sibtnMypageChannelLogin.isVisible = true
-                tvMypageChannelLogout.isVisible = false
+                ccMypageProfileItem.isVisible = false
                 textViews.forEach {
                     it.isVisible = false
                 }
             }
 
             sibtnMypageChannelLogin.setOnClickListener {
-                onClickLogin
+                onClickLogin(it)
             }
 
             tvMypageChannelLogout.setOnClickListener {
-                onClickLogOut
+                onClickLogOut(it)
             }
 
         }

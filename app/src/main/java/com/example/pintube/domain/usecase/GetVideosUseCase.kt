@@ -10,15 +10,22 @@ class GetVideosUseCase @Inject constructor(
     private val localVideoRepository: LocalVideoRepository,
 ) {
     suspend operator fun invoke(idList: List<String>): List<VideoWithThumbnail?> {
-        var result = idList.map {
-            localVideoRepository.findVideoDetail(it)
-        }
-        if (result.isEmpty()) apiRepository.getContentDetails(idList)?.forEach {
-            localVideoRepository.saveVideos(it)
-            result = idList.map {item ->
-                localVideoRepository.findVideoDetail(item)
+        val loadIds = mutableListOf<String>()
+        idList.map {
+            localVideoRepository.findVideoDetail(it).let { item ->
+                if (item == null){
+                    loadIds.add(it)
+                }
             }
         }
+        if (loadIds.isNotEmpty()) {
+            apiRepository.getContentDetails(loadIds)?.forEach {
+                localVideoRepository.saveVideos(it)
+            }
+        }
+        val result = idList.map {item ->
+                localVideoRepository.findVideoDetail(item)
+            }
         return result
     }
 }

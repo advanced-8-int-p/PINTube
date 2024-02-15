@@ -15,7 +15,7 @@ import com.example.pintube.databinding.PopularItemBinding
 import kotlinx.coroutines.Job
 
 class PopularVideoAdapter(
-    private val onItemClick: (item: VideoItemData) -> Job?,
+    private val onItemClick: (item: VideoItemData) -> Int?,
     private val onBookmarkClick: (item: VideoItemData) -> Unit,
 ) : ListAdapter<VideoItemData, PopularVideoAdapter.PopularViewHolder>(object :
     DiffUtil.ItemCallback<VideoItemData>() {
