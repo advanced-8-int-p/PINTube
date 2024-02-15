@@ -66,7 +66,7 @@ class HomeViewModel @Inject constructor(
             val searchResult = getCategoryVideos(query)
             _categoryVideos.postValue(
                 searchResult.map {
-                    Log.d("Local Fa", "${it.video?.id}")
+//                    Log.d("Local Fa", "${it.video?.id}")
                     it.convertVideoItemData()
                         .copy(isSaved = localFavoriteRepository.checkIsBookmark(it.video?.id ?: ""))
                 })
