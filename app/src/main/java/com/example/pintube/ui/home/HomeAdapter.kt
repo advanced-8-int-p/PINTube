@@ -14,7 +14,6 @@ import com.example.pintube.databinding.HomeItemPopularBinding
 import com.example.pintube.databinding.ItemHeaderBinding
 import com.example.pintube.databinding.ItemLoadingProgressBinding
 import com.example.pintube.databinding.VideoItemBinding
-import kotlinx.coroutines.Job
 
 class HomeAdapter(
     private val onCategorySettingClick: () -> Unit,
@@ -32,7 +31,7 @@ class HomeAdapter(
         RecyclerView.ViewHolder(binding.root) {
 
         fun onBind(item: SealedMulti.Popular) = with(binding) {
-            Log.d("jj-홈어댑터 popular onBind", item.toString())  //ddd
+//            Log.d("jj-홈어댑터 popular onBind", item.toString())  //ddd
 
             rvPopularVideos.adapter = item.videoAdapter
             rvPopularVideos.orientation = ViewPager2.ORIENTATION_HORIZONTAL
@@ -88,7 +87,7 @@ class HomeAdapter(
     inner class LoadingHolder(private val binding: ItemLoadingProgressBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun onBind() {
-            Log.d("jj-LoadingHolder onBind", "${binding.root}")
+//            Log.d("jj-LoadingHolder onBind", "${binding.root}")
             binding.root.isVisible = sealedMultis.size > 4
         }
     }
@@ -96,37 +95,44 @@ class HomeAdapter(
     override fun getItemCount(): Int = sealedMultis.size
     override fun getItemViewType(position: Int): Int = sealedMultis[position].viewType
 
+//    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+//        return SealedMulti.Type.values()[viewType].onCreateViewHolder(parent)
+//    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+//        return when (SealedMulti.Type(viewType)) {
+//            SealedMulti.Type.MULTI_POPULAR -> TODO()
+//            SealedMulti.Type.MULTI_CATEGORY -> TODO()
+//            SealedMulti.Type.MULTI_VIDEO -> TODO()
+//            SealedMulti.Type.MULTI_HEADER -> TODO()
+//            SealedMulti.Type.MULTI_LOADING -> TODO()
+//        }
+
         return when (viewType) {
-            MULTI_HEADER ->
-                HeaderHolder(
-                    ItemHeaderBinding
-                        .inflate(LayoutInflater.from(parent.context), parent, false)
-                )
+            SealedMulti.Type.header -> HeaderHolder(
+                ItemHeaderBinding
+                    .inflate(LayoutInflater.from(parent.context), parent, false)
+            )
 
-            MULTI_POPULAR ->
-                MultiViewHolderPopular(
-                    HomeItemPopularBinding
-                        .inflate(LayoutInflater.from(parent.context), parent, false)
-                )
+            SealedMulti.Type.popular -> MultiViewHolderPopular(
+                HomeItemPopularBinding
+                    .inflate(LayoutInflater.from(parent.context), parent, false)
+            )
 
-            MULTI_CATEGORY ->
-                MultiViewHolderCategory(
-                    HomeItemCategoryBinding
-                        .inflate(LayoutInflater.from(parent.context), parent, false)
-                )
+            SealedMulti.Type.category -> MultiViewHolderCategory(
+                HomeItemCategoryBinding
+                    .inflate(LayoutInflater.from(parent.context), parent, false)
+            )
 
-            MULTI_VIDEO ->
-                MultiViewHolderVideo(
-                    VideoItemBinding
-                        .inflate(LayoutInflater.from(parent.context), parent, false)
-                )
+            SealedMulti.Type.video -> MultiViewHolderVideo(
+                VideoItemBinding
+                    .inflate(LayoutInflater.from(parent.context), parent, false)
+            )
 
-            MULTI_LOADING ->
-                LoadingHolder(
-                    ItemLoadingProgressBinding
-                        .inflate(LayoutInflater.from(parent.context), parent, false)
-                )
+            SealedMulti.Type.loading -> LoadingHolder(
+                ItemLoadingProgressBinding
+                    .inflate(LayoutInflater.from(parent.context), parent, false)
+            )
 
             else -> error("jj-홈어댑터 onCreateViewHolder - viewType error: $viewType")
         }
@@ -145,12 +151,11 @@ class HomeAdapter(
 //                holder.setIsRecyclable(false)
             }
 
-            is SealedMulti.Header -> Unit
+            SealedMulti.Header -> Unit
 
             is SealedMulti.Video -> (holder as MultiViewHolderVideo).onBind(item)
 
-            is SealedMulti.Loading -> (holder as LoadingHolder).onBind()
-            else -> Unit
+            SealedMulti.Loading -> (holder as LoadingHolder).onBind()
         }
     }
 

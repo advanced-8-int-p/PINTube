@@ -1,52 +1,49 @@
 package com.example.pintube.ui.home
 
-/** 1 */
-const val MULTI_POPULAR = 1
-
-/** 2 */
-const val MULTI_CATEGORY = 2
-
-/** 3 */
-const val MULTI_VIDEO = 3
-
-
-const val MULTI_HEADER = 0
-
-const val MULTI_LOADING = -1
-
 sealed interface SealedMulti {
 
+//    enum class Type {
+//        MULTI_POPULAR,
+//        MULTI_CATEGORY,
+//        MULTI_VIDEO,
+//        MULTI_HEADER,
+//        MULTI_LOADING,
+//    }
+
+    data object Type {
+        const val popular = 1
+        const val category = 2
+        const val video = 3
+        const val header = 4
+        const val loading = 5
+    }
+
     val viewType: Int
-//    val holder: RecyclerView.ViewHolder  //TODO: (후순위) 실드에 뷰홀더 통합시킬 수 있을까
 
     data object Header : SealedMulti {
-        override val viewType: Int
-            get() = MULTI_HEADER
-
+        override val viewType: Int = Type.header
     }
 
     data class Popular(
         val videoAdapter: PopularVideoAdapter
     ) : SealedMulti {
-        override val viewType: Int = MULTI_POPULAR
-//        override val holder: RecyclerView.ViewHolder = object : RecyclerView.ViewHolder() {}
+        override val viewType: Int = Type.popular
     }
 
     data class Category(
         val categoryAdapter: CategoryAdapter,
     ) : SealedMulti {
-        override val viewType: Int = MULTI_CATEGORY
+        override val viewType: Int = Type.category
     }
 
     data class Video(
         val videoItemData: VideoItemData,
     ) : SealedMulti {
-        override val viewType: Int = MULTI_VIDEO
+        override val viewType: Int = Type.video
     }
 
-    data object Loading: SealedMulti {
-        override val viewType: Int
-            get() = MULTI_LOADING
+    data object Loading : SealedMulti {
+        override val viewType: Int = Type.loading
     }
 
 }
