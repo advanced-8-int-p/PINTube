@@ -65,10 +65,10 @@ class HomeAdapter(
     var sealedMultis = mutableListOf<SealedMulti>()
     var tvCategoryEmptyText: TextView? = null
 
-    class HeaderHolder(binding: ItemHeaderBinding) :
+    inner class HeaderHolder(binding: ItemHeaderBinding) :
         RecyclerView.ViewHolder(binding.root)
 
-    inner class MultiViewHolderPopular(private val binding: HomeItemPopularBinding) :
+    inner class PopularHolder(private val binding: HomeItemPopularBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
         fun onBind(item: SealedMulti.Popular) = with(binding) {
@@ -79,7 +79,7 @@ class HomeAdapter(
         }
     }
 
-    inner class MultiViewHolderCategory(private val binding: HomeItemCategoryBinding) :
+    inner class CategoryHolder(private val binding: HomeItemCategoryBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
         init {
@@ -93,7 +93,7 @@ class HomeAdapter(
         }
     }
 
-    inner class MultiViewHolderVideo(private val binding: VideoItemBinding) :
+    inner class VideoHolder(private val binding: VideoItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
         fun onBind(item: SealedMulti.Video) = binding.also { b ->
@@ -147,17 +147,17 @@ class HomeAdapter(
                     .inflate(LayoutInflater.from(parent.context), parent, false)
             )
 
-            SealedMulti.Type.POPULAR -> MultiViewHolderPopular(
+            SealedMulti.Type.POPULAR -> PopularHolder(
                 HomeItemPopularBinding
                     .inflate(LayoutInflater.from(parent.context), parent, false)
             )
 
-            SealedMulti.Type.CATEGORY -> MultiViewHolderCategory(
+            SealedMulti.Type.CATEGORY -> CategoryHolder(
                 HomeItemCategoryBinding
                     .inflate(LayoutInflater.from(parent.context), parent, false)
             )
 
-            SealedMulti.Type.VIDEO -> MultiViewHolderVideo(
+            SealedMulti.Type.VIDEO -> VideoHolder(
                 VideoItemBinding
                     .inflate(LayoutInflater.from(parent.context), parent, false)
             )
@@ -172,19 +172,19 @@ class HomeAdapter(
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (val item = sealedMultis[position]) {
             is SealedMulti.Popular -> {
-                (holder as MultiViewHolderPopular).onBind(item)
+                (holder as PopularHolder).onBind(item)
                 // TODO: holder.setIsRecyclable(false) 안쓰면 문제가 있나?
 //                holder.setIsRecyclable(false)
             }
 
             is SealedMulti.Category -> {
-                (holder as MultiViewHolderCategory).onBind(item)
+                (holder as CategoryHolder).onBind(item)
 //                holder.setIsRecyclable(false)
             }
 
             SealedMulti.Header -> Unit
 
-            is SealedMulti.Video -> (holder as MultiViewHolderVideo).onBind(item)
+            is SealedMulti.Video -> (holder as VideoHolder).onBind(item)
 
             SealedMulti.Loading -> (holder as LoadingHolder).onBind()
         }
