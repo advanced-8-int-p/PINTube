@@ -18,10 +18,10 @@ import com.example.pintube.databinding.VideoItemBinding
 sealed interface SealedMulti {
 
     enum class Type {
+        HEADER,
         POPULAR,
         CATEGORY,
         VIDEO,
-        HEADER,
         LOADING,
     }
 
@@ -171,6 +171,8 @@ class HomeAdapter(
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (val item = sealedMultis[position]) {
+            SealedMulti.Header -> Unit
+
             is SealedMulti.Popular -> {
                 (holder as PopularHolder).onBind(item)
                 // TODO: holder.setIsRecyclable(false) 안쓰면 문제가 있나?
@@ -181,8 +183,6 @@ class HomeAdapter(
                 (holder as CategoryHolder).onBind(item)
 //                holder.setIsRecyclable(false)
             }
-
-            SealedMulti.Header -> Unit
 
             is SealedMulti.Video -> (holder as VideoHolder).onBind(item)
 
