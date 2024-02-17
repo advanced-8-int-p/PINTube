@@ -65,7 +65,7 @@ class HomeAdapter(
     var sealedMultis = mutableListOf<SealedMulti>()
     var tvCategoryEmptyText: TextView? = null
 
-    class HeaderHolder(private val binding: ItemHeaderBinding) :
+    class HeaderHolder(binding: ItemHeaderBinding) :
         RecyclerView.ViewHolder(binding.root)
 
     inner class MultiViewHolderPopular(private val binding: HomeItemPopularBinding) :
