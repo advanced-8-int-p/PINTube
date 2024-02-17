@@ -17,48 +17,40 @@ import com.example.pintube.databinding.VideoItemBinding
 
 sealed interface SealedMulti {
 
-//    enum class Type {
-//        MULTI_POPULAR,
-//        MULTI_CATEGORY,
-//        MULTI_VIDEO,
-//        MULTI_HEADER,
-//        MULTI_LOADING,
-//    }
-
-    data object Type {
-        const val popular = 1
-        const val category = 2
-        const val video = 3
-        const val header = 4
-        const val loading = 5
+    enum class Type {
+        POPULAR,
+        CATEGORY,
+        VIDEO,
+        HEADER,
+        LOADING,
     }
 
-    val viewType: Int
+    val viewType: Type
 
     data object Header : SealedMulti {
-        override val viewType: Int = Type.header
+        override val viewType: Type = Type.HEADER
     }
 
     data class Popular(
         val videoAdapter: PopularVideoAdapter
     ) : SealedMulti {
-        override val viewType: Int = Type.popular
+        override val viewType: Type = Type.POPULAR
     }
 
     data class Category(
         val categoryAdapter: CategoryAdapter,
     ) : SealedMulti {
-        override val viewType: Int = Type.category
+        override val viewType: Type = Type.CATEGORY
     }
 
     data class Video(
         val videoItemData: VideoItemData,
     ) : SealedMulti {
-        override val viewType: Int = Type.video
+        override val viewType: Type = Type.VIDEO
     }
 
     data object Loading : SealedMulti {
-        override val viewType: Int = Type.loading
+        override val viewType: Type = Type.LOADING
     }
 
 }
@@ -142,48 +134,38 @@ class HomeAdapter(
     }
 
     override fun getItemCount(): Int = sealedMultis.size
-    override fun getItemViewType(position: Int): Int = sealedMultis[position].viewType
+    override fun getItemViewType(position: Int): Int = sealedMultis[position].viewType.ordinal
 
 //    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
 //        return SealedMulti.Type.values()[viewType].onCreateViewHolder(parent)
 //    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-//        return when (SealedMulti.Type(viewType)) {
-//            SealedMulti.Type.MULTI_POPULAR -> TODO()
-//            SealedMulti.Type.MULTI_CATEGORY -> TODO()
-//            SealedMulti.Type.MULTI_VIDEO -> TODO()
-//            SealedMulti.Type.MULTI_HEADER -> TODO()
-//            SealedMulti.Type.MULTI_LOADING -> TODO()
-//        }
-
-        return when (viewType) {
-            SealedMulti.Type.header -> HeaderHolder(
+        return when (SealedMulti.Type.values()[viewType]) {
+            SealedMulti.Type.HEADER -> HeaderHolder(
                 ItemHeaderBinding
                     .inflate(LayoutInflater.from(parent.context), parent, false)
             )
 
-            SealedMulti.Type.popular -> MultiViewHolderPopular(
+            SealedMulti.Type.POPULAR -> MultiViewHolderPopular(
                 HomeItemPopularBinding
                     .inflate(LayoutInflater.from(parent.context), parent, false)
             )
 
-            SealedMulti.Type.category -> MultiViewHolderCategory(
+            SealedMulti.Type.CATEGORY -> MultiViewHolderCategory(
                 HomeItemCategoryBinding
                     .inflate(LayoutInflater.from(parent.context), parent, false)
             )
 
-            SealedMulti.Type.video -> MultiViewHolderVideo(
+            SealedMulti.Type.VIDEO -> MultiViewHolderVideo(
                 VideoItemBinding
                     .inflate(LayoutInflater.from(parent.context), parent, false)
             )
 
-            SealedMulti.Type.loading -> LoadingHolder(
+            SealedMulti.Type.LOADING -> LoadingHolder(
                 ItemLoadingProgressBinding
                     .inflate(LayoutInflater.from(parent.context), parent, false)
             )
-
-            else -> error("jj-홈어댑터 onCreateViewHolder - viewType error: $viewType")
         }
     }
 
