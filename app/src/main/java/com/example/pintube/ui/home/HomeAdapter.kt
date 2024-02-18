@@ -15,7 +15,7 @@ import com.example.pintube.databinding.ItemHeaderBinding
 import com.example.pintube.databinding.ItemLoadingProgressBinding
 import com.example.pintube.databinding.VideoItemBinding
 
-sealed interface SealedMulti {
+sealed interface MultiView {
 
     enum class Type {
         HEADER,
@@ -27,29 +27,29 @@ sealed interface SealedMulti {
 
     val viewType: Type
 
-    data object Header : SealedMulti {
+    data object Header : MultiView {
         override val viewType: Type = Type.HEADER
     }
 
     data class Popular(
         val videoAdapter: PopularVideoAdapter
-    ) : SealedMulti {
+    ) : MultiView {
         override val viewType: Type = Type.POPULAR
     }
 
     data class Category(
         val categoryAdapter: CategoryAdapter,
-    ) : SealedMulti {
+    ) : MultiView {
         override val viewType: Type = Type.CATEGORY
     }
 
     data class Video(
         val videoItemData: VideoItemData,
-    ) : SealedMulti {
+    ) : MultiView {
         override val viewType: Type = Type.VIDEO
     }
 
-    data object Loading : SealedMulti {
+    data object Loading : MultiView {
         override val viewType: Type = Type.LOADING
     }
 
@@ -62,7 +62,7 @@ class HomeAdapter(
 ) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    var sealedMultis = mutableListOf<SealedMulti>()
+    var multiViews = mutableListOf<MultiView>()
     var tvCategoryEmptyText: TextView? = null
 
     inner class HeaderHolder(binding: ItemHeaderBinding) :
@@ -71,7 +71,7 @@ class HomeAdapter(
     inner class PopularHolder(private val binding: HomeItemPopularBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun onBind(item: SealedMulti.Popular) = with(binding) {
+        fun onBind(item: MultiView.Popular) = with(binding) {
 //            Log.d("jj-홈어댑터 popular onBind", item.toString())  //ddd
 
             rvPopularVideos.adapter = item.videoAdapter
@@ -87,7 +87,7 @@ class HomeAdapter(
             tvCategoryEmptyText = binding.tvCategoryEmptyText
         }
 
-        fun onBind(item: SealedMulti.Category) = binding.also { b ->
+        fun onBind(item: MultiView.Category) = binding.also { b ->
             b.rvCategoryCategories.adapter = item.categoryAdapter
             b.tvCategoryEmptyText.isVisible = item.categoryAdapter.itemCount == 0
         }
@@ -96,7 +96,7 @@ class HomeAdapter(
     inner class VideoHolder(private val binding: VideoItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun onBind(item: SealedMulti.Video) = binding.also { b ->
+        fun onBind(item: MultiView.Video) = binding.also { b ->
 
             item.videoItemData.videoThumbnailUri?.let {
                 b.ivItemVideo.load(it) {
@@ -129,40 +129,40 @@ class HomeAdapter(
         RecyclerView.ViewHolder(binding.root) {
         fun onBind() {
 //            Log.d("jj-LoadingHolder onBind", "${binding.root}")
-            binding.root.isVisible = sealedMultis.size > 4
+            binding.root.isVisible = multiViews.size > 4
         }
     }
 
-    override fun getItemCount(): Int = sealedMultis.size
-    override fun getItemViewType(position: Int): Int = sealedMultis[position].viewType.ordinal
+    override fun getItemCount(): Int = multiViews.size
+    override fun getItemViewType(position: Int): Int = multiViews[position].viewType.ordinal
 
 //    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
 //        return SealedMulti.Type.values()[viewType].onCreateViewHolder(parent)
 //    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        return when (SealedMulti.Type.values()[viewType]) {
-            SealedMulti.Type.HEADER -> HeaderHolder(
+        return when (MultiView.Type.values()[viewType]) {
+            MultiView.Type.HEADER -> HeaderHolder(
                 ItemHeaderBinding
                     .inflate(LayoutInflater.from(parent.context), parent, false)
             )
 
-            SealedMulti.Type.POPULAR -> PopularHolder(
+            MultiView.Type.POPULAR -> PopularHolder(
                 HomeItemPopularBinding
                     .inflate(LayoutInflater.from(parent.context), parent, false)
             )
 
-            SealedMulti.Type.CATEGORY -> CategoryHolder(
+            MultiView.Type.CATEGORY -> CategoryHolder(
                 HomeItemCategoryBinding
                     .inflate(LayoutInflater.from(parent.context), parent, false)
             )
 
-            SealedMulti.Type.VIDEO -> VideoHolder(
+            MultiView.Type.VIDEO -> VideoHolder(
                 VideoItemBinding
                     .inflate(LayoutInflater.from(parent.context), parent, false)
             )
 
-            SealedMulti.Type.LOADING -> LoadingHolder(
+            MultiView.Type.LOADING -> LoadingHolder(
                 ItemLoadingProgressBinding
                     .inflate(LayoutInflater.from(parent.context), parent, false)
             )
@@ -170,23 +170,23 @@ class HomeAdapter(
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        when (val item = sealedMultis[position]) {
-            SealedMulti.Header -> Unit
+        when (val item = multiViews[position]) {
+            MultiView.Header -> Unit
 
-            is SealedMulti.Popular -> {
+            is MultiView.Popular -> {
                 (holder as PopularHolder).onBind(item)
                 // TODO: holder.setIsRecyclable(false) 안쓰면 문제가 있나?
 //                holder.setIsRecyclable(false)
             }
 
-            is SealedMulti.Category -> {
+            is MultiView.Category -> {
                 (holder as CategoryHolder).onBind(item)
 //                holder.setIsRecyclable(false)
             }
 
-            is SealedMulti.Video -> (holder as VideoHolder).onBind(item)
+            is MultiView.Video -> (holder as VideoHolder).onBind(item)
 
-            SealedMulti.Loading -> (holder as LoadingHolder).onBind()
+            MultiView.Loading -> (holder as LoadingHolder).onBind()
         }
     }
 

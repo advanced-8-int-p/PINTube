@@ -86,19 +86,19 @@ class HomeFragment : Fragment() {
     }
 
     private fun initView() = binding.also { b ->
-        homeAdapter.sealedMultis.addAll(
+        homeAdapter.multiViews.addAll(
             listOf(
-                SealedMulti.Header,
-                SealedMulti.Popular(popularVideoAdapter),
-                SealedMulti.Category(categoryAdapter),
+                MultiView.Header,
+                MultiView.Popular(popularVideoAdapter),
+                MultiView.Category(categoryAdapter),
             )
         )
         b.rvHomeMain.adapter = homeAdapter
         b.rvHomeMain.layoutManager = GridLayoutManager(requireContext(), 2).also { manager ->
             manager.spanSizeLookup = object : SpanSizeLookup() {
                 override fun getSpanSize(position: Int): Int {
-                    return when (homeAdapter.sealedMultis[position]) {
-                        is SealedMulti.Video -> 1
+                    return when (homeAdapter.multiViews[position]) {
+                        is MultiView.Video -> 1
                         else -> manager.spanCount
                     }
                 }
@@ -186,11 +186,11 @@ class HomeFragment : Fragment() {
         }
         vm.categoryVideos.observe(viewLifecycleOwner) {
             // TODO: 리스트 어댑터로 변경
-            homeAdapter.sealedMultis = homeAdapter.sealedMultis.subList(0, 3).apply {
-                addAll(it.map { v -> SealedMulti.Video(v) })
+            homeAdapter.multiViews = homeAdapter.multiViews.subList(0, 3).apply {
+                addAll(it.map { v -> MultiView.Video(v) })
             }
             if (it != null) {
-                homeAdapter.sealedMultis.add(SealedMulti.Loading)
+                homeAdapter.multiViews.add(MultiView.Loading)
             }
             homeAdapter.notifyDataSetChanged()
         }
