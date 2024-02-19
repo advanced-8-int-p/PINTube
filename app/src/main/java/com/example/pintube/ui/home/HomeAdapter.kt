@@ -69,15 +69,15 @@ class HomeAdapter(
     var multiViews = mutableListOf<MultiView>()
     var tvCategoryEmptyText: TextView? = null
 
-    inner class HeaderHolder(binding: ItemHeaderBinding) :
-        CommonViewHolder(binding.root) {
+    inner class HeaderHolder(b: ItemHeaderBinding) :
+        CommonViewHolder(b.root) {
         override fun onBind(item: MultiView) {}
     }
 
-    inner class PopularHolder(private val binding: HomeItemPopularBinding) :
-        CommonViewHolder(binding.root) {
+    inner class PopularHolder(private val b: HomeItemPopularBinding) :
+        CommonViewHolder(b.root) {
 
-        override fun onBind(item: MultiView) = binding.let { b ->
+        override fun onBind(item: MultiView) {
 //            Log.d("jj-홈어댑터 popular onBind", item.toString())  //ddd
 
             b.rvPopularVideos.adapter = (item as MultiView.Popular).videoAdapter
@@ -85,24 +85,24 @@ class HomeAdapter(
         }
     }
 
-    inner class CategoryHolder(private val binding: HomeItemCategoryBinding) :
-        CommonViewHolder(binding.root) {
+    inner class CategoryHolder(private val b: HomeItemCategoryBinding) :
+        CommonViewHolder(b.root) {
 
         init {
-            binding.btnFlCategorySetting.setOnClickListener { onCategorySettingClick() }
-            tvCategoryEmptyText = binding.tvCategoryEmptyText
+            b.btnFlCategorySetting.setOnClickListener { onCategorySettingClick() }
+            tvCategoryEmptyText = b.tvCategoryEmptyText
         }
 
-        override fun onBind(item: MultiView) = binding.let { b ->
+        override fun onBind(item: MultiView) {
             b.rvCategoryCategories.adapter = (item as MultiView.Category).categoryAdapter
             b.tvCategoryEmptyText.isVisible = item.categoryAdapter.itemCount == 0
         }
     }
 
-    inner class VideoHolder(private val binding: VideoItemBinding) :
-        CommonViewHolder(binding.root) {
+    inner class VideoHolder(private val b: VideoItemBinding) :
+        CommonViewHolder(b.root) {
 
-        override fun onBind(item: MultiView) = binding.let { b ->
+        override fun onBind(item: MultiView) {
             (item as MultiView.Video).videoItemData.videoThumbnailUri?.let {
                 b.ivItemVideo.load(it) {
                     crossfade(true)
@@ -130,11 +130,11 @@ class HomeAdapter(
         }
     }
 
-    inner class LoadingHolder(private val binding: ItemLoadingProgressBinding) :
-        CommonViewHolder(binding.root) {
+    inner class LoadingHolder(private val b: ItemLoadingProgressBinding) :
+        CommonViewHolder(b.root) {
         override fun onBind(item: MultiView) {
-//            Log.d("jj-LoadingHolder onBind", "${binding.root}")
-            binding.root.isVisible = multiViews.size > 4
+//            Log.d("jj-LoadingHolder onBind", "${b.root}")
+            b.root.isVisible = multiViews.size > 4
         }
     }
 
