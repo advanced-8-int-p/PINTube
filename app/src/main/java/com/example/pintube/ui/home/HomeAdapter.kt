@@ -76,17 +76,21 @@ class HomeAdapter(
 
     inner class PopularHolder(private val b: HomeItemPopularBinding) :
         CommonViewHolder(b.root) {
+        init {
+            b.rvPopularVideos.orientation = ViewPager2.ORIENTATION_HORIZONTAL
+        }
 
         override fun onBind(item: MultiView) {
 //            Log.d("jj-홈어댑터 popular onBind", item.toString())  //ddd
 
-            b.rvPopularVideos.adapter = (item as MultiView.Popular).videoAdapter
-            b.rvPopularVideos.orientation = ViewPager2.ORIENTATION_HORIZONTAL
+            if (b.rvPopularVideos.adapter == null)
+                b.rvPopularVideos.adapter = (item as MultiView.Popular).videoAdapter
         }
     }
 
     inner class CategoryHolder(private val b: HomeItemCategoryBinding) :
         CommonViewHolder(b.root) {
+        private lateinit var adapter: CategoryAdapter
 
         init {
             b.btnFlCategorySetting.setOnClickListener { onCategorySettingClick() }
@@ -94,8 +98,11 @@ class HomeAdapter(
         }
 
         override fun onBind(item: MultiView) {
-            b.rvCategoryCategories.adapter = (item as MultiView.Category).categoryAdapter
-            b.tvCategoryEmptyText.isVisible = item.categoryAdapter.itemCount == 0
+            if (this::adapter.isInitialized.not()) {
+                adapter = (item as MultiView.Category).categoryAdapter
+                b.rvCategoryCategories.adapter = item.categoryAdapter
+            }
+            b.tvCategoryEmptyText.isVisible = adapter.itemCount == 0
         }
     }
 
