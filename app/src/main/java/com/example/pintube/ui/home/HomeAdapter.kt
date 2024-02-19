@@ -63,14 +63,12 @@ abstract class CommonViewHolder(itemView: View) : RecyclerView.ViewHolder(itemVi
 class HomeAdapter(
     private val onCategorySettingClick: () -> Unit,
     private val onVideoClick: (item: VideoItemData) -> Int?
-) :
-    RecyclerView.Adapter<CommonViewHolder>() {
+) : RecyclerView.Adapter<CommonViewHolder>() {
 
     var multiViews = mutableListOf<MultiView>()
     var tvCategoryEmptyText: TextView? = null
 
-    inner class HeaderHolder(b: ItemHeaderBinding) :
-        CommonViewHolder(b.root) {
+    inner class HeaderHolder(b: ItemHeaderBinding) : CommonViewHolder(b.root) {
         override fun onBind(item: MultiView) {}
     }
 
@@ -131,7 +129,7 @@ class HomeAdapter(
             item.videoItemData.length?.let { b.tvPopularItemLength.text = it }
 
             b.root.setOnClickListener {
-                Log.d("jj-홈 아이템(비디오) 클릭", "$layoutPosition: $item")
+                Log.d("jj-홈 아이템(비디오) 클릭", "$adapterPosition: $item")
                 onVideoClick(item.videoItemData)
             }
         }
@@ -147,10 +145,6 @@ class HomeAdapter(
 
     override fun getItemCount(): Int = multiViews.size
     override fun getItemViewType(position: Int): Int = multiViews[position].viewType.ordinal
-
-//    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CommonViewHolder {
-//        return SealedMulti.Type.values()[viewType].onCreateViewHolder(parent)
-//    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CommonViewHolder {
         return when (MultiView.Type.values()[viewType]) {
@@ -184,5 +178,4 @@ class HomeAdapter(
     override fun onBindViewHolder(holder: CommonViewHolder, position: Int) {
         holder.onBind(multiViews[position])
     }
-
 }
