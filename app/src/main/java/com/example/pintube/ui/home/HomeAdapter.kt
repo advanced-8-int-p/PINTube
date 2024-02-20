@@ -6,6 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.core.view.isVisible
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import coil.load
@@ -63,9 +65,14 @@ abstract class CommonViewHolder(itemView: View) : RecyclerView.ViewHolder(itemVi
 class HomeAdapter(
     private val onCategorySettingClick: () -> Unit,
     private val onVideoClick: (item: VideoItemData) -> Int?
-) : RecyclerView.Adapter<CommonViewHolder>() {
+) : ListAdapter<MultiView, CommonViewHolder>(object : DiffUtil.ItemCallback<MultiView>() {
+    override fun areItemsTheSame(oldItem: MultiView, newItem: MultiView): Boolean =
+        oldItem === newItem
 
-    var multiViews = mutableListOf<MultiView>()
+    override fun areContentsTheSame(oldItem: MultiView, newItem: MultiView): Boolean =
+        oldItem == newItem
+}) {
+
     var tvCategoryEmptyText: TextView? = null
 
     inner class HeaderHolder(b: ItemHeaderBinding) : CommonViewHolder(b.root) {
@@ -106,6 +113,15 @@ class HomeAdapter(
 
     inner class VideoHolder(private val b: VideoItemBinding) :
         CommonViewHolder(b.root) {
+        init {
+            b.root.setOnClickListener {
+                Log.d(
+                    "jj-홈 아이템(비디오) 클릭",
+                    "$adapterPosition: ${(getItem(adapterPosition) as MultiView.Video)}"
+                )
+                onVideoClick((getItem(adapterPosition) as MultiView.Video).videoItemData)
+            }
+        }
 
         override fun onBind(item: MultiView) {
             (item as MultiView.Video).videoItemData.videoThumbnailUri?.let {
@@ -127,11 +143,6 @@ class HomeAdapter(
             item.videoItemData.views?.let { b.tvItemViews.text = it }
             item.videoItemData.date?.let { b.tvItemDate.text = it }
             item.videoItemData.length?.let { b.tvPopularItemLength.text = it }
-
-            b.root.setOnClickListener {
-                Log.d("jj-홈 아이템(비디오) 클릭", "$adapterPosition: $item")
-                onVideoClick(item.videoItemData)
-            }
         }
     }
 
@@ -139,12 +150,11 @@ class HomeAdapter(
         CommonViewHolder(b.root) {
         override fun onBind(item: MultiView) {
 //            Log.d("jj-LoadingHolder onBind", "${b.root}")
-            b.root.isVisible = multiViews.size > 4
+            b.root.isVisible = itemCount > 4
         }
     }
 
-    override fun getItemCount(): Int = multiViews.size
-    override fun getItemViewType(position: Int): Int = multiViews[position].viewType.ordinal
+    override fun getItemViewType(position: Int): Int = getItem(position).viewType.ordinal
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CommonViewHolder {
         return when (MultiView.Type.values()[viewType]) {
@@ -176,6 +186,6 @@ class HomeAdapter(
     }
 
     override fun onBindViewHolder(holder: CommonViewHolder, position: Int) {
-        holder.onBind(multiViews[position])
+        holder.onBind(getItem(position))
     }
 }

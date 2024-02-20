@@ -86,7 +86,7 @@ class HomeFragment : Fragment() {
     }
 
     private fun initView() = binding.also { b ->
-        homeAdapter.multiViews.addAll(
+        homeAdapter.submitList(
             listOf(
                 MultiView.Header,
                 MultiView.Popular(popularVideoAdapter),
@@ -97,7 +97,7 @@ class HomeFragment : Fragment() {
         b.rvHomeMain.layoutManager = GridLayoutManager(requireContext(), 2).also { manager ->
             manager.spanSizeLookup = object : SpanSizeLookup() {
                 override fun getSpanSize(position: Int): Int {
-                    return when (homeAdapter.multiViews[position]) {
+                    return when (homeAdapter.currentList[position]) {
                         is MultiView.Video -> 1
                         else -> manager.spanCount
                     }
@@ -185,14 +185,14 @@ class HomeFragment : Fragment() {
             binding.tvDialogCategoryEditEmptyText.isVisible = it.isEmpty()
         }
         vm.categoryVideos.observe(viewLifecycleOwner) {
-            // TODO: 리스트 어댑터로 변경
-            homeAdapter.multiViews = homeAdapter.multiViews.subList(0, 3).apply {
-                addAll(it.map { v -> MultiView.Video(v) })
+            if (it == null) {
+                homeAdapter.submitList(homeAdapter.currentList.subList(0, 3))
+            } else {
+                homeAdapter.submitList(ArrayList(homeAdapter.currentList).subList(0, 3).apply {
+                    addAll(it.map { v -> MultiView.Video(v) })
+                    add(MultiView.Loading)
+                })
             }
-            if (it != null) {
-                homeAdapter.multiViews.add(MultiView.Loading)
-            }
-            homeAdapter.notifyDataSetChanged()
         }
     }
 }
